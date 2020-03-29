@@ -5,10 +5,10 @@ import axiosRetry from 'axios-retry';
 
 var ENVIRONMENTS = {
     LOCAL: 'http://localhost:3333/api/v1/',
-    PRODUCTION: 'http://142.93.28.18:3334/api/v1/'
+    PRODUCTION: 'http://167.99.159.107:3334/api/v1/'
 };
 
-var BASE_URL = ENVIRONMENTS.LOCAL;
+var BASE_URL = ENVIRONMENTS.PRODUCTION;
 var JWT_TOKEN = null;
 
 export function ApiService(timeout = 15000, headers) {
