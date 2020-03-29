@@ -5,7 +5,7 @@ import axiosRetry from 'axios-retry';
 
 var ENVIRONMENTS = {
     LOCAL: 'http://localhost:3333/api/v1/',
-    PRODUCTION: 'http://167.99.159.107:3334/api/v1/'
+    PRODUCTION: 'https://api.friwords.com/api/v1/'
 };
 
 var BASE_URL = ENVIRONMENTS.PRODUCTION;
