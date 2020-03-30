@@ -26,6 +26,8 @@ class AuthController {
                     length: 2,
                     style: 'lowerCase'
                 })
+                .replace(' ', '')
+                .replace('&', '_')
             });
             userId = userId.id;
         } else {
