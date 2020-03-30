@@ -28,13 +28,13 @@ class FriwordController {
             if(user == null){
                 return response.json({
                     success: true,
-                    friword: friword
+                    friword: null
                 });
             }
         } catch (exception) {
             return response.json({
                 success: true,
-                friword: friword
+                friword: null
             });
         }
 
