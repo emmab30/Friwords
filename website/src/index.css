@@ -15,6 +15,7 @@ code {
 
 input[type='text'],
 input[type='number'],
+textarea,
 input {
     font-size: 16px !important;
 }
