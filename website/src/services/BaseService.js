@@ -11,6 +11,11 @@ var ENVIRONMENTS = {
 var BASE_URL = ENVIRONMENTS.PRODUCTION;
 var JWT_TOKEN = null;
 
+export function SetToken(token) {
+    localStorage.setItem('JWT_TOKEN', token);
+    JWT_TOKEN = token;
+}
+
 export function ApiService(timeout = 15000, headers) {
 
     if(!headers) {
@@ -18,8 +23,9 @@ export function ApiService(timeout = 15000, headers) {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
         };
-        if(JWT_TOKEN) {
-            headers['Authorization'] = 'Bearer ' + JWT_TOKEN;
+
+        if(localStorage.getItem('JWT_TOKEN')) {
+            headers['Authorization'] = 'Bearer ' + localStorage.getItem('JWT_TOKEN');
         }
     }
 

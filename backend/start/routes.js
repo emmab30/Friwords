@@ -20,6 +20,8 @@ Route.on('/').render('welcome');
 Route.group(() => {
 
     Route.post('auth/anonymous', 'AuthController.signInAnonymously');
+    Route.post('auth/anonymous/credentials', 'AuthController.signInAnonymouslyWithCredentials');
+    Route.post('auth/anonymous/onboard/set_password', 'AuthController.setPasswordAnonymousUser');
 
     Route.get('friwords', 'FriwordController.getFriwords');
     Route.post('friwords/filter', 'FriwordController.getFriwordsByFilter');
@@ -30,4 +32,8 @@ Route.group(() => {
 
     Route.post('friwords', 'FriwordController.postFriword');
     Route.post('friwords/:id/comments', 'FriwordController.postFriwordComment');
+
+    // Profile
+    Route.get('profile/me', 'UserController.getMe');
+    Route.post('profile/me', 'UserController.updateMe');
 }).prefix('api/v1');

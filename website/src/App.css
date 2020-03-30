@@ -48,6 +48,19 @@
 
 .ant-notification {
     z-index: 999999 !important;
+    top: 0 !important;
+    bottom: auto;
+    min-width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.ant-notification .success {
+    background: #25b864 !important;
+    color: white !important;
+    font-size: 1em;
+    font-weight: 600;
+    border-bottom: 2px solid rgba(0,0,0,.2);
 }
 
 .fade-in-section {
@@ -67,4 +80,8 @@
 .ant-card-body {
     transition: all 0.1s ease-in;
     -webkit-transition: all 0.1s ease-in;
+}
+
+input[type=text] {
+    font-size: 16px !important;
 }

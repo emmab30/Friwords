@@ -21,6 +21,8 @@ import CountUp from 'react-countup';
 import ScrollManager from '../utils/ScrollManager'
 
 // Cards
+import FriwordWelcome from '../components/FriwordWelcome';
+import FriwordLogin from '../components/FriwordLogin';
 import FriwordCreatePost from '../components/FriwordCreatePost';
 import FriwordCard from '../components/FriwordCard';
 
@@ -41,7 +43,9 @@ export default class Friwords extends React.Component {
                 listing_mode : 0,
                 page: 0
             },
+            isWelcome: false,
             isCreating: false,
+            isLoggingIn: false,
             isLoading: true,
             hasUpdates: false,
             previousOnlineUsers: 132,
@@ -84,11 +88,23 @@ export default class Friwords extends React.Component {
                 Services.Auth.signInAnonymously(userState, (data) => {
                     if(data.success){
                         this.setState({ user : data.user });
+                        if(!data.user.is_configured || data.user.is_configured == false){
+                            this.setState({ isWelcome: true })
+                        } else {
+                            // Get user profile since this user is already configured
+                            this.getMe()
+                        }
                     }
                 }, (err) => {
                     // Do nothing
                 });
             }
+        });
+    }
+
+    getMe = () => {
+        Services.Auth.getMe((data) => {
+            console.log(data);
         });
     }
 
@@ -177,10 +193,34 @@ export default class Friwords extends React.Component {
 
                 <ScrollManager scrollKey="friwords-list" />
 
+                <FriwordWelcome
+                    isVisible={this.state.isWelcome}
+                    user={this.state.user}
+                    onStart={() => {
+                        this.setState({ isWelcome : false });
+                        notification.open({
+                            className: 'success',
+                            message: <Icons.HeartTwoTone twoToneColor="#eb2f96" />,
+                            description:
+                                'Bienvenid@ a Friwords. Empieza leyendo y divirtiéndote. ¡Que lo disfrutes!',
+                        });
+                    }}
+                    onRequestLogin={() => {
+                        this.setState({ isLoggingIn : true, isWelcome: false });
+                    }}
+                />
+
                 <div style={{ width: '100%', height: 60, display: 'flex', flexDirection: 'row', position: 'fixed', top: 0, right: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 0, backgroundColor: 'white', zIndex: 9999 }}>
                     <div
-                        style={{ height: 60, display: 'flex', flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white', borderTopLeftRadius: 0, borderBottomLeftRadius: 10, cursor: 'pointer', zIndex: 9999, borderLeft: '2px solid rgba(0,0,0,.05)', borderBottom: '2px solid rgba(0,0,0,.05)' }}>
+                        style={{ height: 60, display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white', borderTopLeftRadius: 0, borderBottomLeftRadius: 10, cursor: 'pointer', zIndex: 9999, borderLeft: '2px solid rgba(0,0,0,.05)', borderBottom: '2px solid rgba(0,0,0,.05)' }}>
                         <span style={{ fontWeight: 500, fontSize: '0.85em' }}>{ this.state.user && this.state.user.alias ? `@${this.state.user.alias}` : '-' }</span>
+                        <a
+                            style={{ textDecorationLine: 'underline' }}
+                            href="#"
+                            onClick={() => {
+                                this.setState({ isLoggingIn : true });
+                            }}
+                        >Cambiar</a>
                     </div>
                     <div
                         style={{ height: 60, display: 'flex', flex: 0, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white', borderTopLeftRadius: 0, cursor: 'pointer', zIndex: 9999, borderLeft: '2px solid rgba(0,0,0,.05)', borderBottom: '2px solid rgba(0,0,0,.05)', paddingLeft: 10, paddingRight: 10 }}>
@@ -209,6 +249,19 @@ export default class Friwords extends React.Component {
                 </section>
 
                 <div className="scroll-container">
+                    <FriwordLogin
+                        isVisible={this.state.isLoggingIn}
+                        onRequestClose={() => {
+                            this.setState({ isLoggingIn : false });
+                            if(!this.state.user.is_configured) {
+                                this.setState({ isWelcome : true });
+                            }
+                        }}
+                        onLoggedIn={(user) => {
+                            this.setState({ user, isLoggingIn: false }, this.getFriwords);
+                        }}
+                    />
+
                     <FriwordCreatePost
                         isVisible={this.state.isCreating}
                         onRequestClose={() => {
@@ -222,9 +275,10 @@ export default class Friwords extends React.Component {
                             filters.page = 0;
                             this.setState({ filters }, this.getFriwords);
                             notification.open({
+                                className: 'success',
                                 message: <Icons.HeartTwoTone twoToneColor="#eb2f96" />,
                                 description:
-                                    'Tu friword fue publicado exitosamente',
+                                    'Tu friword fue publicado exitosamente en la sección `Recientes`',
                             });
                         }}
                     />
