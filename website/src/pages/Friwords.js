@@ -299,6 +299,7 @@ export default class Friwords extends React.Component {
                         type={'card'}
                         onTabClick={(val) => {
                             filters.listing_mode = val;
+                            filters.page = 0;
                             this.setState({ filters }, this.getFriwords);
                         }}
                         defaultActiveKey={'0'}>
