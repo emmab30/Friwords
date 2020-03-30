@@ -101,7 +101,8 @@ export default class FriwordCard extends React.Component {
                         this.props.onRequestComments();
                         this.setState({
                             canLeaveComment : false,
-                            isSendingComment: true
+                            isSendingComment: true,
+                            showComments: true
                         });
 
                         notification.open({
@@ -155,9 +156,11 @@ export default class FriwordCard extends React.Component {
                             />
 
                             <span style={{ display: 'block', marginTop: 10, fontSize: 12, textAlign: 'right' }}>{ moment(friword.created_at).fromNow() }</span>
+
                             { friword && friword.user_alias &&
                                 <span style={{ display: 'block', marginTop: 0, fontSize: 12, textAlign: 'right' }}>por <i>@{ friword.user_alias }</i></span>
                             }
+
                             { friword && friword.user && friword.user.country_code != null &&
                                 <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
                                     <img
