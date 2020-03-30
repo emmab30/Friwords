@@ -57,7 +57,9 @@ export default class FriwordCreatePost extends React.Component {
 
     onFinish = () => {
         if(this.isValid()) {
+            this.setState({ isLoading : true });
             Services.Friwords.postFriword(this.state.friword, (data) => {
+                this.setState({ isLoading : false });
                 if(data.success) {
                     this.setState({
                         isVisible: false,
@@ -67,6 +69,12 @@ export default class FriwordCreatePost extends React.Component {
                 }
             }, (err) => {
                 // Do nothing
+                this.setState({ isLoading : false });
+                 notification['error']({
+                    message: 'Oops',
+                    description:
+                        'Tu friword no pudo ser creado ahora. Intenta en unos momentos.',
+                });
             });
         }
     }
