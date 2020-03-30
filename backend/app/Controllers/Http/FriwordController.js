@@ -70,6 +70,9 @@ class FriwordController {
             .with('comments', (query) => {
                 query.orderBy('created_at', 'DESC')
             })
+            .with('user', (query) => {
+                query.select(['id', 'alias', 'country_code']);
+            })
             .first();
 
         return response.json({
