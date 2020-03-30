@@ -18,17 +18,20 @@ class FriwordController {
         });
     }
 
-    async getFriwordsByFilter({ request, response }) {
+    async getFriwordsByFilter({ request, auth, response }) {
         const body = request.all();
 
         const perPage = 10;
+        let user = auth.getUser();
         let friwords = Friword
             .query()
             .limit(perPage)
             .offset(body.page > 0 ? body.page * perPage : 0)
             .orderBy('created_at', 'DESC');
 
-        if(body.listing_mode != null) {
+        if(body.only_me == true) {
+            friwords.where('alias', user.alias);
+        } else if(body.listing_mode != null) {
             friwords.where('listing_mode', body.listing_mode);
         }
 

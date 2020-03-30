@@ -298,8 +298,13 @@ export default class Friwords extends React.Component {
                     <Tabs
                         type={'card'}
                         onTabClick={(val) => {
-                            filters.listing_mode = val;
-                            filters.page = 0;
+                            if(val == 2) {
+                                filters.only_me = true;
+                                filters.page = 0;
+                            } else {
+                                filters.listing_mode = val;
+                                filters.page = 0;
+                            }
                             this.setState({ filters }, this.getFriwords);
                         }}
                         defaultActiveKey={'0'}>
@@ -360,6 +365,55 @@ export default class Friwords extends React.Component {
                                     </span>
                                 }
                             key={'1'}>
+                            { friwords && friwords.map((e, index) => (
+                                <FriwordCard
+                                    loading={this.state.isLoading}
+                                    friword={e}
+                                    comments={e.comments}
+                                    likes={e.likes_qty}
+                                    dislikes={e.dislikes_qty}
+                                    commentsQty={e.comments_qty}
+                                    user={this.state.user}
+                                    onLike={() => {
+                                        Services.Friwords.likeById(e.id, (success) => {
+                                            setTimeout(() => {
+                                                this.getFriwordById(e.id);
+                                            }, 500);
+                                        });
+                                    }}
+                                    onDislike={() => {
+                                        Services.Friwords.dislikeById(e.id, (success) => {
+                                            setTimeout(() => {
+                                                this.getFriwordById(e.id);
+                                            }, 500);
+                                        });
+                                    }}
+                                    onRequestComments={() => {
+                                        this.getFriwordById(e.id);
+                                    }}
+                                />
+                            ))}
+
+                            <Button
+                                onClick={() => {
+                                    filters.page += 1;
+                                    this.setState({ filters }, this.getFriwords);
+                                }}
+                                type="primary"
+                                icon={<Icons.ReloadOutlined />}
+                                style={{ display: 'flex', width: '80%', margin: '0 auto', marginBottom: 20, justifyContent: 'center', alignItems: 'center', height: 40 }}>
+                                Cargar más
+                            </Button>
+                        </TabPane>
+
+                        <TabPane
+                            tab={
+                                <span>
+                                    <Icons.FieldTimeOutlined />
+                                        Míos
+                                    </span>
+                                }
+                            key={'2'}>
                             { friwords && friwords.map((e, index) => (
                                 <FriwordCard
                                     loading={this.state.isLoading}
