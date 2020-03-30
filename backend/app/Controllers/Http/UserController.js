@@ -1,5 +1,7 @@
 'use strict'
 
+const User = use('App/Models/User');
+
 class UserController {
     async getMe({ request, auth, response }) {
         let user = await auth.getUser();
@@ -14,9 +16,13 @@ class UserController {
         let user = await auth.getUser();
         let body = request.all();
 
+        user = await User.find(user.id);
+        user.merge(body);
+        await user.save();
+
         return response.json({
             success: true,
-            user
+            user: user
         });
     }
 }

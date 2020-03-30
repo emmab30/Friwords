@@ -101,8 +101,8 @@ class AuthController {
         }
 
         // Request for country
-        const apiKey = '45c816eed2d04a8b96e59ff177c609af';
-        const ipInfo = await axios.get(`https://api.ipgeolocation.io/ipgeo?apiKey=${apiKey}&fields=geo&output=json`);
+        /*const apiKey = '45c816eed2d04a8b96e59ff177c609af';
+        const ipInfo = await axios.get(`https://api.ipgeolocation.io/ipgeo?apiKey=${apiKey}&fields=geo&output=json`);*/
 
         // Create the user and send the JWT token
         let userInfo = await User.create({
@@ -111,9 +111,9 @@ class AuthController {
             email: `${body.alias}@friwords.com`,
             password: body.password,
             is_configured: true,
-            country_name: ipInfo && ipInfo.data && ipInfo.data.country_name,
+            /*country_name: ipInfo && ipInfo.data && ipInfo.data.country_name,
             country_code: ipInfo && ipInfo.data && ipInfo.data.country_code2,
-            ip: ipInfo && ipInfo.data && ipInfo.data.ip,
+            ip: ipInfo && ipInfo.data && ipInfo.data.ip,*/
             created_at: new Date(),
             updated_at: new Date()
         });

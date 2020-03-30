@@ -63,7 +63,7 @@ export default class FriwordWelcome extends React.Component {
                     this.props.onStart();
             }
         }, (err) => {
-            console.log(err);
+            // Do nothing
         });
     }
 

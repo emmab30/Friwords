@@ -13,6 +13,7 @@ import {
     Spin
 } from 'antd';
 
+import axios from 'axios';
 import Lottie from 'react-lottie';
 import * as Icons from '@ant-design/icons';
 import * as animationLoadingData from '../assets/animations/load.json'
@@ -92,7 +93,7 @@ export default class Friwords extends React.Component {
                             this.setState({ isWelcome: true })
                         } else {
                             // Get user profile since this user is already configured
-                            this.getMe()
+                            this.getMe();
                         }
                     }
                 }, (err) => {
@@ -104,7 +105,27 @@ export default class Friwords extends React.Component {
 
     getMe = () => {
         Services.Auth.getMe((data) => {
-            console.log(data);
+            if(data.success) {
+                this.setState({ user: data.user });
+
+                if(data.user && !data.user.country_code && !data.user.ip) {
+                    const apiKey = '45c816eed2d04a8b96e59ff177c609af';
+                    axios.get(`https://api.ipgeolocation.io/ipgeo?apiKey=${apiKey}&fields=geo&output=json`).then((data) => {
+                        if(data && data.data) {
+                            const ipInfo = data.data;
+                            Services.Auth.updateMe({
+                                country_name: ipInfo && ipInfo.country_name,
+                                country_code: ipInfo && ipInfo.country_code2,
+                                ip: ipInfo && ipInfo.ip
+                            }, (success) => {
+                                if(success.success) {
+                                    this.setState({ user : success.user });
+                                }
+                            });
+                        }
+                    });
+                }
+            }
         });
     }
 
@@ -197,7 +218,7 @@ export default class Friwords extends React.Component {
                     isVisible={this.state.isWelcome}
                     user={this.state.user}
                     onStart={() => {
-                        this.setState({ isWelcome : false });
+                        this.setState({ isWelcome : false }, this.getMe);
                         notification.open({
                             className: 'success',
                             message: <Icons.HeartTwoTone twoToneColor="#eb2f96" />,

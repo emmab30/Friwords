@@ -36,6 +36,15 @@ var Auth = {
         }).catch((err) => {
             if(error) error(err);
         });
+    },
+    updateMe: function(data, success, error) {
+        let url = 'profile/me';
+
+        ApiService().post(url, data).then((response) => {
+            if(success) success(response.data);
+        }).catch((err) => {
+            if(error) error(err);
+        });
     }
 };
 
