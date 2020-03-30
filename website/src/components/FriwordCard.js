@@ -154,9 +154,17 @@ export default class FriwordCard extends React.Component {
                                 description={friword.text}
                             />
 
-                            <span style={{ display: 'block', marginTop: 5, fontSize: 12, textAlign: 'right' }}>{ moment(friword.created_at).fromNow() }</span>
+                            <span style={{ display: 'block', marginTop: 10, fontSize: 12, textAlign: 'right' }}>{ moment(friword.created_at).fromNow() }</span>
                             { friword && friword.user_alias &&
-                                <span style={{ display: 'block', marginTop: 5, fontSize: 12, textAlign: 'right' }}>por <i>@{ friword.user_alias }</i></span>
+                                <span style={{ display: 'block', marginTop: 0, fontSize: 12, textAlign: 'right' }}>por <i>@{ friword.user_alias }</i></span>
+                            }
+                            { friword && friword.user && friword.user.country_code != null &&
+                                <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
+                                    <img
+                                        style={{ width: 20 }}
+                                        src={`https://www.countryflags.io/${friword.user.country_code}/shiny/64.png`}
+                                    />
+                                </div>
                             }
 
                             <div style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', marginTop: 20, marginBottom: 20 }}>

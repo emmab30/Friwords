@@ -44,6 +44,9 @@ class FriwordController {
             .query()
             .limit(perPage)
             .offset(body.page > 0 ? body.page * perPage : 0)
+            .with('user', (query) => {
+                query.select(['id', 'alias', 'country_code']);
+            })
             .orderBy('created_at', 'DESC');
 
         if(body.only_me == true) {

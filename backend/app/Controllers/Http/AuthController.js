@@ -4,8 +4,9 @@ const Encryption = use('Encryption')
 const Hash = use('Hash')
 const User = use('App/Models/User')
 const AnonymousUser = use('App/Models/AnonymousUser')
-const { uniqueNamesGenerator, adjectives, colors, animals } = require('unique-names-generator');
-const randomName = uniqueNamesGenerator({ dictionaries: [adjectives, colors, animals] });
+const { uniqueNamesGenerator, colors, animals, countries } = require('unique-names-generator');
+const randomName = uniqueNamesGenerator({ dictionaries: [countries, colors, animals] });
+const axios = require('axios');
 
 class AuthController {
     async signInAnonymously({ request, response }) {
@@ -21,7 +22,7 @@ class AuthController {
             userId = await AnonymousUser.create({
                 uid: body.uid,
                 alias: uniqueNamesGenerator({
-                    dictionaries: [adjectives, animals, colors],
+                    dictionaries: [countries, animals, colors],
                     length: 2
                 })
             });
@@ -99,6 +100,10 @@ class AuthController {
             });
         }
 
+        // Request for country
+        const apiKey = '45c816eed2d04a8b96e59ff177c609af';
+        const ipInfo = await axios.get(`https://api.ipgeolocation.io/ipgeo?apiKey=${apiKey}&fields=geo&output=json`);
+
         // Create the user and send the JWT token
         let userInfo = await User.create({
             username: body.alias,
@@ -106,6 +111,9 @@ class AuthController {
             email: `${body.alias}@friwords.com`,
             password: body.password,
             is_configured: true,
+            country_name: ipInfo && ipInfo.data && ipInfo.data.country_name,
+            country_code: ipInfo && ipInfo.data && ipInfo.data.country_code2,
+            ip: ipInfo && ipInfo.data && ipInfo.data.ip,
             created_at: new Date(),
             updated_at: new Date()
         });

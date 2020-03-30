@@ -7,6 +7,10 @@ class Friword extends Model {
     comments() {
         return this.hasMany('App/Models/FriwordComment');
     }
+
+    user() {
+        return this.hasOne('App/Models/User', 'user_alias', 'alias');
+    }
 }
 
 module.exports = Friword
