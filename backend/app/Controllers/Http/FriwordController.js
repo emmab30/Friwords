@@ -21,8 +21,25 @@ class FriwordController {
     async getFriwordsByFilter({ request, auth, response }) {
         const body = request.all();
 
+        let user = null;
+        try {
+            user = await auth.getUser();
+
+            if(user == null){
+                return response.json({
+                    success: true,
+                    friword: friword
+                });
+            }
+        } catch (exception) {
+            return response.json({
+                success: true,
+                friword: friword
+            });
+        }
+
+
         const perPage = 10;
-        let user = await auth.getUser();
         let friwords = Friword
             .query()
             .limit(perPage)
