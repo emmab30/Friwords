@@ -231,12 +231,12 @@ export default class Friwords extends React.Component {
                     }}
                 />
 
-                <div style={{ width: '100%', height: 60, display: 'flex', flexDirection: 'row', position: 'fixed', top: 0, right: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 0, backgroundColor: 'white', zIndex: 9999 }}>
+                <div style={{ width: '100%', height: 45, display: 'flex', flexDirection: 'row', position: 'fixed', top: 0, right: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 0, backgroundColor: 'white', zIndex: 9999 }}>
                     <div
-                        style={{ height: 60, display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white', borderTopLeftRadius: 0, borderBottomLeftRadius: 10, cursor: 'pointer', zIndex: 9999, borderLeft: '2px solid rgba(0,0,0,.05)', borderBottom: '2px solid rgba(0,0,0,.05)' }}>
-                        <span style={{ fontWeight: 500, fontSize: '0.85em' }}>{ this.state.user && this.state.user.alias ? `@${this.state.user.alias}` : '-' }</span>
+                        style={{ height: 45, display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white', borderTopLeftRadius: 0, borderBottomLeftRadius: 10, cursor: 'pointer', zIndex: 9999, borderLeft: '2px solid rgba(0,0,0,.05)', borderBottom: '2px solid rgba(0,0,0,.05)' }}>
+                        <span style={{ fontWeight: 500, fontSize: '0.6em' }}>{ this.state.user && this.state.user.alias ? `@${this.state.user.alias}` : '-' }</span>
                         <a
-                            style={{ textDecorationLine: 'underline' }}
+                            style={{ textDecorationLine: 'underline', fontSize: '0.6em' }}
                             href="#"
                             onClick={() => {
                                 this.setState({ isLoggingIn : true });
@@ -244,7 +244,8 @@ export default class Friwords extends React.Component {
                         >Cambiar</a>
                     </div>
                     <div
-                        style={{ height: 60, display: 'flex', flex: 0, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white', borderTopLeftRadius: 0, cursor: 'pointer', zIndex: 9999, borderLeft: '2px solid rgba(0,0,0,.05)', borderBottom: '2px solid rgba(0,0,0,.05)', paddingLeft: 10, paddingRight: 10 }}>
+                        className="counter-online-users"
+                        style={{ height: 45, display: 'flex', flex: 0, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white', borderTopLeftRadius: 0, cursor: 'pointer', zIndex: 9999, borderLeft: '2px solid rgba(0,0,0,.05)', borderBottom: '2px solid rgba(0,0,0,.05)', paddingLeft: 10, paddingRight: 10 }}>
                         <CountUp
                             start={this.state.previousOnlineUsers}
                             end={this.state.newOnlineUsers}
@@ -255,8 +256,8 @@ export default class Friwords extends React.Component {
                     </div>
                     <div
                         onClick={this.getFriwords}
-                        style={{ height: 60, display: 'flex', flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#25b864', cursor: 'pointer', zIndex: 9999, borderBottomRightRadius: 10, borderLeft: '0px solid rgba(0,0,0,.05)', borderBottom: '2px solid rgba(0,0,0,.2)', opacity: this.state.hasUpdates ? 1 : .6 }}>
-                        <span style={{ fontWeight: 500, fontSize: '0.85em', color: 'white' }}>{ this.state.isLoading ? 'Actualizando..' : 'Actualizar' }</span>
+                        style={{ height: 45, display: 'flex', flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#25b864', cursor: 'pointer', zIndex: 9999, borderBottomRightRadius: 10, borderLeft: '0px solid rgba(0,0,0,.05)', borderBottom: '2px solid rgba(0,0,0,.2)', opacity: this.state.hasUpdates ? 1 : .6 }}>
+                        <span style={{ fontWeight: 500, fontSize: '0.6em', color: 'white' }}>{ this.state.isLoading ? 'Actualizando..' : 'Actualizar' }</span>
                         <img
                             style={{ width: 30, height: 30, marginLeft: 10 }}
                             src="https://image.flaticon.com/icons/svg/1688/1688988.svg" />

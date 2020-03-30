@@ -41,6 +41,10 @@ input {
     color: #61dafb;
 }
 
+.counter-online-users span {
+    font-size: 0.6em !important;
+}
+
 @keyframes App-logo-spin {
     from {
         transform: rotate(0deg);

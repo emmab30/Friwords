@@ -26,6 +26,7 @@ import * as Services from '../services'
 
 const { Meta } = Card;
 const { Option } = Select;
+const { TextArea } = Input;
 
 export default class FriwordCreatePost extends React.Component {
     constructor(props) {
@@ -125,13 +126,29 @@ export default class FriwordCreatePost extends React.Component {
                     <Form.Item
                         name="text"
                         rules={[{ required: true, message: 'Ingresa el texto' }]}>
-                        <Input
+                        <TextArea
+                            placeholder="Tu texto"
+                            autoSize={{ minRows: 2, maxRows: 8 }}
+                            maxLength={255}
                             onChange={(evt) => {
                                 friword.text = evt.target.value;
                                 this.setState({ friword });
                             }}
-                            prefix={<Icons.QuestionCircleOutlined className="site-form-item-icon" />} placeholder="Texto" />
+                            prefix={<Icons.QuestionCircleOutlined className="site-form-item-icon" />}
+                        />
+                        {/*<Input
+                            onChange={(evt) => {
+                                friword.text = evt.target.value;
+                                this.setState({ friword });
+                            }}
+                            prefix={<Icons.QuestionCircleOutlined className="site-form-item-icon" />} placeholder="Texto" />*/}
                     </Form.Item>
+
+                    { friword && friword.text && friword.text.length > 0 &&
+                        <span>{255 - friword.text.length} caracteres restantes</span>
+                    }
+
+                    <div style={{ width: '100%', height: 5, backgroundColor: 'rgba(0,0,0,0.05)', marginTop: 20, marginBottom: 20 }}></div>
 
                     <span style={{ width: '100%', display: 'block', textAlign: 'center', fontWeight: 600 }}>Selecciona tu género</span>
                     <div style={{ width: '100%', height: 40, display: 'flex', flexDirection: 'row', marginBottom: 20 }}>

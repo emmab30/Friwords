@@ -32,6 +32,7 @@ export default class FriwordWelcome extends React.Component {
         super(props);
         this.state = {
             isVisible: false,
+            isLoading: false,
             auth: {}
         };
     }
@@ -53,6 +54,7 @@ export default class FriwordWelcome extends React.Component {
     }
 
     onFinish = () => {
+        this.setState({ isLoading : true });
         Services.Auth.setPasswordAnonymousUser({
             alias: this.state.user.alias,
             password: this.state.auth.password
@@ -62,8 +64,12 @@ export default class FriwordWelcome extends React.Component {
                 if(this.props.onStart)
                     this.props.onStart();
             }
+
+            this.setState({ isLoading : false });
         }, (err) => {
             // Do nothing
+
+            this.setState({ isLoading : false });
         });
     }
 
@@ -120,7 +126,9 @@ export default class FriwordWelcome extends React.Component {
                     onClick={() => {
                         this.props.onRequestLogin();
                     }}
-                    type="primary" htmlType="submit" loading={this.state.isLoading} style={{ display: 'flex', width: '75%', margin: '0 auto', backgroundColor: 'white', height: 50, color: 'white', fontWeight: 600, justifyContent: 'center', alignItems: 'center', backgroundColor: '#00a2ff' }}>
+                    type="primary"
+                    htmlType="submit"
+                    loading={this.state.isLoading} style={{ display: 'flex', width: '75%', margin: '0 auto', backgroundColor: 'white', height: 50, color: 'white', fontWeight: 600, justifyContent: 'center', alignItems: 'center', backgroundColor: '#00a2ff' }}>
                     Ya tengo un alias
                 </Button>
             </div>
