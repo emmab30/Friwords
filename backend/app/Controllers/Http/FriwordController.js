@@ -21,10 +21,10 @@ class FriwordController {
     async getFriwordsByFilter({ request, response }) {
         const body = request.all();
 
-        const perPage = 1;
+        const perPage = 10;
         let friwords = Friword
             .query()
-            .limit(1)
+            .limit(perPage)
             .offset(body.page > 0 ? body.page * perPage : 0)
             .orderBy('created_at', 'DESC');
 
