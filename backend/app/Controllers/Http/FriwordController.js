@@ -22,7 +22,7 @@ class FriwordController {
         const body = request.all();
 
         const perPage = 10;
-        let user = auth.getUser();
+        let user = await auth.getUser();
         let friwords = Friword
             .query()
             .limit(perPage)
