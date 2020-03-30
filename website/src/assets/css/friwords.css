@@ -1,0 +1,25 @@
+/* Home page */
+
+.ant-tabs-nav {
+    display: flex;
+    flex-direction: row;
+}
+
+.ant-tabs-nav > div {
+    display: flex;
+    flex: 1;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+div[role=tab] {
+    display: flex;
+    flex: 1;
+    transition: all 0.05s ease-in;
+    -webkit-transition: all 0.05s ease-in;
+}
+
+div[role=tab][aria-selected=true] {
+    background: #25b864 !important;
+    color: white !important;
+}

@@ -10,6 +10,15 @@ var Friwords = {
             if(error) error(err);
         });
     },
+    getFriwordsByFilter: function(filter, success, error) {
+        let url = 'friwords/filter';
+
+        ApiService().post(url, filter).then((response) => {
+            if(success) success(response.data);
+        }).catch((err) => {
+            if(error) error(err);
+        });
+    },
     getFriwordById: function(id, success, error) {
         let url = `friwords/${id}`;
 
