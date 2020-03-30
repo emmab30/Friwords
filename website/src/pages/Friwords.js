@@ -302,6 +302,7 @@ export default class Friwords extends React.Component {
                                 filters.only_me = true;
                                 filters.page = 0;
                             } else {
+                                filters.only_me = false;
                                 filters.listing_mode = val;
                                 filters.page = 0;
                             }
