@@ -18,6 +18,28 @@ class FriwordController {
         });
     }
 
+    async getFriwordsByFilter({ request, response }) {
+        const body = request.all();
+
+        const perPage = 1;
+        let friwords = Friword
+            .query()
+            .limit(1)
+            .offset(body.page > 0 ? body.page * perPage : 0)
+            .orderBy('created_at', 'DESC');
+
+        if(body.listing_mode != null) {
+            friwords.where('listing_mode', body.listing_mode);
+        }
+
+        friwords = await friwords.fetch()
+
+        return response.json({
+            success: true,
+            friwords: friwords
+        });
+    }
+
     async getFriwordById({ request, response }) {
         let friword = await Friword
             .query()

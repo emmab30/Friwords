@@ -11,9 +11,11 @@ class FriwordSchema extends Schema {
             table.string('title');
             table.string('text');
             table.string('gender');
+            table.integer('listing_mode').default(1); // 0 == Featured, 1 == Recently
             table.integer('comments_qty').default(0);
             table.integer('likes_qty').default(0);
             table.integer('dislikes_qty').default(0);
+            table.boolean('is_disabled').default(false);
             table.timestamps();
         });
     }

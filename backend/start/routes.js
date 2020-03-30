@@ -22,6 +22,7 @@ Route.group(() => {
     Route.post('auth/anonymous', 'AuthController.signInAnonymously');
 
     Route.get('friwords', 'FriwordController.getFriwords');
+    Route.post('friwords/filter', 'FriwordController.getFriwordsByFilter');
     Route.get('friwords/updates_available/:lastId', 'FriwordController.hasUpdatesAvailable'); // Check if there is updates available to pull
     Route.get('friwords/:id', 'FriwordController.getFriwordById');
     Route.post('friwords/:id/like', 'FriwordController.likeById');
