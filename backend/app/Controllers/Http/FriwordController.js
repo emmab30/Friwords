@@ -30,7 +30,7 @@ class FriwordController {
             .orderBy('created_at', 'DESC');
 
         if(body.only_me == true) {
-            friwords.where('alias', user.alias);
+            friwords.where('user_alias', user.alias);
         } else if(body.listing_mode != null) {
             friwords.where('listing_mode', body.listing_mode);
         }
