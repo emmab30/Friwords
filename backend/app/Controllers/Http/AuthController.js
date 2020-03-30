@@ -4,8 +4,8 @@ const Encryption = use('Encryption')
 const Hash = use('Hash')
 const User = use('App/Models/User')
 const AnonymousUser = use('App/Models/AnonymousUser')
-const { uniqueNamesGenerator, colors, animals, countries } = require('unique-names-generator');
-const randomName = uniqueNamesGenerator({ dictionaries: [countries, colors, animals] });
+const { uniqueNamesGenerator, adjectives, colors, animals, countries } = require('unique-names-generator');
+const randomName = uniqueNamesGenerator({ dictionaries: [adjectives, countries, colors, animals] });
 const axios = require('axios');
 
 class AuthController {
@@ -22,8 +22,9 @@ class AuthController {
             userId = await AnonymousUser.create({
                 uid: body.uid,
                 alias: uniqueNamesGenerator({
-                    dictionaries: [countries, animals, colors],
-                    length: 2
+                    dictionaries: [adjectives, countries, animals, colors],
+                    length: 2,
+                    style: 'lowerCase'
                 })
             });
             userId = userId.id;
