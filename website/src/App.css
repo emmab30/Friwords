@@ -74,6 +74,22 @@ input {
     border-bottom: 2px solid rgba(0,0,0,.2);
 }
 
+.ant-notification .success svg {
+    color: white !important;
+}
+
+.ant-notification .error {
+    background: #e65454 !important;
+    color: white !important;
+    font-size: 1em;
+    font-weight: 600;
+    border-bottom: 2px solid rgba(0,0,0,.2);
+}
+
+.ant-notification .error svg {
+    color: white !important;
+}
+
 .fade-in-section {
     opacity: 0;
     transform: translateY(20vh);

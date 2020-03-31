@@ -9,54 +9,7 @@ const randomName = uniqueNamesGenerator({ dictionaries: [adjectives, countries, 
 const axios = require('axios');
 
 class AuthController {
-    async signInAnonymously({ request, response }) {
-        let body = request.all();
-
-        let exists = await AnonymousUser
-            .query()
-            .where('uid', body.uid)
-            .getCount('id');
-
-        let userId = null;
-        if(!exists) {
-            userId = await AnonymousUser.create({
-                uid: body.uid,
-                alias: uniqueNamesGenerator({
-                    dictionaries: [adjectives, countries, animals, colors],
-                    length: 2,
-                    style: 'lowerCase'
-                })
-                .replace(' ', '')
-                .replace('&', '_')
-            });
-            userId = userId.id;
-        } else {
-            await AnonymousUser
-                .query()
-                .where('uid', body.uid)
-                .update({
-                    updated_at: new Date()
-                });
-
-            userId = await AnonymousUser
-                .query()
-                .where('uid', body.uid)
-                .first();
-            userId = userId.id;
-        }
-
-        let user = await AnonymousUser
-            .query()
-            .where('id', userId)
-            .first();
-
-        return response.json({
-            success: true,
-            user
-        });
-    }
-
-    async signInAnonymouslyWithCredentials({ request, auth, response }) {
+    async signInWithAlias({ request, auth, response }) {
         let body = request.all();
 
         let user = await User
@@ -87,50 +40,52 @@ class AuthController {
         });
     }
 
-    async setPasswordAnonymousUser({ request, auth, response }) {
-        let body = request.all();
-
-        let user = await AnonymousUser
-            .query()
-            .where('alias', body.alias)
-            .where('is_configured', 0)
-            .first();
-
-        if(!user){
-            return response.json({
-                success: false,
-                message: 'No puedes cambiar la contraseña de ese alias'
-            });
-        }
-
-        // Request for country
-        /*const apiKey = '45c816eed2d04a8b96e59ff177c609af';
-        const ipInfo = await axios.get(`https://api.ipgeolocation.io/ipgeo?apiKey=${apiKey}&fields=geo&output=json`);*/
-
-        // Create the user and send the JWT token
-        let userInfo = await User.create({
-            username: body.alias,
-            alias: body.alias,
-            email: `${body.alias}@friwords.com`,
-            password: body.password,
-            is_configured: true,
-            /*country_name: ipInfo && ipInfo.data && ipInfo.data.country_name,
-            country_code: ipInfo && ipInfo.data && ipInfo.data.country_code2,
-            ip: ipInfo && ipInfo.data && ipInfo.data.ip,*/
-            created_at: new Date(),
-            updated_at: new Date()
-        });
-
-        user.is_configured = true;
-        await user.save();
-
-        let token = await auth.generate(userInfo);
+    async generateRandomAlias({ request, response }) {
+        let alias = uniqueNamesGenerator({
+            dictionaries: [adjectives, countries, animals, colors],
+            length: 2,
+            style: 'lowerCase'
+        })
+        .replace(' ', '')
+        .replace('&', '_');
 
         return response.json({
             success: true,
-            userInfo,
-            token: token.token
+            alias
         });
+    }
+
+    async register({ request, auth, response }) {
+        let body = request.all();
+
+        // Create the user and send the JWT token
+        try {
+            let user = await User.create({
+                username: body.alias,
+                alias: body.alias,
+                email: `${body.alias}@friwords.com`,
+                password: body.password,
+                is_configured: true,
+                created_at: new Date(),
+                updated_at: new Date()
+            });
+
+            await user.save();
+
+            let token = await auth.generate(user);
+
+            return response.json({
+                success: true,
+                user,
+                token: token.token
+            });
+        } catch (exception) {
+            console.log(exception);
+            return response.json({
+                success: false,
+                message: 'Ese usuario ya está registrado. Elige otro alias'
+            });
+        }
     }
 }
 

@@ -59,12 +59,18 @@ export default class FriwordLogin extends React.Component {
             if(data.success) {
                 Services.Base.SetToken(data.token);
                 this.props.onLoggedIn(data.user);
+            } else {
+                notification.open({
+                    className: 'error',
+                    message: <Icons.CloseCircleFilled />,
+                    description: data.message
+                });
             }
         }, (err) => {
-             notification['error']({
-                message: 'Uups',
-                description:
-                    'Esa cuenta no es válida',
+            notification.open({
+                className: 'error',
+                message: <Icons.CloseCircleFilled />,
+                description: 'Ese alias no es válido'
             });
 
             return false;

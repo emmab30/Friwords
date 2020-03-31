@@ -44,6 +44,7 @@ export default class Friwords extends React.Component {
                 listing_mode : 0,
                 page: 0
             },
+            tabActiveKey: '0',
             isWelcome: false,
             isCreating: false,
             isLoggingIn: false,
@@ -71,59 +72,34 @@ export default class Friwords extends React.Component {
         this.getUsersOnline();
         setInterval(this.getUsersOnline, 10000);
 
-        Services.firebase.auth().signInAnonymously().catch(function(error) {
-            // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
-        });
-
-        Services.firebase.auth().onAuthStateChanged((user, err) => {
-            if (user) {
-                // User is signed in.
-                let userState = {
-                    type: 'anonymous',
-                    uid: user.uid
-                };
-                this.setState({ user: userState });
-
-                Services.Auth.signInAnonymously(userState, (data) => {
-                    if(data.success){
-                        this.setState({ user : data.user });
-                        if(!data.user.is_configured || data.user.is_configured == false){
-                            this.setState({ isWelcome: true })
-                        } else {
-                            // Get user profile since this user is already configured
-                            this.getMe();
-                        }
-                    }
-                }, (err) => {
-                    // Do nothing
-                });
-            }
-        });
+        this.getMe();
     }
 
     getMe = () => {
         Services.Auth.getMe((data) => {
             if(data.success) {
-                this.setState({ user: data.user });
+                if(data.user == null) { // Not authenticated
+                    this.setState({ isWelcome : true });
+                } else {
+                    this.setState({ user: data.user });
 
-                if(data.user && !data.user.country_code && !data.user.ip) {
-                    const apiKey = '45c816eed2d04a8b96e59ff177c609af';
-                    axios.get(`https://api.ipgeolocation.io/ipgeo?apiKey=${apiKey}&fields=geo&output=json`).then((data) => {
-                        if(data && data.data) {
-                            const ipInfo = data.data;
-                            Services.Auth.updateMe({
-                                country_name: ipInfo && ipInfo.country_name,
-                                country_code: ipInfo && ipInfo.country_code2,
-                                ip: ipInfo && ipInfo.ip
-                            }, (success) => {
-                                if(success.success) {
-                                    this.setState({ user : success.user });
-                                }
-                            });
-                        }
-                    });
+                    if(data.user && !data.user.country_code && !data.user.ip) {
+                        const apiKey = '45c816eed2d04a8b96e59ff177c609af';
+                        axios.get(`https://api.ipgeolocation.io/ipgeo?apiKey=${apiKey}&fields=geo&output=json`).then((data) => {
+                            if(data && data.data) {
+                                const ipInfo = data.data;
+                                Services.Auth.updateMe({
+                                    country_name: ipInfo && ipInfo.country_name,
+                                    country_code: ipInfo && ipInfo.country_code2,
+                                    ip: ipInfo && ipInfo.ip
+                                }, (success) => {
+                                    if(success.success) {
+                                        this.setState({ user : success.user });
+                                    }
+                                });
+                            }
+                        });
+                    }
                 }
             }
         });
@@ -209,28 +185,12 @@ export default class Friwords extends React.Component {
             filters
         } = this.state;
 
+        if(this.state.isWelcome) {
+            return this.renderWelcome();
+        }
+
         return (
             <div className="friwords-container">
-
-                <ScrollManager scrollKey="friwords-list" />
-
-                <FriwordWelcome
-                    isVisible={this.state.isWelcome}
-                    user={this.state.user}
-                    onStart={() => {
-                        this.setState({ isWelcome : false }, this.getMe);
-                        notification.open({
-                            className: 'success',
-                            message: <Icons.HeartTwoTone twoToneColor="#eb2f96" />,
-                            description:
-                                'Bienvenid@ a Friwords. Empieza leyendo y divirtiéndote. ¡Que lo disfrutes!',
-                        });
-                    }}
-                    onRequestLogin={() => {
-                        this.setState({ isLoggingIn : true, isWelcome: false });
-                    }}
-                />
-
                 <div style={{ width: '100%', height: 45, display: 'flex', flexDirection: 'row', position: 'fixed', top: 0, right: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 0, backgroundColor: 'white', zIndex: 9999 }}>
                     <div
                         style={{ height: 45, display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white', borderTopLeftRadius: 0, borderBottomLeftRadius: 10, cursor: 'pointer', zIndex: 9999, borderLeft: '2px solid rgba(0,0,0,.05)', borderBottom: '2px solid rgba(0,0,0,.05)' }}>
@@ -295,12 +255,12 @@ export default class Friwords extends React.Component {
 
                             // Reset filters and then fetch the first page
                             filters.page = 0;
-                            this.setState({ filters }, this.getFriwords);
+                            filters.listing_mode = 1;
+                            this.setState({ filters, tabActiveKey: '1' }, this.getFriwords);
                             notification.open({
                                 className: 'success',
                                 message: <Icons.HeartTwoTone twoToneColor="#eb2f96" />,
-                                description:
-                                    'Tu friword fue publicado exitosamente en la sección `Recientes`',
+                                description: 'Tu friword fue publicado exitosamente en la sección `Recientes`',
                             });
                         }}
                     />
@@ -318,6 +278,7 @@ export default class Friwords extends React.Component {
                     </div>
 
                     <Tabs
+                        activeKey={this.state.tabActiveKey}
                         type={'card'}
                         onTabClick={(val) => {
                             if(val == 2) {
@@ -487,6 +448,28 @@ export default class Friwords extends React.Component {
                         </div>
                     }
                 </div>
+            </div>
+        );
+    }
+
+    renderWelcome() {
+        return (
+            <div className="friwords-container">
+                <FriwordWelcome
+                    isVisible={this.state.isWelcome}
+                    onStart={() => {
+                        this.setState({ isWelcome : false }, this.getMe);
+                        notification.open({
+                            className: 'success',
+                            message: <Icons.HeartTwoTone twoToneColor="#eb2f96" />,
+                            description:
+                                'Bienvenid@ a Friwords. Empieza leyendo y publicando',
+                        });
+                    }}
+                    onRequestLogin={() => {
+                        this.setState({ isLoggingIn : true, isWelcome: false });
+                    }}
+                />
             </div>
         );
     }

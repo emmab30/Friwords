@@ -19,9 +19,10 @@ const Route = use('Route');
 Route.on('/').render('welcome');
 Route.group(() => {
 
-    Route.post('auth/anonymous', 'AuthController.signInAnonymously');
-    Route.post('auth/anonymous/credentials', 'AuthController.signInAnonymouslyWithCredentials');
-    Route.post('auth/anonymous/onboard/set_password', 'AuthController.setPasswordAnonymousUser');
+    // Alias
+    Route.get('auth/generate_alias', 'AuthController.generateRandomAlias');
+    Route.post('auth/sign_in', 'AuthController.signInWithAlias');
+    Route.post('auth/register', 'AuthController.register');
 
     Route.get('friwords', 'FriwordController.getFriwords');
     Route.post('friwords/filter', 'FriwordController.getFriwordsByFilter');

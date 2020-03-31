@@ -35,6 +35,8 @@ export default class FriwordCreatePost extends React.Component {
             isVisible: false,
             friword: {}
         };
+
+        this.form = null;
     }
 
     componentDidMount() {
@@ -65,6 +67,11 @@ export default class FriwordCreatePost extends React.Component {
                         isVisible: false,
                         friword: {}
                     });
+
+                    // Reset form
+                    if(this.form)
+                        this.form.resetFields();
+
                     this.props.onCreated(data.friword);
                 }
             }, (err) => {
@@ -109,6 +116,7 @@ export default class FriwordCreatePost extends React.Component {
                 }}
                 footer={null}>
                 <Form
+                    ref={(e) => { this.form = e; }}
                     name="post_friword"
                     className="post-friword"
                     initialValues={{ remember: true }}

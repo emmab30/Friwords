@@ -1,8 +1,8 @@
 import { ApiService } from './BaseService.js';
 
 var Auth = {
-    signInAnonymously: function(data, success, error) {
-        let url = 'auth/anonymous';
+    register: function(data, success, error) {
+        let url = 'auth/register';
 
         ApiService().post(url, data).then((response) => {
             if(success) success(response.data);
@@ -11,16 +11,7 @@ var Auth = {
         });
     },
     signInWithAlias: function(data, success, error) {
-        let url = 'auth/anonymous/credentials';
-
-        ApiService().post(url, data).then((response) => {
-            if(success) success(response.data);
-        }).catch((err) => {
-            if(error) error(err);
-        });
-    },
-    setPasswordAnonymousUser: function(data, success, error) {
-        let url = 'auth/anonymous/onboard/set_password';
+        let url = 'auth/sign_in';
 
         ApiService().post(url, data).then((response) => {
             if(success) success(response.data);
@@ -41,6 +32,15 @@ var Auth = {
         let url = 'profile/me';
 
         ApiService().post(url, data).then((response) => {
+            if(success) success(response.data);
+        }).catch((err) => {
+            if(error) error(err);
+        });
+    },
+    generateRandomAlias: function(success, error) {
+        let url = 'auth/generate_alias';
+
+        ApiService().get(url).then((response) => {
             if(success) success(response.data);
         }).catch((err) => {
             if(error) error(err);

@@ -39,9 +39,9 @@ export function ApiService(timeout = 15000, headers) {
     api.interceptors.response.use(response => {
         return response;
     }, error => {
-        if (error.response.status === 401) {
+        /*if (error.response.status === 401) {
             alert("error");
-        }
+        }*/
 
         return error;
     });
