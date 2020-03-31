@@ -289,7 +289,10 @@ export default class Friwords extends React.Component {
                                 filters.listing_mode = val;
                                 filters.page = 0;
                             }
-                            this.setState({ filters }, this.getFriwords);
+                            this.setState({
+                                filters,
+                                tabActiveKey: val
+                            }, this.getFriwords);
                         }}
                         defaultActiveKey={'0'}>
                         <TabPane
