@@ -232,10 +232,9 @@ export default class FriwordCard extends React.Component {
                                 <div style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 20 }}>
                                     <div style={{ height: 50 }}>
                                         <Avatar
-                                            src="https://image.flaticon.com/icons/svg/402/402256.svg"
+                                            src="https://image.flaticon.com/icons/svg/134/134934.svg"
                                             size={'small'}
-                                            shape={'circle'}
-                                            style={{ width: 30, height: 30, borderRadius: 15 }}
+                                            shape={'square'}
                                         />
                                     </div>
 

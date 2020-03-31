@@ -9,6 +9,10 @@ class FriwordComment extends Model {
 
         this.addHook('afterCreate', 'FriwordCommentHook.afterCreate');
     }
+
+    user() {
+        return this.hasOne('App/Models/User', 'user_alias', 'alias');
+    }
 }
 
 module.exports = FriwordComment

@@ -68,7 +68,11 @@ class FriwordController {
             .query()
             .where('id', request.params.id)
             .with('comments', (query) => {
-                query.orderBy('created_at', 'DESC')
+                query
+                    .orderBy('created_at', 'DESC')
+                    .with('user', (subquery) => {
+                        subquery.select('id', 'alias', 'country_code')
+                    })
             })
             .with('user', (query) => {
                 query.select(['id', 'alias', 'country_code']);

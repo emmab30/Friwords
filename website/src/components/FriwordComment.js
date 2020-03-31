@@ -32,14 +32,24 @@ export default class FriwordComment extends React.Component {
                     <Row gutter={24}>
                         <Col span={24} justify={'center'}>
                             <Avatar
-                                src={'https://image.flaticon.com/icons/svg/2743/2743220.svg'}
+                                src={'https://image.flaticon.com/icons/svg/2716/2716406.svg'}
                                 size={'small'}
-                                shape={'circle'}
+                                shape={'square'}
                             />
+
                             <span style={{ color: 'rgba(0,0,0,.75)', fontSize: 13, fontFamily: 'Open Sans', marginLeft: 5 }}>{ comment.text }</span>
                             <span style={{ display: 'block', marginTop: 5, fontSize: 10, textAlign: 'left' }}>{ moment(comment.created_at).fromNow() }</span>
                             { comment && comment.user_alias &&
                                 <span style={{ display: 'block', marginTop: 5, fontSize: 12, textAlign: 'right' }}>por <i>@{ comment.user_alias }</i></span>
+                            }
+
+                            { comment && comment.user && comment.user.country_code != null &&
+                                <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
+                                    <img
+                                        style={{ width: 20 }}
+                                        src={`https://www.countryflags.io/${comment.user.country_code}/shiny/64.png`}
+                                    />
+                                </div>
                             }
                         </Col>
                     </Row>
