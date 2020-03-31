@@ -91,7 +91,7 @@ class FriwordController {
             title: body.title,
             text: body.text,
             user_alias: body.user_alias,
-            gender: body.gender,
+            // gender: body.gender,
             comments_qty: 0,
             likes_qty: 0,
             dislikes_qty: 0
