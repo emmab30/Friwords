@@ -62,7 +62,7 @@ export default class FriwordCreatePost extends React.Component {
             this.setState({ isLoading : true });
 
             const { friword } = this.state;
-            friword.title = friword.text.substring(0, 12) + '...';
+            // friword.title = friword.text.substring(0, 12) + '...';
 
             Services.Friwords.postFriword(friword, (data) => {
                 this.setState({ isLoading : false });

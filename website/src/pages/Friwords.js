@@ -337,6 +337,7 @@ export default class Friwords extends React.Component {
                                     filters.page += 1;
                                     this.setState({ filters }, this.getFriwords);
                                 }}
+                                loading={this.state.isLoading}
                                 type="primary"
                                 icon={<Icons.ReloadOutlined />}
                                 style={{ display: 'flex', width: '80%', margin: '0 auto', marginBottom: 20, justifyContent: 'center', alignItems: 'center', height: 40 }}>
@@ -388,6 +389,7 @@ export default class Friwords extends React.Component {
                                 }}
                                 type="primary"
                                 icon={<Icons.ReloadOutlined />}
+                                loading={this.state.isLoading}
                                 style={{ display: 'flex', width: '80%', margin: '0 auto', marginBottom: 20, justifyContent: 'center', alignItems: 'center', height: 40 }}>
                                 Cargar más
                             </Button>
@@ -436,6 +438,7 @@ export default class Friwords extends React.Component {
                                     this.setState({ filters }, this.getFriwords);
                                 }}
                                 type="primary"
+                                loading={this.state.isLoading}
                                 icon={<Icons.ReloadOutlined />}
                                 style={{ display: 'flex', width: '80%', margin: '0 auto', marginBottom: 20, justifyContent: 'center', alignItems: 'center', height: 40 }}>
                                 Cargar más

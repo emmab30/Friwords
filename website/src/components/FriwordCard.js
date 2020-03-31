@@ -84,13 +84,16 @@ export default class FriwordCard extends React.Component {
                 onClick={() => {
                     // Create comment
                     if(!this.state.comment || this.state.comment.length < 2) {
-                        notification['error']({
+                        notification.open({
+                            className: 'error',
                             message: 'El comentario..',
                             description:
                                 'A tu comentario le falta un poco de magia. Complétalo',
                         });
                         return;
                     }
+
+                    this.setState({ isSendingComment : true });
                     Services.Friwords.postComment({
                         text: this.state.comment,
                         user_alias: this.props.user != null && this.props.user.alias != null ? this.props.user.alias : '',
@@ -101,7 +104,7 @@ export default class FriwordCard extends React.Component {
                         this.props.onRequestComments();
                         this.setState({
                             canLeaveComment : false,
-                            isSendingComment: true,
+                            isSendingComment: false,
                             showComments: true
                         });
 
@@ -115,7 +118,8 @@ export default class FriwordCard extends React.Component {
                     });
                 }}
                 style={{ backgroundColor: 'white', padding: 0, marginTop: 5 }}>
-                <Icons.SendOutlined style={{ color: 'rgba(0,0,0,.75)' }} />
+                <a style={{ fontWeight: 800, padding: 10 }}>Enviar</a>
+                {/*<Icons.SendOutlined style={{ color: 'rgba(0,0,0,.75)' }} />*/}
             </div>
         );
 
@@ -146,9 +150,15 @@ export default class FriwordCard extends React.Component {
                                     />
                                 }
                                 title={
-                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                    <div style={{ display: 'flex', flexDirection: 'row' }}>
+                                        { friword && friword.user && friword.user.country_code != null &&
+                                            <img
+                                                style={{ width: 23, marginRight: 5 }}
+                                                src={`https://www.countryflags.io/${friword.user.country_code}/shiny/64.png`}
+                                            />
+                                        }
                                         <span>
-                                            { friword.title }
+                                            { `${friword.text.substring(0, 30)}...` }
                                         </span>
                                     </div>
                                 }
@@ -159,15 +169,6 @@ export default class FriwordCard extends React.Component {
 
                             { friword && friword.user_alias &&
                                 <span style={{ display: 'block', marginTop: 0, fontSize: 12, textAlign: 'right' }}>por <i>@{ friword.user_alias }</i></span>
-                            }
-
-                            { friword && friword.user && friword.user.country_code != null &&
-                                <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
-                                    <img
-                                        style={{ width: 20 }}
-                                        src={`https://www.countryflags.io/${friword.user.country_code}/shiny/64.png`}
-                                    />
-                                </div>
                             }
 
                             <div style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', marginTop: 20, marginBottom: 20 }}>

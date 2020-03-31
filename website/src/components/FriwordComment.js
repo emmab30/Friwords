@@ -35,15 +35,16 @@ export default class FriwordComment extends React.Component {
                                 src={'https://image.flaticon.com/icons/svg/2716/2716406.svg'}
                                 size={'small'}
                                 shape={'square'}
+                                size={15}
                             />
 
                             <span style={{ color: 'rgba(0,0,0,.75)', fontSize: 13, fontFamily: 'Open Sans', marginLeft: 5 }}>{ comment.text }</span>
-                            <span style={{ display: 'block', marginTop: 5, fontSize: 10, textAlign: 'left' }}>{ moment(comment.created_at).fromNow() }</span>
+                            {/*<span style={{ display: 'block', marginTop: 10, fontSize: 10, textAlign: 'right' }}>{ moment(comment.created_at).fromNow() }</span>*/}
                             { comment && comment.user_alias &&
-                                <span style={{ display: 'block', marginTop: 5, fontSize: 12, textAlign: 'right' }}>por <i>@{ comment.user_alias }</i></span>
+                                <span style={{ display: 'block', marginTop: 0, fontSize: 10, textAlign: 'right' }}>por <i>@{ comment.user_alias }</i></span>
                             }
 
-                            { comment && comment.user && comment.user.country_code != null &&
+                            { false && comment && comment.user && comment.user.country_code != null &&
                                 <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
                                     <img
                                         style={{ width: 20 }}

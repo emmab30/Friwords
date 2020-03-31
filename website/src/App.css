@@ -74,7 +74,7 @@ input {
     border-bottom: 2px solid rgba(0,0,0,.2);
 }
 
-.ant-notification .success svg {
+.ant-notification .success svg, .ant-notification .success div {
     color: white !important;
 }
 
@@ -86,7 +86,7 @@ input {
     border-bottom: 2px solid rgba(0,0,0,.2);
 }
 
-.ant-notification .error svg {
+.ant-notification .error svg, .ant-notification .error div {
     color: white !important;
 }
 
