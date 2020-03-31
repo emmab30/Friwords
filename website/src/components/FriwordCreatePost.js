@@ -99,11 +99,21 @@ export default class FriwordCreatePost extends React.Component {
 
     isValid = () => {
         const { friword } = this.state;
-        if(friword.gender == null) {
+        /*if(friword.gender == null) {
             notification['error']({
                 message: 'El género',
                 description:
                     'Selecciona tu género',
+            });
+
+            return false;
+        }*/
+
+        if(!friword || !friword.text || friword.text.length < 10) {
+            notification.open({
+                className: 'error',
+                message: 'Oops',
+                description: 'Escribe un texto de al menos 10 caracteres',
             });
 
             return false;
@@ -174,7 +184,7 @@ export default class FriwordCreatePost extends React.Component {
 
                     <div style={{ width: '100%', height: 5, backgroundColor: 'rgba(0,0,0,0.05)', marginTop: 20, marginBottom: 20 }}></div>
 
-                    <span style={{ width: '100%', display: 'block', textAlign: 'center', fontWeight: 600 }}>Selecciona tu género</span>
+                    {/*<span style={{ width: '100%', display: 'block', textAlign: 'center', fontWeight: 600 }}>Selecciona tu género</span>
                     <div style={{ width: '100%', height: 40, display: 'flex', flexDirection: 'row', marginBottom: 20 }}>
                         <div
                             onClick={() => {
@@ -197,7 +207,7 @@ export default class FriwordCreatePost extends React.Component {
                                 style={{ maxWidth: 35, maxHeight: 35, opacity: friword.gender == 'male' ? 1 : 0.5 }}
                                 src="https://image.flaticon.com/icons/svg/921/921071.svg" />
                         </div>
-                    </div>
+                    </div>*/}
 
                     <Form.Item>
                         <Button type="primary" htmlType="submit" loading={this.state.isLoading}>

@@ -45,7 +45,7 @@ class FriwordController {
             .limit(perPage)
             .offset(body.page > 0 ? body.page * perPage : 0)
             .with('user', (query) => {
-                query.select(['id', 'alias', 'country_code']);
+                query.select(['id', 'alias', 'country_code', 'gender']);
             })
             .orderBy('created_at', 'DESC');
 
@@ -75,7 +75,7 @@ class FriwordController {
                     })
             })
             .with('user', (query) => {
-                query.select(['id', 'alias', 'country_code']);
+                query.select(['id', 'alias', 'country_code', 'gender']);
             })
             .first();
 

@@ -65,6 +65,7 @@ class AuthController {
                 alias: body.alias,
                 email: `${body.alias}@friwords.com`,
                 password: body.password,
+                gender: body.gender,
                 is_configured: true,
                 created_at: new Date(),
                 updated_at: new Date()

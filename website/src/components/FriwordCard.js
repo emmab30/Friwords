@@ -143,14 +143,14 @@ export default class FriwordCard extends React.Component {
                             <Meta
                                 avatar={
                                     <Avatar
-                                        src={friword.gender == 'female' ? 'https://image.flaticon.com/icons/svg/590/590083.svg' : 'https://image.flaticon.com/icons/svg/921/921071.svg'}
+                                        src={friword && friword.user && friword.user.gender == 'female' ? 'https://image.flaticon.com/icons/svg/590/590083.svg' : 'https://image.flaticon.com/icons/svg/921/921071.svg'}
                                         size={'small'}
                                         shape={'circle'}
                                         style={{ width: 30, height: 30, borderRadius: 15 }}
                                     />
                                 }
                                 title={
-                                    <div style={{ display: 'flex', flexDirection: 'row' }}>
+                                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                                         { friword && friword.user && friword.user.country_code != null &&
                                             <img
                                                 style={{ width: 23, marginRight: 5 }}
@@ -181,7 +181,7 @@ export default class FriwordCard extends React.Component {
                                     hidden={this.state.hideLikeBtn}>
                                     <div
                                         onClick={this.onLike}
-                                        style={{ display: 'flex', flex: 0, alignItems: 'center', justifyContent: 'center', backgroundColor: '#008bdb', width: 100, height: 30, borderRadius: 10, marginRight: 10, cursor: 'pointer', opacity: (this.props.likes > 0 ? 1 : .5) }}>
+                                        style={{ display: 'flex', flex: 0, alignItems: 'center', justifyContent: 'center', backgroundColor: '#008bdb', width: 100, height: 30, borderRadius: 2, marginRight: 10, cursor: 'pointer', opacity: (this.props.likes > 0 ? 1 : .75) }}>
                                         <Icons.LikeOutlined style={{ color: 'white' }} />
                                         <span style={{ color: 'white', marginLeft: 5 }}>{ this.props.likes }</span>
                                     </div>
@@ -196,7 +196,7 @@ export default class FriwordCard extends React.Component {
                                     hidden={this.state.hideDislikeBtn}>
                                     <div
                                         onClick={this.onDislike}
-                                        style={{ display: 'flex', flex: 0, alignItems: 'center', justifyContent: 'center', backgroundColor: '#ff2452', width: 100, height: 30, borderRadius: 10, cursor: 'pointer', opacity: (this.props.dislikes > 0 ? 1 : .5) }}>
+                                        style={{ display: 'flex', flex: 0, alignItems: 'center', justifyContent: 'center', backgroundColor: '#ff2452', width: 100, height: 30, borderRadius: 2, cursor: 'pointer', opacity: (this.props.dislikes > 0 ? 1 : .75) }}>
                                         <Icons.DislikeOutlined style={{ color: 'white' }} />
                                         <span style={{ color: 'white', marginLeft: 5 }}>{ this.props.dislikes }</span>
                                     </div>
@@ -231,28 +231,29 @@ export default class FriwordCard extends React.Component {
 
                             { this.state.canLeaveComment &&
                                 <div style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 20 }}>
-                                    <div style={{ height: 50 }}>
+                                    { /* <div style={{ height: 50 }}>
                                         <Avatar
                                             src="https://image.flaticon.com/icons/svg/134/134934.svg"
                                             size={'small'}
                                             shape={'square'}
                                         />
-                                    </div>
+                                    </div> */ }
 
                                     <div style={{ display: 'flex', flex: 1 }}>
                                         <Form
                                             name="post_comment"
-                                            style={{ width: '100%', paddingLeft: 10, paddingRight: 10 }}>
+                                            style={{ width: '100%', paddingLeft: 0, paddingRight: 0 }}>
                                             <Form.Item
                                                 name="comment"
-                                                rules={[{ required: true, message: 'Ingresa un comentario' }]}>
+                                                rules={[{ required: true, message: 'Ingresa un comentario' }]}
+                                                style={{ marginBottom: 0, paddingBottom: 0 }}>
                                                 <Input
                                                     suffix={sendCommentSuffix}
                                                     placeholder="Deja tu comentario"
                                                     onChange={(evt) => {
                                                         this.setState({ comment: evt.target.value });
                                                     }}
-                                                    style={{ borderRadius : 10, borderWidth: 1, borderColor: 'rgba(0,0,0,0.05)', height: 40 }}
+                                                    style={{ borderRadius : 2, borderWidth: 1, borderColor: 'rgba(0,0,0,0.05)', height: 40 }}
                                                 />
                                             </Form.Item>
                                         </Form>

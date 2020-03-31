@@ -62,10 +62,20 @@ export default class FriwordWelcome extends React.Component {
     }
 
     onFinish = () => {
+        if(!this.state.auth.gender) {
+            notification.open({
+                className: 'error',
+                message: <Icons.CloseCircleFilled />,
+                description: 'Escoge tu género',
+            });
+            return;
+        };
+
         this.setState({ isLoading : true });
         Services.Auth.register({
             alias: this.state.auth.alias,
-            password: this.state.auth.password
+            password: this.state.auth.password,
+            gender: this.state.auth.gender
         }, (data) => {
             if(data.success) {
                 Services.Base.SetToken(data.token);
@@ -142,6 +152,31 @@ export default class FriwordWelcome extends React.Component {
                             style={{ width: '100%', margin: '0 auto' }}
                             prefix={<Icons.KeyOutlined className="site-form-item-icon" />} placeholder="Contraseña" />
                     </Form.Item>
+
+                    <span style={{ width: '100%', display: 'block', textAlign: 'center', fontWeight: 600, color: 'white' }}>Selecciona tu género</span>
+                    <div style={{ width: '100%', height: 40, display: 'flex', flexDirection: 'row', marginBottom: 20 }}>
+                        <div
+                            onClick={() => {
+                                auth.gender = 'female';
+                                this.setState({ auth });
+                            }}
+                            style={{ display: 'flex', flex: 1, flexDirection: 'row', backgroundColor: 'transparent', justifyContent: 'center', alignItems: 'center' }}>
+                            <img
+                                style={{ maxWidth: 35, maxHeight: 35, opacity: auth.gender == 'female' ? 1 : 0.6 }}
+                                src="https://image.flaticon.com/icons/svg/590/590083.svg"
+                            />
+                        </div>
+                        <div
+                            onClick={() => {
+                                auth.gender = 'male';
+                                this.setState({ auth });
+                            }}
+                            style={{ display: 'flex', flex: 1, flexDirection: 'row', backgroundColor: 'transparent', justifyContent: 'center', alignItems: 'center' }}>
+                            <img
+                                style={{ maxWidth: 35, maxHeight: 35, opacity: auth.gender == 'male' ? 1 : 0.6 }}
+                                src="https://image.flaticon.com/icons/svg/921/921071.svg" />
+                        </div>
+                    </div>
 
                     <Form.Item style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <Button

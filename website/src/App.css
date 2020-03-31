@@ -5,6 +5,11 @@
     src: url('./assets/fonts/Good_Morning.ttf'); /* Safari, Android, iOS */
 }
 
+* {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+}
+
 input[type='text'],
 input[type='number'],
 textarea,
@@ -107,4 +112,21 @@ input {
 .ant-card-body {
     transition: all 0.1s ease-in;
     -webkit-transition: all 0.1s ease-in;
+}
+
+.ant-card-meta-title {
+    margin-bottom: 0 !important;
+}
+
+.ant-card-meta-title span {
+    font-size: 13px;
+    color: #25b864 !important;
+    font-weight: 600;
+}
+
+.ant-card-meta-description {
+    font-size: 16px;
+    color: rgba(80,80,80,1);
+    margin-top: 10px;
+    margin-bottom: 10px;
 }

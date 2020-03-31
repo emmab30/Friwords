@@ -19,6 +19,8 @@ class UserSchema extends Schema {
                 .string('email', 254)
                 .notNullable()
                 .unique();
+
+            table.string('gender').notNullable();
             table.string('password', 60).notNullable();
             table.boolean('is_configured').default(false);
 
