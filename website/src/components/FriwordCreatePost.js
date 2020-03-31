@@ -60,7 +60,11 @@ export default class FriwordCreatePost extends React.Component {
     onFinish = () => {
         if(this.isValid()) {
             this.setState({ isLoading : true });
-            Services.Friwords.postFriword(this.state.friword, (data) => {
+
+            const { friword } = this.state;
+            friword.title = friword.text.substring(0, 12) + '...';
+
+            Services.Friwords.postFriword(friword, (data) => {
                 this.setState({ isLoading : false });
                 if(data.success) {
                     this.setState({
@@ -73,11 +77,18 @@ export default class FriwordCreatePost extends React.Component {
                         this.form.resetFields();
 
                     this.props.onCreated(data.friword);
+                } else {
+                    notification.open({
+                        className: 'error',
+                        message: 'Oops',
+                        description: data.message,
+                    });
                 }
             }, (err) => {
                 // Do nothing
                 this.setState({ isLoading : false });
-                 notification['error']({
+                notification.open({
+                    className: 'error',
                     message: 'Oops',
                     description:
                         'Tu friword no pudo ser creado ahora. Intenta en unos momentos.',
@@ -128,7 +139,7 @@ export default class FriwordCreatePost extends React.Component {
 
                     {/*<div style={{ width: '100%', height: 8, backgroundColor: 'rgba(0,0,0,0.01)', marginTop: 10, marginBottom: 10 }}></div>*/}
 
-                    <Form.Item
+                    {/*<Form.Item
                         name="title"
                         rules={[{ required: true, message: 'Ingresa un título' }]}>
                         <Input
@@ -137,7 +148,7 @@ export default class FriwordCreatePost extends React.Component {
                                 this.setState({ friword });
                             }}
                             prefix={<Icons.QuestionCircleOutlined className="site-form-item-icon" />} placeholder="Título" />
-                    </Form.Item>
+                    </Form.Item>*/}
 
                     <Form.Item
                         name="text"
