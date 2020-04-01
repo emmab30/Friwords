@@ -49,8 +49,12 @@ class FriwordController {
             })
             .orderBy('created_at', 'DESC');
 
-        if(body.only_me == true && user != null) {
-            friwords.where('user_alias', user.alias);
+        if(body.only_me == true) {
+            if(user != null) {
+                friwords.where('user_alias', user.alias);
+            } else {
+                return response.json({ success: true, friwords: [] });
+            }
         } else if(body.listing_mode != null) {
             friwords.where('listing_mode', body.listing_mode);
         }
