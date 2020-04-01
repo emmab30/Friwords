@@ -6,7 +6,7 @@ const Notification = use('App/Models/Notification');
 class UserController {
     async getMe({ request, auth, response }) {
         try {
-            await auth.check()
+            await auth.check();
         } catch (error) {
             return response.json({
                 success: true,
@@ -15,6 +15,14 @@ class UserController {
         }
 
         let user = await auth.getUser();
+
+        // Update the updated_at date to know when logged in this user
+        await User
+            .query()
+            .where('id', user.id)
+            .update({
+                updated_at: new Date()
+            });
 
         // Get unread notifications
         user.unread_notifications = await Notification
