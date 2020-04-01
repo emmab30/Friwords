@@ -1,6 +1,7 @@
 'use strict'
 
 const User = use('App/Models/User');
+const Notification = use('App/Models/Notification');
 
 class UserController {
     async getMe({ request, auth, response }) {
@@ -14,6 +15,14 @@ class UserController {
         }
 
         let user = await auth.getUser();
+
+        // Get unread notifications
+        user.unread_notifications = await Notification
+            .query()
+            .where('user_id', user.id)
+            .where('seen', false)
+            .getCount('id');
+
         return response.json({
             success: true,
             user

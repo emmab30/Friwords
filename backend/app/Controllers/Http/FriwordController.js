@@ -1,6 +1,7 @@
 'use strict'
 
 const Friword = use('App/Models/Friword');
+const Notification = use('App/Models/Notification');
 const FriwordComment = use('App/Models/FriwordComment');
 
 class FriwordController {
@@ -107,8 +108,10 @@ class FriwordController {
         });
     }
 
-    async postFriwordComment({ request, response }) {
+    async postFriwordComment({ request, auth, response }) {
         let body = request.all();
+        let user = await auth.getUser();
+
         let friwordComment = await FriwordComment.create({
             friword_id: request.params.id,
             user_alias: body.user_alias,
@@ -116,6 +119,27 @@ class FriwordController {
             likes: 0,
             dislikes: 0
         });
+
+        // Create the notification for the friword's owner
+        let friword = await Friword
+            .query()
+            .where('id', request.params.id)
+            .with('user')
+            .first();
+        if(friword && friword.user) {
+            friword = friword.toJSON();
+
+            if(friword.user.alias != body.user_alias) {
+                await Notification.create({
+                    user_id: friword.user.id,
+                    text: `@${body.user_alias} hizo un comentario en tu pregunta '${friword.text.substring(0, 30)}...'`,
+                    html: `<span style="color: #ffa000; font-weight: 800;">@${body.user_alias}</span> hizo un comentario en tu pregunta <b>'${friword.text.substring(0, 30)}...'</b>`,
+                    seen: false,
+                    created_at: new Date(),
+                    updated_at: new Date()
+                });
+            }
+        }
 
         return response.json({
             success: true,

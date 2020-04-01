@@ -37,4 +37,8 @@ Route.group(() => {
     // Profile
     Route.get('profile/me', 'UserController.getMe');
     Route.post('profile/me', 'UserController.updateMe');
+
+    // Notifications
+    Route.get('notifications/me', 'NotificationController.getMe');
+    Route.post('notifications/:id/update', 'NotificationController.updateNotification');
 }).prefix('api/v1');
