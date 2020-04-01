@@ -132,7 +132,7 @@ export default class FriwordCard extends React.Component {
                         // Do nothing
                     });
                 }}
-                style={{ backgroundColor: 'white', padding: 0, marginTop: 5 }}>
+                style={{ backgroundColor: 'transparent', padding: 0, marginTop: 5 }}>
                 <a style={{ fontWeight: 800, padding: 10 }}>Enviar</a>
                 {/*<Icons.SendOutlined style={{ color: 'rgba(0,0,0,.75)' }} />*/}
             </div>
@@ -265,6 +265,7 @@ export default class FriwordCard extends React.Component {
                                                 <Input
                                                     suffix={sendCommentSuffix}
                                                     placeholder="Deja tu comentario"
+                                                    disabled={this.props.user == null}
                                                     onChange={(evt) => {
                                                         this.setState({ comment: evt.target.value });
                                                     }}
@@ -273,6 +274,12 @@ export default class FriwordCard extends React.Component {
                                             </Form.Item>
                                         </Form>
                                     </div>
+                                </div>
+                            }
+
+                            { this.props.user == null &&
+                                <div style={{ width: '100%', backgroundColor: '#25b864', padding: 5, marginTop: 10, borderRadius: 2 }}>
+                                    <span style={{ display: 'block', fontSize: 12, fontWeight: 600, textAlign: 'left', color: 'white' }}>Creá tu alias anónimo para dejar un comentario</span>
                                 </div>
                             }
 
