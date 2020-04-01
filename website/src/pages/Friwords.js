@@ -26,6 +26,7 @@ import FriwordWelcome from '../components/FriwordWelcome';
 import FriwordLogin from '../components/FriwordLogin';
 import FriwordCreatePost from '../components/FriwordCreatePost';
 import FriwordCard from '../components/FriwordCard';
+import FriwordsNotificationsPanel from '../components/FriwordsNotificationsPanel';
 
 // Services
 import * as Services from '../services'
@@ -45,13 +46,14 @@ export default class Friwords extends React.Component {
                 page: 0
             },
             tabActiveKey: '0',
+            isViewingNotifications: false,
             isWelcome: false,
             isCreating: false,
             isLoggingIn: false,
             isLoading: true,
             hasUpdates: false,
-            previousOnlineUsers: 132,
-            newOnlineUsers: 132,
+            /*previousOnlineUsers: 132,
+            newOnlineUsers: 132,*/
             user: null
         };
     }
@@ -69,8 +71,8 @@ export default class Friwords extends React.Component {
             }
         }, 10000);
 
-        this.getUsersOnline();
-        setInterval(this.getUsersOnline, 10000);
+        /*this.getUsersOnline();
+        setInterval(this.getUsersOnline, 10000);*/
 
         this.getMe();
     }
@@ -78,10 +80,10 @@ export default class Friwords extends React.Component {
     getMe = () => {
         Services.Auth.getMe((data) => {
             if(data.success) {
-                if(data.user == null) { // Not authenticated
-                    // this.setState({ isWelcome : true });
-                } else {
+                if(data.user != null) {
                     this.setState({ user: data.user });
+
+                    Services.Auth.user = data.user;
 
                     if(data.user && !data.user.country_code && !data.user.ip) {
                         const apiKey = '45c816eed2d04a8b96e59ff177c609af';
@@ -105,7 +107,7 @@ export default class Friwords extends React.Component {
         });
     }
 
-    getUsersOnline = () => {
+    /*getUsersOnline = () => {
         let onlineUsers = this.state.previousOnlineUsers;
         let offsetIncrement = 5;
         let operator = Math.random() < 0.5 ? 1 : -1;
@@ -115,10 +117,10 @@ export default class Friwords extends React.Component {
             newOnlineUsers: newUsers,
             previousOnlineUsers: onlineUsers
         });
-    }
+    }*/
 
     getFriwords = () => {
-        this.getUsersOnline()
+        // this.getUsersOnline()
         this.setState({ isLoading : true, hasUpdates: false });
         Services.Friwords.getFriwordsByFilter(this.state.filters, (data) => {
 
@@ -179,8 +181,13 @@ export default class Friwords extends React.Component {
         });
     }
 
+    refresh = () => {
+        this.getFriwords();
+        this.getMe();
+    }
+
     isAuthenticated = () => {
-        return this.state.user != null;
+        return Services.Auth.isAuthenticated();
     }
 
     render() {
@@ -211,7 +218,7 @@ export default class Friwords extends React.Component {
                             }}
                         >{ this.isAuthenticated() ? 'Cambiar' : 'Ingresar' }</a>
                     </div>
-                    <div
+                    {/*<div
                         className="counter-online-users"
                         style={{ height: 45, display: 'flex', flex: 0, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white', borderTopLeftRadius: 0, cursor: 'pointer', zIndex: 9999, borderLeft: '2px solid rgba(0,0,0,.05)', borderBottom: '2px solid rgba(0,0,0,.05)', paddingLeft: 10, paddingRight: 10 }}>
                         <CountUp
@@ -221,9 +228,24 @@ export default class Friwords extends React.Component {
                         <img
                             style={{ width: 20, height: 20, marginLeft: 10, opacity: .5 }}
                             src="https://image.flaticon.com/icons/svg/745/745205.svg" />
+                    </div>*/}
+                    <div
+                        className="counter-online-users"
+                        onClick={() => {
+                            if(this.isAuthenticated()) {
+                                this.setState({ isViewingNotifications : true });
+                            } else {
+                                this.setState({ isWelcome : true });
+                            }
+                        }}
+                        style={{ height: 45, display: 'flex', flex: 0, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white', borderTopLeftRadius: 0, cursor: 'pointer', zIndex: 9999, borderLeft: '2px solid rgba(0,0,0,.05)', borderBottom: '2px solid rgba(0,0,0,.05)', paddingLeft: 10, paddingRight: 10 }}>
+                        <span style={{ fontWeight: 600 }}>{ this.state.user != null ? (this.state.user.unread_notifications || 0) : 0 }</span>
+                        <img
+                            style={{ width: 20, height: 20, marginLeft: 5, opacity: 1 }}
+                            src={`/img/bell-${this.state.user != null && this.state.user.unread_notifications > 0 ? 'on' : 'off'}.png`} />
                     </div>
                     <div
-                        onClick={this.getFriwords}
+                        onClick={this.refresh}
                         style={{ height: 45, display: 'flex', flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#25b864', cursor: 'pointer', zIndex: 9999, borderBottomRightRadius: 10, borderLeft: '0px solid rgba(0,0,0,.05)', borderBottom: '2px solid rgba(0,0,0,.2)', opacity: this.state.hasUpdates ? 1 : .6 }}>
                         <span style={{ fontWeight: 500, fontSize: '0.6em', color: 'white' }}>{ this.state.isLoading ? 'Actualizando..' : 'Actualizar' }</span>
                         <img
@@ -239,6 +261,14 @@ export default class Friwords extends React.Component {
                 </section>
 
                 <div className="scroll-container">
+                    <FriwordsNotificationsPanel
+                        isVisible={this.state.isViewingNotifications}
+                        user={this.state.user}
+                        onRequestClose={() => {
+                            this.setState({ isViewingNotifications : false }, this.getMe);
+                        }}
+                    />
+
                     <FriwordLogin
                         isVisible={this.state.isLoggingIn}
                         onRequestClose={() => {
@@ -248,7 +278,7 @@ export default class Friwords extends React.Component {
                             }
                         }}
                         onLoggedIn={(user) => {
-                            this.setState({ user, isLoggingIn: false }, this.getFriwords);
+                            this.setState({ user, isLoggingIn: false }, this.refresh);
                         }}
                     />
 
@@ -264,7 +294,7 @@ export default class Friwords extends React.Component {
                             // Reset filters and then fetch the first page
                             filters.page = 0;
                             filters.listing_mode = 1;
-                            this.setState({ filters, tabActiveKey: '1' }, this.getFriwords);
+                            this.setState({ filters, tabActiveKey: '1' }, this.refresh);
                             notification.open({
                                 className: 'success',
                                 message: <Icons.HeartTwoTone twoToneColor="#eb2f96" />,
@@ -328,6 +358,7 @@ export default class Friwords extends React.Component {
                                         Services.Friwords.likeById(e.id, (success) => {
                                             setTimeout(() => {
                                                 this.getFriwordById(e.id);
+                                                this.getMe();
                                             }, 500);
                                         });
                                     }}
@@ -335,12 +366,14 @@ export default class Friwords extends React.Component {
                                         Services.Friwords.dislikeById(e.id, (success) => {
                                             setTimeout(() => {
                                                 this.getFriwordById(e.id);
+                                                this.getMe();
                                             }, 500);
                                         });
                                     }}
                                     onRequestComments={() => {
                                         this.getFriwordById(e.id);
                                     }}
+                                    onPostedComment={this.getMe}
                                 />
                             ))}
 
@@ -391,6 +424,7 @@ export default class Friwords extends React.Component {
                                     onRequestComments={() => {
                                         this.getFriwordById(e.id);
                                     }}
+                                    onPostedComment={this.getMe}
                                 />
                             ))}
 
@@ -441,6 +475,7 @@ export default class Friwords extends React.Component {
                                     onRequestComments={() => {
                                         this.getFriwordById(e.id);
                                     }}
+                                    onPostedComment={this.getMe}
                                 />
                             ))}
 

@@ -1,6 +1,10 @@
 import { ApiService } from './BaseService.js';
 
 var Auth = {
+    user: null,
+    isAuthenticated: () => {
+        return Auth.user != null
+    },
     register: function(data, success, error) {
         let url = 'auth/register';
 

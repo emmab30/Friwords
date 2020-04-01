@@ -124,7 +124,11 @@ export default class FriwordCard extends React.Component {
                             message: <Icons.HeartTwoTone twoToneColor="#eb2f96" />,
                             description: 'Tu comentario ya está visible',
                         });
+
+                        if(this.props.onPostedComment)
+                            this.props.onPostedComment();
                     }, (err) => {
+                        console.log(err);
                         // Do nothing
                     });
                 }}
