@@ -336,7 +336,7 @@ export default class Friwords extends React.Component {
                                 tabActiveKey: val
                             }, this.getFriwords);
                         }}
-                        defaultActiveKey={'0'}>
+                        defaultActiveKey={'1'}>
                         <TabPane
                             tab={
                                 <span>
