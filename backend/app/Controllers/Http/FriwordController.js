@@ -32,10 +32,10 @@ class FriwordController {
                 });
             }*/
         } catch (exception) {
-            return response.json({
+            /*return response.json({
                 success: true,
-                friword: null
-            });
+                friwords: null
+            });*/
         }
 
 
