@@ -82,6 +82,17 @@ export default class FriwordCard extends React.Component {
         let sendCommentSuffix = (
             <div
                 onClick={() => {
+
+                    if(this.props.user == null) {
+                        notification.open({
+                            className: 'error',
+                            message: 'Ingresa primero',
+                            description:
+                                'Ingresa o crea tu alias para dejar comentarios',
+                        });
+                        return;
+                    }
+
                     // Create comment
                     if(!this.state.comment || this.state.comment.length < 2) {
                         notification.open({

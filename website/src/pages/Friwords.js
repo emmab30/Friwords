@@ -79,7 +79,7 @@ export default class Friwords extends React.Component {
         Services.Auth.getMe((data) => {
             if(data.success) {
                 if(data.user == null) { // Not authenticated
-                    this.setState({ isWelcome : true });
+                    // this.setState({ isWelcome : true });
                 } else {
                     this.setState({ user: data.user });
 
@@ -179,6 +179,10 @@ export default class Friwords extends React.Component {
         });
     }
 
+    isAuthenticated = () => {
+        return this.state.user != null;
+    }
+
     render() {
         const {
             friwords,
@@ -199,9 +203,13 @@ export default class Friwords extends React.Component {
                             style={{ textDecorationLine: 'underline', fontSize: '0.6em' }}
                             href="#"
                             onClick={() => {
-                                this.setState({ isLoggingIn : true });
+                                if(this.isAuthenticated()) {
+                                    this.setState({ isLoggingIn : true });
+                                } else {
+                                    this.setState({ isWelcome : true });
+                                }
                             }}
-                        >Cambiar</a>
+                        >{ this.isAuthenticated() ? 'Cambiar' : 'Ingresar' }</a>
                     </div>
                     <div
                         className="counter-online-users"
@@ -268,12 +276,16 @@ export default class Friwords extends React.Component {
                     <div style={{ width: '100%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                         <Button
                             onClick={() => {
-                                this.setState({ isCreating : true });
+                                if(this.isAuthenticated()) {
+                                    this.setState({ isCreating : true });
+                                } else {
+                                    this.setState({ isWelcome : true });
+                                }
                             }}
                             type="primary"
                             icon={<Icons.PlusOutlined />}
                             style={{ display: 'flex', width: '80%', margin: '0 auto', marginBottom: 20, justifyContent: 'center', alignItems: 'center', height: 40 }}>
-                            Escribir algo
+                            Publicar friword
                         </Button>
                     </div>
 
