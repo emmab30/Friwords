@@ -42,10 +42,10 @@ export default class Friwords extends React.Component {
         this.state = {
             friwords: [],
             filters: {
-                listing_mode : 0,
+                listing_mode : 1,
                 page: 0
             },
-            tabActiveKey: '0',
+            tabActiveKey: '1',
             isViewingNotifications: false,
             isWelcome: false,
             isCreating: false,
