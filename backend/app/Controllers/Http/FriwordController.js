@@ -25,12 +25,12 @@ class FriwordController {
         try {
             user = await auth.getUser();
 
-            if(user == null){
+            /*if(user == null){
                 return response.json({
                     success: true,
                     friword: null
                 });
-            }
+            }*/
         } catch (exception) {
             return response.json({
                 success: true,
@@ -49,7 +49,7 @@ class FriwordController {
             })
             .orderBy('created_at', 'DESC');
 
-        if(body.only_me == true) {
+        if(body.only_me == true && user != null) {
             friwords.where('user_alias', user.alias);
         } else if(body.listing_mode != null) {
             friwords.where('listing_mode', body.listing_mode);

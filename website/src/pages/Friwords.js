@@ -471,6 +471,10 @@ export default class Friwords extends React.Component {
                             description:
                                 'Bienvenid@ a Friwords. Empieza leyendo y publicando',
                         });
+
+                        setTimeout(() => {
+                            this.getFriwords();
+                        }, 3000);
                     }}
                     onRequestLogin={() => {
                         this.setState({ isLoggingIn : true, isWelcome: false });
