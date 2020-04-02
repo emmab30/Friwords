@@ -52,7 +52,7 @@ input {
 }
 
 .input-comment {
-    font-size: 1em !important;
+    font-size: 16px !important;
     padding-right: 15% !important;
     outline: none !important;
     border: 1px solid rgba(37, 184, 100, .1) !important;
@@ -64,7 +64,7 @@ input {
 }
 
 .input-comment::placeholder {
-    font-size: 1em;
+    font-size: 16px !important;
     color: rgba(0,0,0,.4);
 }
 
