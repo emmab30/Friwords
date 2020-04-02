@@ -153,7 +153,8 @@ export default class FriwordsNotificationsPanel extends React.Component {
     render() {
         const {
             notifications,
-            friword
+            friword,
+            isLoading
         } = this.state;
 
         return (
@@ -166,7 +167,7 @@ export default class FriwordsNotificationsPanel extends React.Component {
                 }}
                 footer={null}>
 
-                { notifications && notifications.length > 0 && notifications.map((notification) => {
+                { !isLoading && notifications && notifications.length > 0 && notifications.map((notification) => {
                     return (
                         <div
                             onClick={() => {
@@ -185,8 +186,12 @@ export default class FriwordsNotificationsPanel extends React.Component {
                     );
                 })}
 
-                { !notifications || notifications.length == 0 &&
+                { !isLoading && !notifications || notifications.length == 0 &&
                     <span>¡Aún no tienes notificaciones para revisar!</span>
+                }
+
+                { isLoading &&
+                    <Icons.LoadingOutlined style={{ fontSize: 24, color: '#ff306f', marginTop: 10 }} spin />
                 }
 
             </Modal>

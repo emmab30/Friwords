@@ -32,6 +32,7 @@ export default class FriwordLogin extends React.Component {
         super(props);
         this.state = {
             isVisible: false,
+            isLoading: false,
             auth: {}
         };
     }
@@ -55,7 +56,9 @@ export default class FriwordLogin extends React.Component {
     }
 
     onFinish = () => {
+        this.setState({ isLoading : true });
         Services.Auth.signInWithAlias(this.state.auth, (data) => {
+            this.setState({ isLoading : false });
             if(data.success) {
                 Services.Base.SetToken(data.token);
                 this.props.onLoggedIn(data.user);
@@ -67,6 +70,7 @@ export default class FriwordLogin extends React.Component {
                 });
             }
         }, (err) => {
+            this.setState({ isLoading : false });
             notification.open({
                 className: 'error',
                 message: <Icons.CloseCircleFilled />,
