@@ -172,7 +172,7 @@ export default class FriwordsNotificationsPanel extends React.Component {
 
                             <div style={{ width: '100%', borderBottomWidth: 5, borderBottomColor: 'rgba(0,0,0,.05)' }} dangerouslySetInnerHTML={{ __html: notification.html }}></div>
 
-                            <span style={{ display: 'block', width: '100%', fontSize: 11, marginTop: 5, textAlign: 'right' }}>{ moment(notifications.created_at).fromNow() }</span>
+                            <span style={{ display: 'block', width: '100%', fontSize: 11, marginTop: 5, textAlign: 'right' }}>{ moment(notification.created_at).fromNow() }</span>
 
                             <div style={{ width: '100%', height: 5, backgroundColor: 'rgba(0,0,0,0.1)', marginTop: 10 }}></div>
                         </div>

@@ -26,23 +26,16 @@ export default class FriwordComment extends React.Component {
         const { comment } = this.props;
 
         return (
-            <div>
-                <div style={{ width: '95%', marginLeft: '5%', height: 5, backgroundColor: 'rgba(0,0,0,.01)', marginTop: 10, marginBottom: 10 }} />
-                <div style={{ width: '95%', marginLeft: '5%', borderLeft: `4px solid ${hexToRgbA(this.state.randomColor, .4)}`, paddingLeft: 10, marginTop: 5 }}>
+            <div style={{ marginBottom: 15 }}>
+                {/*<div style={{ width: '95%', marginLeft: '2%', height: 3, backgroundColor: 'rgba(0,0,0,.005)', marginTop: 5, marginBottom: 0 }} />*/}
+                <div style={{ width: '95%', marginLeft: '2%', borderLeft: `4px solid ${hexToRgbA(this.state.randomColor, .2)}`, paddingLeft: 10, marginTop: 0 }}>
                     <Row gutter={24}>
                         <Col span={24} justify={'center'}>
-                            {/*<Avatar
-                                src={'https://image.flaticon.com/icons/svg/2716/2716406.svg'}
-                                size={'small'}
-                                shape={'square'}
-                                size={15}
-                            />*/}
-
-                            <span style={{ color: 'rgba(0,0,0,.75)', fontSize: 13, fontFamily: 'Open Sans', marginLeft: 5 }}>{ comment.text }</span>
-                            {/*<span style={{ display: 'block', marginTop: 10, fontSize: 10, textAlign: 'right' }}>{ moment(comment.created_at).fromNow() }</span>*/}
                             { comment && comment.user_alias &&
-                                <span style={{ display: 'block', marginTop: 0, fontSize: 10, textAlign: 'right' }}>por <i>@{ comment.user_alias }</i></span>
+                                <span style={{ display: 'block', marginTop: 0, fontSize: 10, textAlign: 'left' }}><span style={{ color: '#25b864', fontWeight: 600 }}>@{ comment.user_alias }</span></span>
                             }
+
+                            <span style={{ color: 'rgba(0,0,0,.75)', fontSize: 12, fontFamily: 'Open Sans', marginLeft: 0, marginTop: 5 }}>{ comment.text }</span>
 
                             { false && comment && comment.user && comment.user.country_code != null &&
                                 <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end' }}>

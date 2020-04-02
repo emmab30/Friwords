@@ -27,6 +27,7 @@ import * as Services from '../services'
 import '../App.css';
 
 const { Meta } = Card;
+const { TextArea } = Input;
 
 export default class FriwordCard extends React.Component {
     constructor(props) {
@@ -132,8 +133,8 @@ export default class FriwordCard extends React.Component {
                         // Do nothing
                     });
                 }}
-                style={{ backgroundColor: 'transparent', padding: 0, marginTop: 5 }}>
-                <a style={{ fontWeight: 800, padding: 10 }}>Enviar</a>
+                style={{ backgroundColor: 'transparent', padding: 0, marginTop: 0, display: 'flex', flex: 1 }}>
+                <a style={{ fontWeight: 800, padding: 15 }}>Enviar</a>
                 {/*<Icons.SendOutlined style={{ color: 'rgba(0,0,0,.75)' }} />*/}
             </div>
         );
@@ -177,13 +178,17 @@ export default class FriwordCard extends React.Component {
                                         </span>
                                     </div>
                                 }
-                                description={friword.text}
+                                description={
+                                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                        <span style={{ fontSize: '0.9em' }}>{ `${friword.text}` }</span>
+                                    </div>
+                                }
                             />
 
                             {/*<span style={{ display: 'block', marginTop: 10, fontSize: 12, textAlign: 'right' }}>{ moment(friword.created_at).fromNow() }</span>*/}
 
                             { friword && friword.user_alias &&
-                                <span style={{ display: 'block', marginTop: 0, fontSize: 12, textAlign: 'right' }}>por <i>@{ friword.user_alias }</i></span>
+                                <span style={{ display: 'block', marginTop: 0, fontSize: 10, textAlign: 'right' }}>por <span style={{ color: '#25b864', fontWeight: 600 }}>@{ friword.user_alias }</span></span>
                             }
 
                             <div style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', marginTop: 20, marginBottom: 20 }}>
@@ -196,7 +201,7 @@ export default class FriwordCard extends React.Component {
                                     hidden={this.state.hideLikeBtn}>
                                     <div
                                         onClick={this.onLike}
-                                        style={{ display: 'flex', flex: 0, alignItems: 'center', justifyContent: 'center', backgroundColor: '#008bdb', width: 100, height: 30, borderRadius: 2, marginRight: 10, cursor: 'pointer', opacity: (this.props.likes > 0 ? 1 : .75) }}>
+                                        style={{ display: 'flex', flex: 0, alignItems: 'center', justifyContent: 'center', backgroundColor: '#25b864', width: 60, height: 30, borderRadius: 2, marginRight: 10, cursor: 'pointer', opacity: (this.props.likes > 0 ? 1 : .75) }}>
                                         <Icons.LikeOutlined style={{ color: 'white' }} />
                                         <span style={{ color: 'white', marginLeft: 5 }}>{ this.props.likes }</span>
                                     </div>
@@ -211,7 +216,7 @@ export default class FriwordCard extends React.Component {
                                     hidden={this.state.hideDislikeBtn}>
                                     <div
                                         onClick={this.onDislike}
-                                        style={{ display: 'flex', flex: 0, alignItems: 'center', justifyContent: 'center', backgroundColor: '#ff2452', width: 100, height: 30, borderRadius: 2, cursor: 'pointer', opacity: (this.props.dislikes > 0 ? 1 : .75) }}>
+                                        style={{ display: 'flex', flex: 0, alignItems: 'center', justifyContent: 'center', backgroundColor: '#ff2452', width: 60, height: 30, borderRadius: 2, cursor: 'pointer', opacity: (this.props.dislikes > 0 ? 1 : .75) }}>
                                         <Icons.DislikeOutlined style={{ color: 'white' }} />
                                         <span style={{ color: 'white', marginLeft: 5 }}>{ this.props.dislikes }</span>
                                     </div>
@@ -257,12 +262,13 @@ export default class FriwordCard extends React.Component {
                                     <div style={{ display: 'flex', flex: 1 }}>
                                         <Form
                                             name="post_comment"
-                                            style={{ width: '100%', paddingLeft: 0, paddingRight: 0 }}>
+                                            style={{ width: '100%', paddingLeft: 0, paddingRight: 0, position: 'relative' }}>
                                             <Form.Item
                                                 name="comment"
                                                 rules={[{ required: true, message: 'Ingresa un comentario' }]}
                                                 style={{ marginBottom: 0, paddingBottom: 0 }}>
-                                                <Input
+                                                { /* <Input
+                                                    className="input-comment"
                                                     suffix={sendCommentSuffix}
                                                     placeholder="Deja tu comentario"
                                                     disabled={this.props.user == null}
@@ -270,7 +276,21 @@ export default class FriwordCard extends React.Component {
                                                         this.setState({ comment: evt.target.value });
                                                     }}
                                                     style={{ borderRadius : 2, borderWidth: 1, borderColor: 'rgba(0,0,0,0.05)', height: 40 }}
-                                                />
+                                                /> */ }
+
+                                                <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                                                    <TextArea
+                                                        className="input-comment"
+                                                        placeholder="Deja tu comentario"
+                                                        autoSize={{ minRows: 1, maxRows: 3 }}
+                                                        maxLength={500}
+                                                        onChange={(evt) => {
+                                                            this.setState({ comment: evt.target.value });
+                                                        }}
+                                                        disabled={this.props.user == null}
+                                                    />
+                                                    { sendCommentSuffix }
+                                                </div>
                                             </Form.Item>
                                         </Form>
                                     </div>

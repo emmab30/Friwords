@@ -200,6 +200,8 @@ export default class Friwords extends React.Component {
             return this.renderWelcome();
         }
 
+        const hasNoticicationsUnread = this.state.user != null && this.state.user.unread_notifications > 0;
+
         return (
             <div className="friwords-container">
                 <div style={{ width: '100%', height: 45, display: 'flex', flexDirection: 'row', position: 'fixed', top: 0, right: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 0, backgroundColor: 'white', zIndex: 9999 }}>
@@ -238,11 +240,11 @@ export default class Friwords extends React.Component {
                                 this.setState({ isWelcome : true });
                             }
                         }}
-                        style={{ height: 45, display: 'flex', flex: 0, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white', borderTopLeftRadius: 0, cursor: 'pointer', zIndex: 9999, borderLeft: '2px solid rgba(0,0,0,.05)', borderBottom: '2px solid rgba(0,0,0,.05)', paddingLeft: 10, paddingRight: 10 }}>
-                        <span style={{ fontWeight: 600 }}>{ this.state.user != null ? (this.state.user.unread_notifications || 0) : 0 }</span>
+                        style={{ height: 45, display: 'flex', flex: hasNoticicationsUnread ? 1 : 0, justifyContent: 'center', alignItems: 'center', backgroundColor: hasNoticicationsUnread ? '#fccf84' : 'white', borderTopLeftRadius: 0, cursor: 'pointer', zIndex: 9999, borderLeft: '2px solid rgba(0,0,0,.05)', borderBottom: '2px solid rgba(0,0,0,.05)', paddingLeft: 10, paddingRight: 10 }}>
+                        <p style={{ fontWeight: 600, margin: 0, padding: 0, fontSize: '0.75em' }}>{ hasNoticicationsUnread ? `${this.state.user.unread_notifications} nueva${this.state.user.unread_notifications > 1 ? 's' : ''}` : 0 }</p>
                         <img
                             style={{ width: 20, height: 20, marginLeft: 5, opacity: 1 }}
-                            src={`/img/bell-${this.state.user != null && this.state.user.unread_notifications > 0 ? 'on' : 'off'}.png`} />
+                            src={`/img/bell-${hasNoticicationsUnread ? 'on' : 'off'}.png`} />
                     </div>
                     <div
                         onClick={this.refresh}
