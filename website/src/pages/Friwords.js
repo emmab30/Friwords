@@ -175,7 +175,7 @@ export default class Friwords extends React.Component {
                         friwords,
                         currentFriwordId: id,
                         isLoading: false
-                    });
+                    }, this.getMe);
                 } else {
                     let index = _.findIndex(this.state.friwords, (e) => e.id == data.friword.id);
                     let friwords = this.state.friwords;
@@ -316,9 +316,7 @@ export default class Friwords extends React.Component {
                         <div style={{ width: '100%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                             <Button
                                 onClick={() => {
-                                    this.setState({ currentFriwordId: null }, () => {
-                                        this.getFriwords();
-                                    });
+                                    this.setState({ currentFriwordId: null }, this.refresh);
                                 }}
                                 type="primary"
                                 icon={<Icons.RollbackOutlined />}
