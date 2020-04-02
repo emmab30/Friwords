@@ -111,9 +111,11 @@ class FriwordController {
 
         friword = friword.toJSON()
         let mentions = [];
-        mentions.push({
-            alias: friword.user.alias
-        });
+        if(friword && friword.user && friword.user.alias){
+            mentions.push({
+                alias: friword.user.alias
+            });
+        }
 
         for(var idx in friword.comments) {
             const comment = friword.comments[idx];
