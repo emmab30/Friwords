@@ -31,12 +31,12 @@ export default class FriwordComment extends React.Component {
                 <div style={{ width: '95%', marginLeft: '5%', borderLeft: `4px solid ${hexToRgbA(this.state.randomColor, .4)}`, paddingLeft: 10, marginTop: 5 }}>
                     <Row gutter={24}>
                         <Col span={24} justify={'center'}>
-                            <Avatar
+                            {/*<Avatar
                                 src={'https://image.flaticon.com/icons/svg/2716/2716406.svg'}
                                 size={'small'}
                                 shape={'square'}
                                 size={15}
-                            />
+                            />*/}
 
                             <span style={{ color: 'rgba(0,0,0,.75)', fontSize: 13, fontFamily: 'Open Sans', marginLeft: 5 }}>{ comment.text }</span>
                             {/*<span style={{ display: 'block', marginTop: 10, fontSize: 10, textAlign: 'right' }}>{ moment(comment.created_at).fromNow() }</span>*/}
