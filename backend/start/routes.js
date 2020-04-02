@@ -33,6 +33,7 @@ Route.group(() => {
 
     Route.post('friwords', 'FriwordController.postFriword');
     Route.post('friwords/:id/comments', 'FriwordController.postFriwordComment');
+    Route.get('friwords/:id/possible_mentions', 'FriwordController.getPossibleMentionsByFriwordId');
 
     // Profile
     Route.get('profile/me', 'UserController.getMe');

@@ -28,6 +28,15 @@ var Friwords = {
             if(error) error(err);
         });
     },
+    getPossibleMentionsByFriwordId: function(id, success, error) {
+        let url = `friwords/${id}/possible_mentions`;
+
+        ApiService().get(url).then((response) => {
+            if(success) success(response.data);
+        }).catch((err) => {
+            if(error) error(err);
+        });
+    },
     likeById: function(id, success, error) {
         let url = `friwords/${id}/like`;
 

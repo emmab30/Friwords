@@ -7,7 +7,8 @@ import {
     Button,
     Form,
     Input,
-    notification
+    notification,
+    Mentions
 } from 'antd';
 
 // Components
@@ -28,6 +29,7 @@ import '../App.css';
 
 const { Meta } = Card;
 const { TextArea } = Input;
+const { Option, getMentions } = Mentions;
 
 export default class FriwordCard extends React.Component {
     constructor(props) {
@@ -40,6 +42,7 @@ export default class FriwordCard extends React.Component {
             canLeaveComment: true,
             comment: '',
             showComments: false,
+            mentions: [],
 
             // False both
             hasDisliked: false,
@@ -48,7 +51,14 @@ export default class FriwordCard extends React.Component {
     }
 
     componentDidMount() {
-
+        // Get possible mentions
+        Services.Friwords.getPossibleMentionsByFriwordId(this.props.friword.id, (data) => {
+            if(data.success) {
+                this.setState({ mentions : data.mentions });
+            }
+        }, (err) => {
+            // Do nothing
+        });
     }
 
     onDislike = () => {
@@ -79,6 +89,7 @@ export default class FriwordCard extends React.Component {
         const {
             friword
         } = this.props;
+        const { mentions } = this.state;
 
         let sendCommentSuffix = (
             <div
@@ -223,14 +234,6 @@ export default class FriwordCard extends React.Component {
                                 </ParticleEffectButton>
                             </div>
 
-                            { this.state.showComments && friword.comments != null && friword.comments.length > 0 && friword.comments.map((e) => {
-                                return (
-                                    <FriwordComment
-                                        comment={e}
-                                    />
-                                );
-                            })}
-
                             { this.state.isLoadingComments && (!friword.comments || !friword.comments.length) &&
                                 <Icons.LoadingOutlined style={{ fontSize: 24, color: '#ff306f', marginTop: 10 }} spin />
                             }
@@ -244,21 +247,21 @@ export default class FriwordCard extends React.Component {
                                         });
                                         this.props.onRequestComments();
                                     }}
-                                    style={{ display: 'block', marginLeft: 0, marginTop: 20, fontWeight: 500 }}>
+                                    style={{ display: 'block', marginLeft: 0, marginTop: 5, fontWeight: 500 }}>
                                     Ver { friword.comments_qty } comentarios
                                 </a>
                             }
 
-                            { this.state.canLeaveComment &&
-                                <div style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 20 }}>
-                                    { /* <div style={{ height: 50 }}>
-                                        <Avatar
-                                            src="https://image.flaticon.com/icons/svg/134/134934.svg"
-                                            size={'small'}
-                                            shape={'square'}
-                                        />
-                                    </div> */ }
+                            { this.state.showComments && friword.comments != null && friword.comments.length > 0 && friword.comments.map((e) => {
+                                return (
+                                    <FriwordComment
+                                        comment={e}
+                                    />
+                                );
+                            })}
 
+                            { this.state.canLeaveComment &&
+                                <div style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 20, marginBottom: 10 }}>
                                     <div style={{ display: 'flex', flex: 1 }}>
                                         <Form
                                             name="post_comment"
@@ -267,28 +270,22 @@ export default class FriwordCard extends React.Component {
                                                 name="comment"
                                                 rules={[{ required: true, message: 'Ingresa un comentario' }]}
                                                 style={{ marginBottom: 0, paddingBottom: 0 }}>
-                                                { /* <Input
-                                                    className="input-comment"
-                                                    suffix={sendCommentSuffix}
-                                                    placeholder="Deja tu comentario"
-                                                    disabled={this.props.user == null}
-                                                    onChange={(evt) => {
-                                                        this.setState({ comment: evt.target.value });
-                                                    }}
-                                                    style={{ borderRadius : 2, borderWidth: 1, borderColor: 'rgba(0,0,0,0.05)', height: 40 }}
-                                                /> */ }
-
                                                 <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                                                    <TextArea
+                                                    <Mentions
+                                                        onChange={(comment) => {
+                                                            this.setState({ comment });
+                                                        }}
                                                         className="input-comment"
                                                         placeholder="Deja tu comentario"
                                                         autoSize={{ minRows: 1, maxRows: 3 }}
-                                                        maxLength={500}
-                                                        onChange={(evt) => {
-                                                            this.setState({ comment: evt.target.value });
-                                                        }}
-                                                        disabled={this.props.user == null}
-                                                    />
+                                                        maxLength={500}>
+                                                        { mentions && mentions.map((e) => {
+                                                            return (
+                                                                <Option value={e.alias}>{e.alias}</Option>
+                                                            );
+                                                        })}
+                                                    </Mentions>
+
                                                     { sendCommentSuffix }
                                                 </div>
                                             </Form.Item>
@@ -302,19 +299,6 @@ export default class FriwordCard extends React.Component {
                                     <span style={{ display: 'block', fontSize: 12, fontWeight: 600, textAlign: 'left', color: 'white' }}>Creá tu alias anónimo para dejar un comentario</span>
                                 </div>
                             }
-
-                            {/*<div style={{ width: '100%' }}>
-                                <Button
-                                    onClick={() => {
-                                        this.setState({ isCreating : true });
-                                    }}
-                                    type="primary"
-                                    icon={<Icons.PlusOutlined />}
-                                    size={20}
-                                    style={{ display: 'flex', width: 'auto', marginBottom: 20, justifyContent: 'center', alignItems: 'center' }}>
-                                    Dejar comentario
-                                </Button>
-                            </div>*/}
 
                         </Card>
                     </div>

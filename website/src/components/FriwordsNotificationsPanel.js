@@ -168,7 +168,13 @@ export default class FriwordsNotificationsPanel extends React.Component {
 
                 { notifications && notifications.length > 0 && notifications.map((notification) => {
                     return (
-                        <div style={{ width: '100%', marginBottom: 10, position: 'relative', backgroundColor: !notification.seen ? 'rgba(255, 160, 0, .15)' : 'white', padding: 10, borderRadius: 5 }}>
+                        <div
+                            onClick={() => {
+                                if(this.props.onClickNotification){
+                                    this.props.onClickNotification(notification);
+                                }
+                            }}
+                            style={{ width: '100%', marginBottom: 10, position: 'relative', backgroundColor: !notification.seen ? 'rgba(255, 160, 0, .15)' : 'white', padding: 10, borderRadius: 5 }}>
 
                             <div style={{ width: '100%', borderBottomWidth: 5, borderBottomColor: 'rgba(0,0,0,.05)' }} dangerouslySetInnerHTML={{ __html: notification.html }}></div>
 
