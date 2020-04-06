@@ -228,7 +228,7 @@ export default class Friwords extends React.Component {
                                     this.setState({ isWelcome : true });
                                 }
                             }}
-                        >{ this.isAuthenticated() ? 'Cambiar' : 'Ingresar' }</a>
+                        >{ this.isAuthenticated() ? 'Cambiar' : 'Registrar alias' }</a>
                     </div>
                     <div
                         className="counter-online-users"
@@ -282,9 +282,9 @@ export default class Friwords extends React.Component {
                         isVisible={this.state.isLoggingIn}
                         onRequestClose={() => {
                             this.setState({ isLoggingIn : false });
-                            if(!this.state.user.is_configured) {
+                            /*if(!this.state.user || !this.state.user.is_configured) {
                                 this.setState({ isWelcome : true });
-                            }
+                            }*/
                         }}
                         onLoggedIn={(user) => {
                             this.setState({ user, isLoggingIn: false }, this.refresh);
@@ -358,6 +358,7 @@ export default class Friwords extends React.Component {
                     { this.state.currentFriwordId == null && [
                         <div style={{ width: '100%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                             <Button
+                                disabled={this.state.user == null}
                                 onClick={() => {
                                     if(this.isAuthenticated()) {
                                         this.setState({ isCreating : true });
@@ -367,11 +368,21 @@ export default class Friwords extends React.Component {
                                 }}
                                 type="primary"
                                 icon={<Icons.PlusOutlined />}
-                                style={{ display: 'flex', width: '80%', margin: '0 auto', marginBottom: 20, justifyContent: 'center', alignItems: 'center', height: 40 }}>
+                                style={{ display: 'flex', width: '80%', margin: '0 auto', justifyContent: 'center', alignItems: 'center', height: 40 }}>
                                 Publicar friword
                             </Button>
                         </div>,
+                        (this.state.user == null &&
+                            <a
+                                onClick={() => {
+                                    this.setState({ isWelcome : true })
+                                }}
+                                style={{ display: 'block', textAlign: 'center', marginTop: 15, fontWeight: 600, marginRight: 0, textDecoration: 'underline' }}>
+                                Registrá un alias para comentar y publicar nuevos Friwords
+                            </a>
+                        ),
                         <Tabs
+                            style={{ marginTop: 20 }}
                             activeKey={this.state.tabActiveKey}
                             type={'card'}
                             onTabClick={(val) => {
