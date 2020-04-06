@@ -82,12 +82,12 @@ input {
     font-weight: 300;
 }
 
-.custom-card.male {
-    box-shadow: 0 5px 10px rgba(0,0,0,0.02), 0 2px 8px rgba(0,0,0,0.05);
+.ant-timeline > .ant-timeline-item:last-child > .ant-timeline-item-tail {
+    display: none;
 }
 
-.custom-card.female {
-    box-shadow: 0 5px 10px rgba(0,0,0,0.02), 0 2px 8px rgba(0,0,0,0.05);
+.ant-timeline-item {
+    padding-bottom: 5px;
 }
 
 @keyframes App-logo-spin {

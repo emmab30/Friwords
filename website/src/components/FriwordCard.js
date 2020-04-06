@@ -8,7 +8,8 @@ import {
     Form,
     Input,
     notification,
-    Mentions
+    Mentions,
+    Timeline
 } from 'antd';
 
 // Components
@@ -200,7 +201,7 @@ export default class FriwordCard extends React.Component {
 
                             <div style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', marginTop: 20, marginBottom: 20 }}>
                                 <ParticleEffectButton
-                                    color='#008bdb'
+                                    color='rgb(37, 184, 100)'
                                     duration={250}
                                     type={'rectangle'}
                                     particlesAmountCoefficient={1}
@@ -248,13 +249,28 @@ export default class FriwordCard extends React.Component {
                                 </a>
                             }
 
-                            { this.state.showComments && friword.comments != null && friword.comments.length > 0 && friword.comments.map((e) => {
-                                return (
-                                    <FriwordComment
-                                        comment={e}
-                                    />
-                                );
-                            })}
+                            { friword.comments != null && friword.comments.length > 0 && this.state.showComments &&
+                                <a
+                                    onClick={() => {
+                                        this.setState({
+                                            isLoadingComments: false,
+                                            showComments: false
+                                        });
+                                    }}
+                                    style={{ display: 'block', marginLeft: 0, marginBottom: 15, fontWeight: 500 }}>
+                                    Ocultar comentarios
+                                </a>
+                            }
+
+                            <Timeline>
+                                { this.state.showComments && friword.comments != null && friword.comments.length > 0 && friword.comments.map((e) => {
+                                    return (
+                                        <FriwordComment
+                                            comment={e}
+                                        />
+                                    );
+                                })}
+                            </Timeline>
 
                             { this.state.canLeaveComment &&
                                 <div style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 20, marginBottom: 10 }}>
