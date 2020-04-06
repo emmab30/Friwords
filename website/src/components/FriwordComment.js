@@ -28,16 +28,12 @@ export default class FriwordComment extends React.Component {
         return (
             <div style={{ marginBottom: 15 }}>
                 {/*<div style={{ width: '95%', marginLeft: '2%', height: 3, backgroundColor: 'rgba(0,0,0,.005)', marginTop: 5, marginBottom: 0 }} />*/}
-                <div style={{ width: '100%', borderLeft: `4px solid ${hexToRgbA(this.state.randomColor, .2)}`, paddingLeft: 10, marginTop: 0 }}>
+                <div className={`custom-card ${comment && comment.user && comment.user.gender == 'female' ? 'female' : 'male'}`} style={{ width: '100%', paddingLeft: 10, marginBottom: 10, backgroundColor: 'rgba(0,0,0,.02)', borderRadius: 1 }}>
                     <Row gutter={24}>
                         <Col span={24} justify={'center'}>
-                            { comment && comment.user_alias &&
-                                <span style={{ display: 'block', marginTop: 0, fontSize: 10, textAlign: 'left' }}><span style={{ color: '#25b864', fontWeight: 600 }}>@{ comment.user_alias }</span></span>
-                            }
-
                             <span
                                 dangerouslySetInnerHTML={{ __html: comment.html }}
-                                style={{ color: 'rgba(0,0,0,.75)', fontSize: 12, fontFamily: 'Open Sans', marginLeft: 0, marginTop: 5 }}></span>
+                                style={{ color: 'rgba(0,0,0,.75)', fontSize: 12, fontFamily: 'Open Sans', marginLeft: 0, marginTop: 5, fontWeight: 400 }}></span>
 
                             { false && comment && comment.user && comment.user.country_code != null &&
                                 <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
@@ -45,6 +41,19 @@ export default class FriwordComment extends React.Component {
                                         style={{ width: 20 }}
                                         src={`https://www.countryflags.io/${comment.user.country_code}/shiny/64.png`}
                                     />
+                                </div>
+                            }
+
+                            { comment && comment.user_alias &&
+                                <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginBottom: 0, marginTop: 15, padding: 5 }}>
+                                    <span style={{ display: 'flex', flex: 0, marginTop: 0, fontSize: 12, textAlign: 'left' }}><span style={{ color: `${comment && comment.user && comment.user.gender == 'male' ? 'rgba(0,114,255,1)' : 'rgba(255,0,234, 1)'}`, fontWeight: 400 }}>@{ comment.user_alias }</span></span>
+                                    { false && comment && comment.user && comment.user.gender != null &&
+                                        <Avatar
+                                            src={comment.user.gender == 'female' ? 'https://image.flaticon.com/icons/svg/2284/2284897.svg' : 'https://image.flaticon.com/icons/svg/2284/2284900.svg'}
+                                            size={'small'}
+                                            style={{ borderRadius: 0, width: 15, height: 15, marginLeft: 5, opacity: .25 }}
+                                        />
+                                    }
                                 </div>
                             }
                         </Col>

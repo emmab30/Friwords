@@ -78,7 +78,7 @@ class FriwordController {
                 query
                     .orderBy('created_at', 'DESC')
                     .with('user', (subquery) => {
-                        subquery.select('id', 'alias', 'country_code')
+                        subquery.select('id', 'alias', 'country_code', 'gender')
                     })
             })
             .with('user', (query) => {

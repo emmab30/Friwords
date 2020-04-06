@@ -158,11 +158,14 @@ export default class FriwordCard extends React.Component {
             );
         }
 
+        let isMale = friword && friword.user && friword.user.gender == 'male';
+        let isFemale = friword && friword.user && friword.user.gender == 'female';
+
         return (
             <FadeInSection key={friword.id}>
-                <div className={`data-node-${friword.id}`} style={{ marginBottom: 5 }}>
+                <div className={`data-node-${friword.id}`} style={{ marginBottom: 20 }}>
                     <div style={{ width: '100%' }}>
-                        <div style={{ width: '100%', height: 10, backgroundColor: 'rgba(0,0,0,.075)' }}></div>
+                        {/*<div style={{ width: '100%', height: 10, backgroundColor: 'rgba(0,0,0,.075)' }}></div>*/}
                         <Card
                             bordered={false}
                             // loading={this.props.loading}
@@ -170,20 +173,13 @@ export default class FriwordCard extends React.Component {
                             <Meta
                                 avatar={
                                     <Avatar
-                                        src={friword && friword.user && friword.user.gender == 'female' ? 'https://image.flaticon.com/icons/svg/590/590083.svg' : 'https://image.flaticon.com/icons/svg/921/921071.svg'}
-                                        size={'small'}
-                                        shape={'circle'}
-                                        style={{ width: 30, height: 30, borderRadius: 15 }}
+                                        src={friword && friword.user && friword.user.gender == 'female' ? 'https://image.flaticon.com/icons/svg/2284/2284897.svg' : 'https://image.flaticon.com/icons/svg/2284/2284900.svg'}
+                                        size={'large'}
+                                        style={{ borderRadius: 0, width: 30, height: 30 }}
                                     />
                                 }
                                 title={
                                     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                        { friword && friword.user && friword.user.country_code != null &&
-                                            <img
-                                                style={{ width: 23, marginRight: 5 }}
-                                                src={`https://www.countryflags.io/${friword.user.country_code}/shiny/64.png`}
-                                            />
-                                        }
                                         <span>
                                             { `${friword.text.substring(0, 30)}...` }
                                         </span>
