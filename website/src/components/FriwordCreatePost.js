@@ -166,7 +166,7 @@ export default class FriwordCreatePost extends React.Component {
                         <TextArea
                             placeholder="Tu texto"
                             autoSize={{ minRows: 2, maxRows: 8 }}
-                            maxLength={500}
+                            maxLength={750}
                             onChange={(evt) => {
                                 friword.text = evt.target.value;
                                 this.setState({ friword });
@@ -180,7 +180,7 @@ export default class FriwordCreatePost extends React.Component {
                             }}
                             prefix={<Icons.QuestionCircleOutlined className="site-form-item-icon" />} placeholder="Texto" />*/}
                     </Form.Item>
-                    <span>{500 - (friword && friword.text && friword.text.length ? friword.text.length : 0)} caracteres restantes</span>
+                    <span>{750 - (friword && friword.text && friword.text.length ? friword.text.length : 0)} caracteres restantes</span>
 
                     <div style={{ width: '100%', height: 5, backgroundColor: 'rgba(0,0,0,0.05)', marginTop: 20, marginBottom: 20 }}></div>
 

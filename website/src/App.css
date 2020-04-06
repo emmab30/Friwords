@@ -83,11 +83,11 @@ input {
 }
 
 .custom-card.male {
-    box-shadow: 0 2px 6px rgba(0,114,255,0.15), 0 2px 6px rgba(0,114,255,0.03);
+    box-shadow: 0 5px 10px rgba(0,0,0,0.02), 0 2px 8px rgba(0,0,0,0.05);
 }
 
 .custom-card.female {
-    box-shadow: 0 2px 6px rgba(255,0,234,0.15), 0 2px 6px rgba(255,0,234,0.03);
+    box-shadow: 0 5px 10px rgba(0,0,0,0.02), 0 2px 8px rgba(0,0,0,0.05);
 }
 
 @keyframes App-logo-spin {

@@ -165,7 +165,7 @@ export default class FriwordCard extends React.Component {
             <FadeInSection key={friword.id}>
                 <div className={`data-node-${friword.id}`} style={{ marginBottom: 20 }}>
                     <div style={{ width: '100%' }}>
-                        {/*<div style={{ width: '100%', height: 10, backgroundColor: 'rgba(0,0,0,.075)' }}></div>*/}
+                        <div style={{ width: '100%', height: 5, backgroundColor: 'rgba(0,0,0,.025)' }}></div>
                         <Card
                             bordered={false}
                             // loading={this.props.loading}
@@ -274,7 +274,7 @@ export default class FriwordCard extends React.Component {
                                                         className="input-comment"
                                                         placeholder="Deja tu comentario"
                                                         autoSize={{ minRows: 1, maxRows: 3 }}
-                                                        maxLength={500}>
+                                                        maxLength={750}>
                                                         { mentions && mentions.map((e) => {
                                                             return (
                                                                 <Option value={e.alias}>{e.alias}</Option>

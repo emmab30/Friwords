@@ -46,7 +46,7 @@ export default class FriwordComment extends React.Component {
 
                             { comment && comment.user_alias &&
                                 <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginBottom: 0, marginTop: 15, padding: 5 }}>
-                                    <span style={{ display: 'flex', flex: 0, marginTop: 0, fontSize: 12, textAlign: 'left' }}><span style={{ color: `${comment && comment.user && comment.user.gender == 'male' ? 'rgba(0,114,255,1)' : 'rgba(255,0,234, 1)'}`, fontWeight: 400 }}>@{ comment.user_alias }</span></span>
+                                    <span style={{ display: 'flex', flex: 0, marginTop: 0, fontSize: 12, textAlign: 'left' }}><span style={{ color: `${comment && comment.user && comment.user.gender == 'male' ? '#3483db' : '#ff8b9a'}`, fontWeight: 600 }}>@{ comment.user_alias }</span></span>
                                     { false && comment && comment.user && comment.user.gender != null &&
                                         <Avatar
                                             src={comment.user.gender == 'female' ? 'https://image.flaticon.com/icons/svg/2284/2284897.svg' : 'https://image.flaticon.com/icons/svg/2284/2284900.svg'}
