@@ -33,7 +33,7 @@ export default class FriwordComment extends React.Component {
                 }>
                 <div style={{ marginBottom: 0 }}>
                     {/*<div style={{ width: '95%', marginLeft: '2%', height: 3, backgroundColor: 'rgba(0,0,0,.005)', marginTop: 5, marginBottom: 0 }} />*/}
-                    <div className={`custom-card`} style={{ width: '100%', padding: 2, marginBottom: 0, backgroundColor: 'white', borderRadius: 2 }}>
+                    <div className={`custom-card`} style={{ width: '100%', padding: 5, marginBottom: 0, backgroundColor: 'white', borderRadius: 2 }}>
                         <Row gutter={24}>
                             <Col span={24} justify={'center'}>
                                 <span
@@ -50,7 +50,7 @@ export default class FriwordComment extends React.Component {
                                 }
 
                                 { comment && comment.user_alias &&
-                                    <div style={{ width: '100%', display: 'flex', flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
+                                    <div style={{ width: '100%', display: 'flex', flex: 1, justifyContent: 'flex-end', alignItems: 'center', marginTop: 10 }}>
                                         <span style={{ display: 'block', marginTop: 0, fontSize: 10, textAlign: 'right' }}>por <span style={{ color: '#25b864', fontWeight: 600 }}>@{ comment.user_alias }</span></span>
                                     </div>
                                 }
