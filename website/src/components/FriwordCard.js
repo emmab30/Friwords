@@ -262,15 +262,17 @@ export default class FriwordCard extends React.Component {
                                 </a>
                             }
 
-                            <Timeline>
-                                { this.state.showComments && friword.comments != null && friword.comments.length > 0 && friword.comments.map((e) => {
-                                    return (
-                                        <FriwordComment
-                                            comment={e}
-                                        />
-                                    );
-                                })}
-                            </Timeline>
+                            <div style={{ marginLeft: 5 }}>
+                                <Timeline>
+                                    { this.state.showComments && friword.comments != null && friword.comments.length > 0 && friword.comments.map((e) => {
+                                        return (
+                                            <FriwordComment
+                                                comment={e}
+                                            />
+                                        );
+                                    })}
+                                </Timeline>
+                            </div>
 
                             { this.state.canLeaveComment &&
                                 <div style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 20, marginBottom: 10 }}>

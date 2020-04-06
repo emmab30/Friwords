@@ -36,24 +36,16 @@ export default class FriwordComment extends React.Component {
                     <div className={`custom-card`} style={{ width: '100%', padding: 5, marginBottom: 0, backgroundColor: 'white', borderRadius: 2 }}>
                         <Row gutter={24}>
                             <Col span={24} justify={'center'}>
-                                <span
-                                    dangerouslySetInnerHTML={{ __html: comment.html }}
-                                    style={{ color: 'rgba(0,0,0,.75)', fontSize: 12, fontFamily: 'Open Sans', marginLeft: 0, marginTop: 5, fontWeight: 400 }}></span>
-
-                                { false && comment && comment.user && comment.user.country_code != null &&
-                                    <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
-                                        <img
-                                            style={{ width: 20 }}
-                                            src={`https://www.countryflags.io/${comment.user.country_code}/shiny/64.png`}
-                                        />
-                                    </div>
-                                }
 
                                 { comment && comment.user_alias &&
-                                    <div style={{ width: '100%', display: 'flex', flex: 1, justifyContent: 'flex-end', alignItems: 'center', marginTop: 10 }}>
-                                        <span style={{ display: 'block', marginTop: 0, fontSize: 10, textAlign: 'right' }}>por <span style={{ color: '#25b864', fontWeight: 600 }}>@{ comment.user_alias }</span></span>
+                                    <div style={{ width: 'auto', marginBottom: 5, backgroundColor: 'white' }}>
+                                        <span style={{ display: 'block', marginTop: 0, fontSize: 13, textAlign: 'left', color: comment && comment.user && comment.user.gender == 'female' ? '#ff8b9a' : '#8baeff', fontWeight: 500 }}>@{ comment.user_alias } dice:</span>
                                     </div>
                                 }
+
+                                <span
+                                    dangerouslySetInnerHTML={{ __html: comment.html }}
+                                    style={{ color: 'rgba(0,0,0,.75)', fontSize: 13, fontFamily: 'Open Sans', marginLeft: 0, marginTop: 0, fontWeight: 400 }}></span>
                             </Col>
                         </Row>
                     </div>
