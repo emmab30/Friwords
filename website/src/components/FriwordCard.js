@@ -75,6 +75,16 @@ export default class FriwordCard extends React.Component {
         if(nextProps.friword != null) {
             this.setState({ friword : nextProps.friword });
         }
+
+        if(this.props.user != null && (!this.state.mentions || !this.state.mentions.length)) {
+            Services.Friwords.getPossibleMentionsByFriwordId(this.props.friword.id, (data) => {
+                if(data.success) {
+                    this.setState({ mentions : data.mentions });
+                }
+            }, (err) => {
+                // Do nothing
+            });
+        }
     }
 
     onLike = () => {
