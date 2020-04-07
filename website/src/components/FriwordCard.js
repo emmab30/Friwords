@@ -193,7 +193,7 @@ export default class FriwordCard extends React.Component {
                                 }
                             />
 
-                            {/*<span style={{ display: 'block', marginTop: 10, fontSize: 12, textAlign: 'right' }}>{ moment(friword.created_at).fromNow() }</span>*/}
+                            <span style={{ display: 'block', marginTop: 10, fontSize: 10, textAlign: 'right' }}>{ moment(friword.created_at).fromNow() }</span>
 
                             { friword && friword.user_alias &&
                                 <span style={{ display: 'block', marginTop: 0, fontSize: 10, textAlign: 'right' }}>por <span style={{ color: '#25b864', fontWeight: 600 }}>@{ friword.user_alias }</span></span>

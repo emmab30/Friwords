@@ -186,7 +186,7 @@ export default class FriwordsNotificationsPanel extends React.Component {
                     );
                 })}
 
-                { !isLoading && !notifications || notifications.length == 0 &&
+                { !isLoading && (!notifications || notifications.length == 0) &&
                     <span>¡Aún no tienes notificaciones para revisar!</span>
                 }
 

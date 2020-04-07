@@ -38,10 +38,14 @@ export default class FriwordComment extends React.Component {
                             <Col span={24} justify={'center'}>
 
                                 { comment && comment.user_alias &&
-                                    <div style={{ width: 'auto', marginBottom: 5, backgroundColor: 'white' }}>
-                                        <span style={{ display: 'block', marginTop: 0, fontSize: 13, textAlign: 'left', color: comment && comment.user && comment.user.gender == 'female' ? '#ff8b9a' : '#8baeff', fontWeight: 500 }}>@{ comment.user_alias } dice:</span>
+                                    <div style={{ width: 'auto', marginBottom: 0, backgroundColor: 'white' }}>
+                                        <span style={{ display: 'block', marginTop: 0, fontSize: 13, textAlign: 'left', color: comment && comment.user && comment.user.gender == 'female' ? '#ff8b9a' : '#8baeff', fontWeight: 500 }}>@{ comment.user_alias }</span>
                                     </div>
                                 }
+
+                                <div style={{ width: 'auto', marginBottom: 0, backgroundColor: 'white' }}>
+                                    <span style={{ display: 'block', marginTop: 2, marginBottom: 5, fontSize: 10, textAlign: 'left' }}>{ moment(comment.created_at).fromNow() }</span>
+                                </div>
 
                                 <span
                                     dangerouslySetInnerHTML={{ __html: comment.html }}
