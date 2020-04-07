@@ -340,14 +340,6 @@ export default class Friwords extends React.Component {
                                     }, 500);
                                 });
                             }}
-                            onDislike={() => {
-                                Services.Friwords.dislikeById(this.state.friwords[0].id, (success) => {
-                                    setTimeout(() => {
-                                        this.getFriwordById(this.state.friwords[0].id, true);
-                                        this.getMe();
-                                    }, 500);
-                                });
-                            }}
                             onRequestComments={() => {
                                 this.getFriwordById(this.state.friwords[0].id, true);
                             }}
@@ -425,14 +417,6 @@ export default class Friwords extends React.Component {
                                                 }, 500);
                                             });
                                         }}
-                                        onDislike={() => {
-                                            Services.Friwords.dislikeById(e.id, (success) => {
-                                                setTimeout(() => {
-                                                    this.getFriwordById(e.id);
-                                                    this.getMe();
-                                                }, 500);
-                                            });
-                                        }}
                                         onRequestComments={() => {
                                             this.getFriwordById(e.id);
                                         }}
@@ -480,13 +464,6 @@ export default class Friwords extends React.Component {
                                                 }, 500);
                                             });
                                         }}
-                                        onDislike={() => {
-                                            Services.Friwords.dislikeById(e.id, (success) => {
-                                                setTimeout(() => {
-                                                    this.getFriwordById(e.id);
-                                                }, 500);
-                                            });
-                                        }}
                                         onRequestComments={() => {
                                             this.getFriwordById(e.id);
                                         }}
@@ -529,13 +506,6 @@ export default class Friwords extends React.Component {
                                         user={this.state.user}
                                         onLike={() => {
                                             Services.Friwords.likeById(e.id, (success) => {
-                                                setTimeout(() => {
-                                                    this.getFriwordById(e.id);
-                                                }, 500);
-                                            });
-                                        }}
-                                        onDislike={() => {
-                                            Services.Friwords.dislikeById(e.id, (success) => {
                                                 setTimeout(() => {
                                                     this.getFriwordById(e.id);
                                                 }, 500);

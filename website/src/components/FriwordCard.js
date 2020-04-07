@@ -41,8 +41,6 @@ export default class FriwordCard extends React.Component {
         super(props);
         this.state = {
             isLoadingComments: false,
-            hideDislikeBtn: false,
-            hideLikeBtn: false,
             isSendingComment: false,
             canLeaveComment: true,
             comment: '',
@@ -51,7 +49,8 @@ export default class FriwordCard extends React.Component {
 
             // False both
             hasDisliked: false,
-            hasLiked: false
+            hasLiked: false,
+            friword: null
         };
     }
 
@@ -66,18 +65,16 @@ export default class FriwordCard extends React.Component {
                 // Do nothing
             });
         }
+
+        if(this.props.friword != null) {
+            this.setState({ friword : this.props.friword });
+        }
     }
 
-    onDislike = () => {
-        if(this.state.hasLiked || this.state.hasDisliked)
-            return;
-
-        this.props.onDislike();
-        this.setState({ hideDislikeBtn : true, hasDisliked : true }, () => {
-            setTimeout(() => {
-                this.setState({ hideDislikeBtn : false });
-            }, 1000);
-        });
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.friword != null) {
+            this.setState({ friword : nextProps.friword });
+        }
     }
 
     onLike = () => {
@@ -92,19 +89,21 @@ export default class FriwordCard extends React.Component {
             return;
         }
 
-        this.setState({ hideLikeBtn : true, hasLiked : true });
+        const { friword } = this.state;
+        friword.liked = true;
+        this.setState({ friword });
+
         this.props.onLike();
-        this.setState({ hideLikeBtn : true, hasLiked : true }, () => {
-            setTimeout(() => {
-                this.setState({ hideLikeBtn : false });
-            }, 1000);
-        });
     }
 
     render() {
         const {
             friword
-        } = this.props;
+        } = this.state;
+
+        if(!friword)
+            return null;
+
         const { mentions } = this.state;
 
         let sendCommentSuffix = (
