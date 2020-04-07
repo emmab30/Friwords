@@ -198,11 +198,11 @@ export default class FriwordCard extends React.Component {
             <FadeInSection key={friword.id}>
                 <div className={`data-node-${friword.id}`}>
                     <div style={{ width: '100%' }}>
-                        <div style={{ width: '100%', height: 5, backgroundColor: 'rgba(0,0,0,.025)' }}></div>
+                        <div style={{ width: '100%', height: 15, backgroundColor: 'rgba(0,0,0,.1)' }}></div>
                         <Card
                             bordered={false}
                             // loading={this.props.loading}
-                            bodyStyle={{ padding: 10, opacity: this.props.loading ? .1 : 1 }}>
+                            bodyStyle={{ padding: 10, paddingTop: 20, opacity: this.props.loading ? .1 : 1 }}>
                             <Meta
                                 avatar={
                                     <Avatar
