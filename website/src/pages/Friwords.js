@@ -63,15 +63,7 @@ export default class Friwords extends React.Component {
         this.getFriwords();
         this.getMe();
 
-        /*setInterval(() => {
-            if(this.state.friwords && this.state.friwords.length > 0) {
-                Services.Friwords.hasUpdatesAvailable(_.first(this.state.friwords).id, (data) => {
-                    if(data.success) {
-                        this.setState({ hasUpdates : data.hasUpdates });
-                    }
-                });
-            }
-        }, 10000);*/
+        setInterval(this.getMe, 10000);
     }
 
     getMe = () => {
@@ -247,11 +239,10 @@ export default class Friwords extends React.Component {
                     </div>
                     <div
                         onClick={this.refresh}
-                        style={{ height: 45, display: 'flex', flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#25b864', cursor: 'pointer', zIndex: 9999, borderBottomRightRadius: 10, borderLeft: '0px solid rgba(0,0,0,.05)', borderBottom: '2px solid rgba(0,0,0,.2)', opacity: this.state.hasUpdates ? 1 : .6 }}>
-                        <span style={{ fontWeight: 500, fontSize: '0.6em', color: 'white' }}>{ this.state.isLoading ? 'Actualizando..' : 'Actualizar' }</span>
+                        style={{ height: 45, display: 'flex', flex: 0, justifyContent: 'center', alignItems: 'center', backgroundColor: '#25b864', cursor: 'pointer', zIndex: 9999, borderBottomRightRadius: 10, borderLeft: '0px solid rgba(0,0,0,.05)', borderBottom: '2px solid rgba(0,0,0,.2)', paddingLeft: 10, paddingRight: 10 }}>
                         <img
-                            style={{ width: 30, height: 30, marginLeft: 10 }}
-                            src="https://image.flaticon.com/icons/svg/1688/1688988.svg" />
+                            style={{ width: 25, height: 25, marginLeft: 0, opacity: this.state.isLoading ? .1 : 1 }}
+                            src="/img/update.png" />
                     </div>
                 </div>
 

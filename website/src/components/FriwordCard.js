@@ -45,7 +45,7 @@ export default class FriwordCard extends React.Component {
             canLeaveComment: true,
             comment: '',
             showComments: false,
-            mentions: [],
+            mentions: null,
 
             // False both
             hasDisliked: false,
@@ -76,13 +76,16 @@ export default class FriwordCard extends React.Component {
             this.setState({ friword : nextProps.friword });
         }
 
-        if(this.props.user != null && (!this.state.mentions || !this.state.mentions.length)) {
+        if(this.props.user != null && !this.state.mentions) {
             Services.Friwords.getPossibleMentionsByFriwordId(this.props.friword.id, (data) => {
                 if(data.success) {
                     this.setState({ mentions : data.mentions });
+                } else {
+                    this.setState({ mentions : [] });
                 }
             }, (err) => {
                 // Do nothing
+                this.setState({ mentions : [] });
             });
         }
     }
