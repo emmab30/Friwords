@@ -46,6 +46,15 @@ var Friwords = {
             if(error) error(err);
         });
     },
+    likeCommentById: function(id, success, error) {
+        let url = `friwords/comments/${id}/like`;
+
+        ApiService().post(url).then((response) => {
+            if(success) success(response.data);
+        }).catch((err) => {
+            if(error) error(err);
+        });
+    },
     dislikeById: function(id, success, error) {
         let url = `friwords/${id}/dislike`;
 

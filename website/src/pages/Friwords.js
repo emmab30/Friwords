@@ -437,6 +437,9 @@ export default class Friwords extends React.Component {
                                             this.getFriwordById(e.id);
                                         }}
                                         onPostedComment={this.getMe}
+                                        refreshFriword={() => {
+                                            this.getFriwordById(e.id, false);
+                                        }}
                                     />
                                 ))}
 
@@ -488,6 +491,9 @@ export default class Friwords extends React.Component {
                                             this.getFriwordById(e.id);
                                         }}
                                         onPostedComment={this.getMe}
+                                        refreshFriword={() => {
+                                            this.getFriwordById(e.id, false);
+                                        }}
                                     />
                                 ))}
 
@@ -539,6 +545,9 @@ export default class Friwords extends React.Component {
                                             this.getFriwordById(e.id);
                                         }}
                                         onPostedComment={this.getMe}
+                                        refreshFriword={() => {
+                                            this.getFriwordById(e.id, false);
+                                        }}
                                     />
                                 ))}
 

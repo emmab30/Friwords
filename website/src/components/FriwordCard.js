@@ -16,7 +16,11 @@ import {
 import FriwordComment from './FriwordComment';
 import FadeInSection from './FadeInSection'
 
+// Animations
+import * as animationData from '../assets/animations/like.json'
+
 // Modules
+import Lottie from 'react-lottie';
 import moment from 'moment';
 import 'moment/locale/es';
 import * as Icons from '@ant-design/icons';
@@ -53,13 +57,15 @@ export default class FriwordCard extends React.Component {
 
     componentDidMount() {
         // Get possible mentions
-        Services.Friwords.getPossibleMentionsByFriwordId(this.props.friword.id, (data) => {
-            if(data.success) {
-                this.setState({ mentions : data.mentions });
-            }
-        }, (err) => {
-            // Do nothing
-        });
+        if(this.props.user != null) {
+            Services.Friwords.getPossibleMentionsByFriwordId(this.props.friword.id, (data) => {
+                if(data.success) {
+                    this.setState({ mentions : data.mentions });
+                }
+            }, (err) => {
+                // Do nothing
+            });
+        }
     }
 
     onDislike = () => {
@@ -75,9 +81,18 @@ export default class FriwordCard extends React.Component {
     }
 
     onLike = () => {
-        if(this.state.hasLiked || this.state.hasDisliked)
+        if(this.props.user == null){
+            notification.open({
+                className: 'error',
+                message: 'Oops',
+                description: 'No se pudo dar like. Debes ingresar con tu alias para hacer esto',
+            });
             return;
+        } else if(this.state.hasLiked || this.state.hasDisliked) {
+            return;
+        }
 
+        this.setState({ hideLikeBtn : true, hasLiked : true });
         this.props.onLike();
         this.setState({ hideLikeBtn : true, hasLiked : true }, () => {
             setTimeout(() => {
@@ -161,10 +176,18 @@ export default class FriwordCard extends React.Component {
 
         let isMale = friword && friword.user && friword.user.gender == 'male';
         let isFemale = friword && friword.user && friword.user.gender == 'female';
+        const defaultOptions = {
+            loop: false,
+            autoplay: false,
+            animationData: animationData.default,
+            rendererSettings: {
+                preserveAspectRatio: 'xMidYMid slice'
+            }
+        }
 
         return (
             <FadeInSection key={friword.id}>
-                <div className={`data-node-${friword.id}`} style={{ marginBottom: 20 }}>
+                <div className={`data-node-${friword.id}`}>
                     <div style={{ width: '100%' }}>
                         <div style={{ width: '100%', height: 5, backgroundColor: 'rgba(0,0,0,.025)' }}></div>
                         <Card
@@ -199,36 +222,17 @@ export default class FriwordCard extends React.Component {
                                 <span style={{ display: 'block', marginTop: 0, fontSize: 10, textAlign: 'right' }}>por <span style={{ color: '#25b864', fontWeight: 600 }}>@{ friword.user_alias }</span></span>
                             }
 
-                            <div style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', marginTop: 20, marginBottom: 20 }}>
-                                <ParticleEffectButton
-                                    color='rgb(37, 184, 100)'
-                                    duration={250}
-                                    type={'rectangle'}
-                                    particlesAmountCoefficient={1}
-                                    oscillationCoefficient={5}
-                                    hidden={this.state.hideLikeBtn}>
-                                    <div
-                                        onClick={this.onLike}
-                                        style={{ display: 'flex', flex: 0, alignItems: 'center', justifyContent: 'center', backgroundColor: '#25b864', width: 60, height: 30, borderRadius: 2, marginRight: 10, cursor: 'pointer', opacity: (this.props.likes > 0 ? 1 : .75) }}>
-                                        <Icons.LikeOutlined style={{ color: 'white' }} />
-                                        <span style={{ color: 'white', marginLeft: 5 }}>{ this.props.likes }</span>
-                                    </div>
-                                </ParticleEffectButton>
-
-                                <ParticleEffectButton
-                                    color='#ff2452'
-                                    duration={250}
-                                    type={'rectangle'}
-                                    particlesAmountCoefficient={1}
-                                    oscillationCoefficient={5}
-                                    hidden={this.state.hideDislikeBtn}>
-                                    <div
-                                        onClick={this.onDislike}
-                                        style={{ display: 'flex', flex: 0, alignItems: 'center', justifyContent: 'center', backgroundColor: '#ff2452', width: 60, height: 30, borderRadius: 2, cursor: 'pointer', opacity: (this.props.dislikes > 0 ? 1 : .75) }}>
-                                        <Icons.DislikeOutlined style={{ color: 'white' }} />
-                                        <span style={{ color: 'white', marginLeft: 5 }}>{ this.props.dislikes }</span>
-                                    </div>
-                                </ParticleEffectButton>
+                            <div
+                                onClick={this.onLike}
+                                style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', marginTop: 5, marginBottom: 5 }}>
+                                <Lottie
+                                    options={defaultOptions}
+                                    autoplay={false}
+                                    height={50}
+                                    width={32}
+                                    isStopped={!friword.liked}
+                                />
+                                <span style={{ color: '#f87676', marginLeft: 5, fontWeight: 800 }}>{ this.props.likes } like{this.props.likes > 1 ? 's' : ''}</span>
                             </div>
 
                             { this.state.isLoadingComments && (!friword.comments || !friword.comments.length) &&
@@ -244,8 +248,8 @@ export default class FriwordCard extends React.Component {
                                         });
                                         this.props.onRequestComments();
                                     }}
-                                    style={{ display: 'block', marginLeft: 0, marginTop: 5, fontWeight: 500 }}>
-                                    Ver { friword.comments_qty } comentarios
+                                    style={{ display: 'block', marginLeft: 0, marginTop: 0, marginBottom: 10, marginLeft: 7, fontWeight: 400, textDecoration: 'underline' }}>
+                                    Ver { friword.comments_qty } comentario{friword.comments_qty > 1 ? 's' : ''}
                                 </a>
                             }
 
@@ -264,10 +268,27 @@ export default class FriwordCard extends React.Component {
 
                             <div style={{ marginLeft: 5 }}>
                                 <Timeline>
-                                    { this.state.showComments && friword.comments != null && friword.comments.length > 0 && friword.comments.map((e) => {
+                                    { this.state.showComments && friword.comments != null && friword.comments.length > 0 && friword.comments.map((e, index) => {
                                         return (
                                             <FriwordComment
+                                                key={`comment_${e.id}`}
                                                 comment={e}
+                                                onLikeComment={(comment) => {
+                                                    if(this.props.user != null) {
+                                                        Services.Friwords.likeCommentById(comment.id, (data) => {
+                                                            this.props.refreshFriword();
+                                                        }, (err) => {
+                                                            this.props.refreshFriword();
+                                                        });
+                                                    } else {
+                                                        notification.open({
+                                                            className: 'error',
+                                                            message: 'Oops',
+                                                            description: 'No se pudo dar like. Debes ingresar con tu alias para hacer esto',
+                                                        });
+                                                        return;
+                                                    }
+                                                }}
                                             />
                                         );
                                     })}
@@ -275,7 +296,7 @@ export default class FriwordCard extends React.Component {
                             </div>
 
                             { this.state.canLeaveComment &&
-                                <div style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 20, marginBottom: 10 }}>
+                                <div style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 0, marginBottom: 0 }}>
                                     <div style={{ display: 'flex', flex: 1 }}>
                                         <Form
                                             name="post_comment"

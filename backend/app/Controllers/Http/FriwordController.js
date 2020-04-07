@@ -3,7 +3,9 @@
 const _ = require('lodash');
 const User = use('App/Models/User');
 const Friword = use('App/Models/Friword');
+const FriwordLike = use('App/Models/FriwordLike');
 const Notification = use('App/Models/Notification');
+const FriwordCommentLike = use('App/Models/FriwordCommentLike');
 const FriwordComment = use('App/Models/FriwordComment');
 
 class FriwordController {
@@ -23,23 +25,8 @@ class FriwordController {
 
     async getFriwordsByFilter({ request, auth, response }) {
         const body = request.all();
-
         let user = null;
-        try {
-            user = await auth.getUser();
-
-            /*if(user == null){
-                return response.json({
-                    success: true,
-                    friword: null
-                });
-            }*/
-        } catch (exception) {
-            /*return response.json({
-                success: true,
-                friwords: null
-            });*/
-        }
+        try { user = await auth.getUser(); } catch (exception) { }
 
 
         const perPage = 10;
@@ -63,14 +50,41 @@ class FriwordController {
         }
 
         friwords = await friwords.fetch()
+        friwords = friwords.toJSON();
 
-        return response.json({
-            success: true,
-            friwords: friwords
+        // Check what friwords was liked for me
+        let promises = [];
+        if(user != null) {
+            for(var idx in friwords) {
+                promises.push(new Promise((resolve, reject) => {
+                    const friword = friwords[idx];
+                    Friword.IsLikedBy(friword.id, user.id).then((value) => {
+                        friword.liked = value;
+                        resolve(friword);
+                    });
+                }));
+            }
+        } else {
+            promises.push(new Promise((resolve, reject) => {
+                resolve(friwords);
+            }));
+        }
+
+        await Promise.all(promises).then((values) => {
+            if(values.length == 1)
+                values = values[0];
+
+            return response.json({
+                success: true,
+                friwords: values
+            });
         });
     }
 
-    async getFriwordById({ request, response }) {
+    async getFriwordById({ request, auth, response }) {
+        let user = null;
+        try { user = await auth.getUser(); } catch (exception) { }
+
         let friword = await Friword
             .query()
             .where('id', request.params.id)
@@ -85,6 +99,22 @@ class FriwordController {
                 query.select(['id', 'alias', 'country_code', 'gender']);
             })
             .first();
+
+        friword = friword.toJSON();
+
+        if(user != null) {
+            const liked = await Friword.IsLikedBy(friword.id, user.id);
+            friword.liked = liked;
+
+            for(var idx in friword.comments) {
+                const comment = friword.comments[idx];
+                if(comment) {
+                    comment.liked = await FriwordComment.IsLikedBy(comment.id, user.id);
+                } else {
+                    comment.liked = false;
+                }
+            }
+        }
 
         return response.json({
             success: true,
@@ -203,8 +233,8 @@ class FriwordController {
             user_alias: body.user_alias,
             text: body.text,
             html: html,
-            likes: 0,
-            dislikes: 0
+            likes_qty: 0,
+            dislikes_qty: 0
         });
 
         if(friword && friword.user) {
@@ -229,17 +259,73 @@ class FriwordController {
         });
     }
 
-    async likeById({ request, response }) {
+    /* Like friword by id */
+    async likeById({ request, auth, response }) {
+        let user = await auth.getUser();
         let friwordId = request.params.id;
-        let friword = await Friword
-            .query()
-            .where('id', friwordId)
-            .first();
-        friword.likes_qty += 1;
-        await friword.save();
+
+        let status = null;
+
+        if(user) {
+            // Unlike or like
+            let hasLiked = await FriwordLike
+                .query()
+                .where('user_id', user.id)
+                .where('friword_id', friwordId)
+                .getCount('id');
+
+            if(hasLiked == 0) {
+                status = 'liked';
+                await FriwordLike.create({
+                    user_id: user.id,
+                    friword_id: friwordId
+                });
+            } else {
+                let friwordLike = await FriwordLike.query().where('user_id', user.id).where('friword_id', friwordId).first();
+                if(friwordLike) {
+                    friwordLike.delete();
+                    status = 'unliked';
+                }
+            }
+        }
 
         return response.json({
-            success: true
+            success: true,
+            status
+        });
+    }
+
+    async likeCommentById({ request, auth, response }) {
+        let user = await auth.getUser();
+        let commentId = request.params.id;
+
+        let status = null;
+        if(user) {
+            // Unlike or like
+            let hasLiked = await FriwordCommentLike
+                .query()
+                .where('user_id', user.id)
+                .where('comment_id', commentId)
+                .getCount('id');
+
+            if(hasLiked == 0) {
+                status = 'liked';
+                await FriwordCommentLike.create({
+                    user_id: user.id,
+                    comment_id: commentId
+                });
+            } else {
+                let comment = await FriwordCommentLike.query().where('user_id', user.id).where('comment_id', commentId).first();
+                if(comment) {
+                    await comment.delete();
+                    status = 'unliked';
+                }
+            }
+        }
+
+        return response.json({
+            success: true,
+            status
         });
     }
 
