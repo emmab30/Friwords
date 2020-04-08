@@ -73,6 +73,11 @@ input {
     -webkit-transition: all 0.1s ease-in;
 }
 
+.card-topic {
+    transition: all 0.25s ease-in;
+    -webkit-transition: all 0.25s ease-in;
+}
+
 .input-comment textarea:active, .input-comment textarea:focus {
     border: none !important;
     outline: none !important;

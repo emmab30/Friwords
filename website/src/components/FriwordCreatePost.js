@@ -143,28 +143,27 @@ export default class FriwordCreatePost extends React.Component {
                     initialValues={{ remember: true }}
                     onFinish={this.onFinish}>
 
-                    <div style={{ marginBottom: 10, backgroundColor: 'rgba(0,0,0,.03)', padding: 10 }}>
-                        <span>¡Recuerda! Esto es totalmente anónimo, y tu friword aparecerá creado por <b>{friword.user_alias != null ? friword.user_alias : ''}</b></span>
-                    </div>
-
-                    {/*<div style={{ width: '100%', height: 8, backgroundColor: 'rgba(0,0,0,0.01)', marginTop: 10, marginBottom: 10 }}></div>*/}
-
-                    {/*<Form.Item
-                        name="title"
-                        rules={[{ required: true, message: 'Ingresa un título' }]}>
-                        <Input
-                            onChange={(evt) => {
-                                friword.title = evt.target.value;
-                                this.setState({ friword });
-                            }}
-                            prefix={<Icons.QuestionCircleOutlined className="site-form-item-icon" />} placeholder="Título" />
-                    </Form.Item>*/}
+                    { this.props.topics != null &&
+                        <Select
+                            defaultValue="Escoge un tópico"
+                            style={{ width: '100%', marginBottom: 15 }}
+                            onChange={(value) => {
+                                friword.topic_id = value;
+                                this.setState({ friword });
+                            }}>
+                            { this.props.topics.map((e) => {
+                                return (
+                                    <Option value={ e.id }>#{e.name}</Option>
+                                );
+                            })}
+                        </Select>
+                    }
 
                     <Form.Item
                         name="text"
                         rules={[{ required: true, message: 'Ingresa el texto' }]}>
                         <TextArea
-                            placeholder="Tu texto"
+                            placeholder="Escribe tu friword"
                             autoSize={{ minRows: 2, maxRows: 8 }}
                             maxLength={750}
                             onChange={(evt) => {
@@ -173,16 +172,10 @@ export default class FriwordCreatePost extends React.Component {
                             }}
                             prefix={<Icons.QuestionCircleOutlined className="site-form-item-icon" />}
                         />
-                        {/*<Input
-                            onChange={(evt) => {
-                                friword.text = evt.target.value;
-                                this.setState({ friword });
-                            }}
-                            prefix={<Icons.QuestionCircleOutlined className="site-form-item-icon" />} placeholder="Texto" />*/}
                     </Form.Item>
                     <span>{750 - (friword && friword.text && friword.text.length ? friword.text.length : 0)} caracteres restantes</span>
 
-                    <div style={{ width: '100%', height: 5, backgroundColor: 'rgba(0,0,0,0.05)', marginTop: 20, marginBottom: 20 }}></div>
+                    <div style={{ width: '100%', height: 5, backgroundColor: 'rgba(0,0,0,0.05)', marginTop: 5, marginBottom: 10 }}></div>
 
                     {/*<span style={{ width: '100%', display: 'block', textAlign: 'center', fontWeight: 600 }}>Selecciona tu género</span>
                     <div style={{ width: '100%', height: 40, display: 'flex', flexDirection: 'row', marginBottom: 20 }}>

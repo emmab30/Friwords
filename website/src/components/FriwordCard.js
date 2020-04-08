@@ -168,7 +168,6 @@ export default class FriwordCard extends React.Component {
                         if(this.props.onPostedComment)
                             this.props.onPostedComment();
                     }, (err) => {
-                        console.log(err);
                         // Do nothing
                     });
                 }}
@@ -344,6 +343,12 @@ export default class FriwordCard extends React.Component {
                             { this.props.user == null &&
                                 <div style={{ width: '100%', backgroundColor: '#25b864', padding: 5, marginTop: 10, borderRadius: 2 }}>
                                     <span style={{ display: 'block', fontSize: 12, fontWeight: 600, textAlign: 'left', color: 'white' }}>Creá tu alias anónimo para dejar un comentario</span>
+                                </div>
+                            }
+
+                            { this.state.friword && this.state.friword.topic != null &&
+                                <div style={{ width: 'auto', position: 'absolute', top: 0, right: 0, backgroundColor: 'rgba(0,0,0,.85)', color: 'white', fontSize: '0.7em', borderBottomLeftRadius: 3, borderTopLeftRadius: 0, padding: 5 }}>
+                                    #{this.state.friword.topic.name}
                                 </div>
                             }
 

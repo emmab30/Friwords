@@ -3,6 +3,7 @@
 const _ = require('lodash');
 const User = use('App/Models/User');
 const Friword = use('App/Models/Friword');
+const FriwordTopic = use('App/Models/FriwordTopic');
 const FriwordLike = use('App/Models/FriwordLike');
 const Notification = use('App/Models/Notification');
 const FriwordCommentLike = use('App/Models/FriwordCommentLike');
@@ -38,6 +39,9 @@ class FriwordController {
             .with('user', (query) => {
                 query.select(['id', 'alias', 'country_code', 'gender']);
             })
+            .with('topic', (query) => {
+                query.select(['id', 'name']);
+            })
             .orderBy('created_at', 'DESC');
 
         if(body.only_me == true) {
@@ -48,6 +52,10 @@ class FriwordController {
             }
         } else if(body.listing_mode != null) {
             friwords.where('listing_mode', body.listing_mode);
+        }
+
+        if(body.topic_id != null) {
+            friwords.where('topic_id', body.topic_id);
         }
 
         friwords = await friwords.fetch()
@@ -72,7 +80,7 @@ class FriwordController {
         }
 
         await Promise.all(promises).then((values) => {
-            if(values.length == 1)
+            if(values.length == 1 && values[0].length > 0)
                 values = values[0];
 
             return response.json({
@@ -171,6 +179,7 @@ class FriwordController {
             title: body.title,
             text: body.text,
             user_alias: body.user_alias,
+            topic_id: body.topic_id,
             // gender: body.gender,
             comments_qty: 0,
             likes_qty: 0,
@@ -357,6 +366,19 @@ class FriwordController {
             return response.json({ success: true, hasUpdates: true });
 
         return response.json({ success: true, hasUpdates: false });
+    }
+
+    /* Topics */
+
+    async getTopics({ request, auth, response }){
+        const topics = await FriwordTopic
+            .query()
+            .fetch();
+
+        return response.json({
+            success: true,
+            topics
+        });
     }
 }
 

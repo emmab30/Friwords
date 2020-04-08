@@ -41,6 +41,7 @@ export default class Friwords extends React.Component {
         super(props);
         this.state = {
             friwords: [],
+            topics: [],
             filters: {
                 listing_mode : 1,
                 page: 0
@@ -62,8 +63,17 @@ export default class Friwords extends React.Component {
     componentDidMount() {
         this.getFriwords();
         this.getMe();
+        this.getTopics();
 
         setInterval(this.getMe, 10000);
+    }
+
+    getTopics = () => {
+        Services.Friwords.getTopics((data) => {
+            if(data.success) {
+                this.setState({ topics: data.topics });
+            }
+        }, (err) => {});
     }
 
     getMe = () => {
@@ -192,6 +202,12 @@ export default class Friwords extends React.Component {
         return Services.Auth.isAuthenticated();
     }
 
+    onPressTopic = (topic) => {
+        const { filters } = this.state;
+        filters.topic_id = topic.id;
+        this.setState({ filters }, this.getFriwords);
+    }
+
     render() {
         const {
             friwords,
@@ -288,6 +304,7 @@ export default class Friwords extends React.Component {
                             this.setState({ isCreating : false });
                         }}
                         user={this.state.user}
+                        topics={this.state.topics}
                         onCreated={(friword) => {
                             this.setState({ isCreating : false });
 
@@ -298,7 +315,7 @@ export default class Friwords extends React.Component {
                             notification.open({
                                 className: 'success',
                                 message: <Icons.HeartTwoTone twoToneColor="#eb2f96" />,
-                                description: 'Tu friword fue publicado exitosamente en la sección `Recientes`',
+                                description: 'Tu friword fue publicado exitosamente en la sección `Últimos Friwords`',
                             });
                         }}
                     />
@@ -383,7 +400,7 @@ export default class Friwords extends React.Component {
                                 }, this.getFriwords);
                             }}
                             defaultActiveKey={'1'}>
-                            <TabPane
+                            { /* <TabPane
                                 tab={
                                     <span>
                                         <Icons.HeartOutlined />
@@ -429,16 +446,46 @@ export default class Friwords extends React.Component {
                                     style={{ display: 'flex', width: '80%', margin: '0 auto', marginBottom: 20, justifyContent: 'center', alignItems: 'center', height: 40 }}>
                                     Cargar más
                                 </Button>
-                            </TabPane>
+                            </TabPane> */ }
 
                             <TabPane
                                 tab={
                                     <span>
-                                        <Icons.FieldTimeOutlined />
-                                            Recientes
+                                        <Icons.AlignCenterOutlined />
+                                            Friwords
                                         </span>
                                     }
                                 key={'1'}>
+
+                                { this.state.topics != null &&
+                                    <div style={{ paddingTop: 0, paddingLeft: 5 }}>
+                                        <h3>Trending topics</h3>
+                                        <div style={{ display: 'flex', flexDirection: 'row', overflow: 'scroll', paddingBottom: 15 }}>
+                                            { this.state.topics.map((e, index) => {
+                                                return (
+                                                    <div
+                                                        className="card-topic"
+                                                        onClick={this.onPressTopic.bind(this, e)}
+                                                        style={{
+                                                            width: 'auto',
+                                                            padding: 5,
+                                                            backgroundColor: filters.topic_id == e.id ? '#363636': '#363636',
+                                                            opacity: (filters.topic_id != null && filters.topic_id != e.id) ? .2 : 1,
+                                                            color: 'white',
+                                                            borderRadius: 10,
+                                                            marginLeft: index == 0 ? 0 : 5 }}>
+                                                        #{ e.name }
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                }
+
+                                { !this.state.isLoading && (!friwords || !friwords.length) &&
+                                    <p style={{ textAlign: 'center', marginTop: 10, color: '#fe553a', fontWeight: 600 }}>No hay friwords publicados con esos filtros. Inténtalo nuevamente</p>
+                                }
+
                                 { friwords && friwords.map((e, index) => (
                                     <FriwordCard
                                         loading={this.state.isLoading}
@@ -478,52 +525,54 @@ export default class Friwords extends React.Component {
                                 </Button>
                             </TabPane>
 
-                            <TabPane
-                                tab={
-                                    <span>
-                                        <Icons.FieldTimeOutlined />
-                                            Míos
-                                        </span>
-                                    }
-                                key={'2'}>
-                                { friwords && friwords.map((e, index) => (
-                                    <FriwordCard
-                                        loading={this.state.isLoading}
-                                        friword={e}
-                                        comments={e.comments}
-                                        likes={e.likes_qty}
-                                        dislikes={e.dislikes_qty}
-                                        commentsQty={e.comments_qty}
-                                        user={this.state.user}
-                                        onLike={() => {
-                                            Services.Friwords.likeById(e.id, (success) => {
-                                                setTimeout(() => {
-                                                    this.getFriwordById(e.id);
-                                                }, 500);
-                                            });
-                                        }}
-                                        onRequestComments={() => {
-                                            this.getFriwordById(e.id);
-                                        }}
-                                        onPostedComment={this.getMe}
-                                        refreshFriword={() => {
-                                            this.getFriwordById(e.id, false);
-                                        }}
-                                    />
-                                ))}
+                            { this.state.user != null &&
+                                <TabPane
+                                    tab={
+                                        <span>
+                                            <Icons.FieldTimeOutlined />
+                                                Mis friwords
+                                            </span>
+                                        }
+                                    key={'2'}>
+                                    { friwords && friwords.map((e, index) => (
+                                        <FriwordCard
+                                            loading={this.state.isLoading}
+                                            friword={e}
+                                            comments={e.comments}
+                                            likes={e.likes_qty}
+                                            dislikes={e.dislikes_qty}
+                                            commentsQty={e.comments_qty}
+                                            user={this.state.user}
+                                            onLike={() => {
+                                                Services.Friwords.likeById(e.id, (success) => {
+                                                    setTimeout(() => {
+                                                        this.getFriwordById(e.id);
+                                                    }, 500);
+                                                });
+                                            }}
+                                            onRequestComments={() => {
+                                                this.getFriwordById(e.id);
+                                            }}
+                                            onPostedComment={this.getMe}
+                                            refreshFriword={() => {
+                                                this.getFriwordById(e.id, false);
+                                            }}
+                                        />
+                                    ))}
 
-                                <Button
-                                    onClick={() => {
-                                        filters.page += 1;
-                                        this.setState({ filters }, this.getFriwords);
-                                    }}
-                                    type="primary"
-                                    loading={this.state.isLoading}
-                                    icon={<Icons.ReloadOutlined />}
-                                    style={{ display: 'flex', width: '80%', margin: '0 auto', marginBottom: 20, justifyContent: 'center', alignItems: 'center', height: 40 }}>
-                                    Cargar más
-                                </Button>
-                            </TabPane>
+                                    <Button
+                                        onClick={() => {
+                                            filters.page += 1;
+                                            this.setState({ filters }, this.getFriwords);
+                                        }}
+                                        type="primary"
+                                        loading={this.state.isLoading}
+                                        icon={<Icons.ReloadOutlined />}
+                                        style={{ display: 'flex', width: '80%', margin: '0 auto', marginBottom: 20, justifyContent: 'center', alignItems: 'center', height: 40 }}>
+                                        Cargar más
+                                    </Button>
+                                </TabPane>
+                            }
                         </Tabs>
                     ]}
 

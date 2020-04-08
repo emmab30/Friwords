@@ -90,6 +90,15 @@ var Friwords = {
         }).catch((err) => {
             if(error) error(err);
         });
+    },
+    getTopics: function(success, error) {
+        let url = `friwords/topics`;
+
+        ApiService().get(url).then((response) => {
+            if(success) success(response.data);
+        }).catch((err) => {
+            if(error) error(err);
+        });
     }
 };
 

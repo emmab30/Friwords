@@ -25,6 +25,7 @@ Route.group(() => {
     Route.post('auth/register', 'AuthController.register');
 
     Route.get('friwords', 'FriwordController.getFriwords');
+    Route.get('friwords/topics', 'FriwordController.getTopics');
     Route.post('friwords/filter', 'FriwordController.getFriwordsByFilter');
     Route.get('friwords/updates_available/:lastId', 'FriwordController.hasUpdatesAvailable'); // Check if there is updates available to pull
     Route.get('friwords/:id', 'FriwordController.getFriwordById');

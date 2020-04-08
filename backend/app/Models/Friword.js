@@ -13,6 +13,10 @@ class Friword extends Model {
         return this.hasOne('App/Models/User', 'user_alias', 'alias');
     }
 
+    topic() {
+        return this.hasOne('App/Models/FriwordTopic', 'topic_id', 'id');
+    }
+
     static async IsLikedBy(friwordId, userId) {
         let liked = await FriwordLike
             .query()
