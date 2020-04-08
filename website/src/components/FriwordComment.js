@@ -73,10 +73,12 @@ export default class FriwordComment extends React.Component {
             }
         }
 
+        const isAdmin = comment && comment.user && (comment.user.alias == 'admin' || comment.user.alias == 'friwords');
+
         return (
             <Timeline.Item
                 dot={
-                    <div style={{ marginTop: 5, width: 10, height: 10, borderRadius: 5, backgroundColor: comment && comment.user && comment.user.gender == 'female' ? '#ff8b9a' : '#8baeff' }}></div>
+                    <div style={{ marginTop: 5, width: 10, height: 10, borderRadius: 5, backgroundColor: isAdmin ? '#ffa002' : (comment && comment.user && comment.user.gender == 'female' ? '#ff8b9a' : '#8baeff') }}></div>
                 }>
                 <div style={{ marginBottom: 0 }}>
                     {/*<div style={{ width: '95%', marginLeft: '2%', height: 3, backgroundColor: 'rgba(0,0,0,.005)', marginTop: 5, marginBottom: 0 }} />*/}
@@ -89,7 +91,7 @@ export default class FriwordComment extends React.Component {
                                         { comment && comment.user_alias &&
                                             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                                                 <div style={{ display: 'flex', flex: 1, marginBottom: 0, backgroundColor: 'white' }}>
-                                                    <span style={{ display: 'block', marginTop: 0, fontSize: 13, textAlign: 'left', color: comment && comment.user && comment.user.gender == 'female' ? '#ff8b9a' : '#8baeff', fontWeight: 500 }}>@{ comment.user_alias }</span>
+                                                    <span style={{ display: 'block', marginTop: 0, fontSize: 13, textAlign: 'left', color: isAdmin ? '#ffa002' : (comment && comment.user && comment.user.gender == 'female' ? '#ff8b9a' : '#8baeff'), fontWeight: 500 }}>@{ comment.user_alias }</span>
                                                 </div>
 
                                                 <div
