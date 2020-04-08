@@ -293,11 +293,12 @@ class FriwordController {
                     friword_id: friwordId
                 });
             } else {
-                let friwordLike = await FriwordLike.query().where('user_id', user.id).where('friword_id', friwordId).first();
+                status = 'liked';
+                /*let friwordLike = await FriwordLike.query().where('user_id', user.id).where('friword_id', friwordId).first();
                 if(friwordLike) {
                     friwordLike.delete();
                     status = 'unliked';
-                }
+                }*/
             }
         }
 
@@ -327,11 +328,12 @@ class FriwordController {
                     comment_id: commentId
                 });
             } else {
-                let comment = await FriwordCommentLike.query().where('user_id', user.id).where('comment_id', commentId).first();
+                status = 'liked';
+                /*let comment = await FriwordCommentLike.query().where('user_id', user.id).where('comment_id', commentId).first();
                 if(comment) {
                     await comment.delete();
                     status = 'unliked';
-                }
+                }*/
             }
         }
 
