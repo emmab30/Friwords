@@ -34,10 +34,21 @@
                 OneSignal.init({
                     appId: "dc8495cf-d343-4c38-94cf-883cc60c7aee",
                     safari_web_id: "web.onesignal.auto.62c55c8f-4b76-4a2c-bf2b-fd3fb88f056f",
-                    autoRegister: true,
+                    autoResubscribe: true,
                     notifyButton: {
                         enable: true,
                     },
+                    promptOptions: {
+                        /* These prompt options values configure both the HTTP prompt and the HTTP popup. */
+                        /* actionMessage limited to 90 characters */
+                        actionMessage: 'Nos gustaría mostrarte notificaciones',
+                        /* acceptButtonText limited to 15 characters */
+                        acceptButtonText: 'Permitir',
+                        /* cancelButtonText limited to 15 characters */
+                        cancelButtonText: 'No, gracias',
+                         /* Change bold title, limited to 30 characters */
+                        siteName: 'Friwords'
+                    }
                 });
             });
         </script>
