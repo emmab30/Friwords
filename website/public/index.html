@@ -26,6 +26,19 @@
         <meta property="twitter:title" content="Hacé preguntas de forma anónima">
         <meta property="twitter:description" content="Friwords, el sitio donde podés preguntar cualquiera cosa de forma anónima">
         <meta property="twitter:image" content="https://i.ibb.co/DDHw06Z/Friwords.png">
+
+        <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+        <script>
+            var OneSignal = window.OneSignal || [];
+            OneSignal.push(function() {
+                OneSignal.init({
+                    appId: "dc8495cf-d343-4c38-94cf-883cc60c7aee",
+                    notifyButton: {
+                        enable: true,
+                    },
+                });
+            });
+        </script>
     </head>
     <body>
         <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -71,18 +84,5 @@
         </script>
         <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=250576236335865&ev=PageView&noscript=1"/></noscript>
         <!-- End Facebook Pixel Code -->
-
-        <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
-        <script>
-            var OneSignal = window.OneSignal || [];
-            OneSignal.push(function() {
-                OneSignal.init({
-                    appId: "dc8495cf-d343-4c38-94cf-883cc60c7aee",
-                    notifyButton: {
-                        enable: true,
-                    },
-                });
-            });
-        </script>
     </body>
 </html>
