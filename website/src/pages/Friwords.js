@@ -204,7 +204,12 @@ export default class Friwords extends React.Component {
 
     onPressTopic = (topic) => {
         const { filters } = this.state;
-        filters.topic_id = topic.id;
+        if(filters.topic_id != null && filters.topic_id == topic.id) {
+            delete filters.topic_id;
+        } else {
+            filters.topic_id = topic.id;
+        }
+
         this.setState({ filters }, this.getFriwords);
     }
 
