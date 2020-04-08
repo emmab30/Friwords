@@ -107,6 +107,9 @@ class FriwordController {
             .with('user', (query) => {
                 query.select(['id', 'alias', 'country_code', 'gender']);
             })
+            .with('topic', (query) => {
+                query.select(['id', 'name']);
+            })
             .first();
 
         friword = friword.toJSON();
@@ -210,7 +213,6 @@ class FriwordController {
             if(mentions && mentions.length > 0) {
                 for(var idx in mentions) {
                     const mention = mentions[idx];
-                    console.log(mention.replace('@', ''));
                     html = html.replace(mention, `<span class="mention">${mention}</span>`)
                     promises.push(new Promise((resolve, reject) => {
                         User
