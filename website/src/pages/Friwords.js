@@ -106,20 +106,7 @@ export default class Friwords extends React.Component {
         });
     }
 
-    /*getUsersOnline = () => {
-        let onlineUsers = this.state.previousOnlineUsers;
-        let offsetIncrement = 5;
-        let operator = Math.random() < 0.5 ? 1 : -1;
-        let newUsers = (onlineUsers + ((Math.floor(Math.random() * offsetIncrement) + 1) * operator));
-
-        this.setState({
-            newOnlineUsers: newUsers,
-            previousOnlineUsers: onlineUsers
-        });
-    }*/
-
     getFriwords = () => {
-        // this.getUsersOnline()
         this.setState({ isLoading : true, hasUpdates: false });
         Services.Friwords.getFriwordsByFilter(this.state.filters, (data) => {
 
@@ -374,8 +361,8 @@ export default class Friwords extends React.Component {
                                 }}
                                 type="primary"
                                 icon={<Icons.PlusOutlined />}
-                                style={{ display: 'flex', width: '80%', margin: '0 auto', justifyContent: 'center', alignItems: 'center', height: 40 }}>
-                                Publicar friword
+                                style={{ display: 'flex', width: '80%', margin: '0 auto', justifyContent: 'center', alignItems: 'center', height: 40, backgroundColor: 'white', color: '#25b864' }}>
+                                Publicá tu Friword
                             </Button>
                         </div>,
                         (this.state.user == null &&
@@ -466,6 +453,7 @@ export default class Friwords extends React.Component {
                                 { this.state.topics != null && this.state.topics.length > 0 &&
                                     <div style={{ paddingTop: 0, paddingLeft: 5 }}>
                                         <h3>Trending topics</h3>
+
                                         <div style={{ display: 'flex', flexDirection: 'row', overflow: 'scroll', paddingBottom: 15 }}>
                                             { this.state.topics.map((e, index) => {
                                                 return (
@@ -475,7 +463,7 @@ export default class Friwords extends React.Component {
                                                         style={{
                                                             width: 'auto',
                                                             padding: 5,
-                                                            backgroundColor: filters.topic_id == e.id ? '#363636': '#363636',
+                                                            backgroundColor: filters.topic_id == e.id ? '#25b864': 'rgba(37, 184, 100, .65)',
                                                             opacity: (filters.topic_id != null && filters.topic_id != e.id) ? .2 : 1,
                                                             color: 'white',
                                                             borderRadius: 10,
