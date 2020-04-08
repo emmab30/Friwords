@@ -88,6 +88,10 @@ export default class FriwordCard extends React.Component {
                 this.setState({ mentions : [] });
             });
         }
+
+        if(nextProps.isOnlyFriword == true && nextProps.friword && nextProps.friword.comments) {
+            this.setState({ showComments : true });
+        }
     }
 
     onLike = () => {
@@ -347,7 +351,7 @@ export default class FriwordCard extends React.Component {
                             }
 
                             { this.state.friword && this.state.friword.topic != null &&
-                                <div style={{ width: 'auto', position: 'absolute', top: 0, right: 0, backgroundColor: 'rgba(0,0,0,.85)', color: 'white', fontSize: '0.7em', borderBottomLeftRadius: 3, borderTopLeftRadius: 0, padding: 5 }}>
+                                <div style={{ width: 'auto', position: 'absolute', top: 0, right: 0, backgroundColor: 'rgba(0,0,0,.85)', color: 'white', fontSize: '0.7em', borderBottomLeftRadius: 3, borderTopLeftRadius: 0, padding: 5, opacity: .8 }}>
                                     #{this.state.friword.topic.name}
                                 </div>
                             }

@@ -333,11 +333,12 @@ export default class Friwords extends React.Component {
                                 }}
                                 type="primary"
                                 icon={<Icons.RollbackOutlined />}
-                                style={{ display: 'flex', width: '80%', margin: '0 auto', marginBottom: 20, justifyContent: 'center', alignItems: 'center', height: 40 }}>
+                                style={{ display: 'flex', width: '80%', margin: '0 auto', marginBottom: 20, justifyContent: 'center', alignItems: 'center', height: 40, backgroundColor: '#007eff' }}>
                                 Volver atrás
                             </Button>
                         </div>,
                         <FriwordCard
+                            isOnlyFriword={true}
                             loading={this.state.isLoading}
                             friword={this.state.friwords[0]}
                             comments={this.state.friwords[0].comments}
@@ -462,7 +463,7 @@ export default class Friwords extends React.Component {
                                     }
                                 key={'1'}>
 
-                                { this.state.topics != null &&
+                                { this.state.topics != null && this.state.topics.length > 0 &&
                                     <div style={{ paddingTop: 0, paddingLeft: 5 }}>
                                         <h3>Trending topics</h3>
                                         <div style={{ display: 'flex', flexDirection: 'row', overflow: 'scroll', paddingBottom: 15 }}>
