@@ -8,7 +8,7 @@ class NotificationController {
         let user = await auth.getUser();
         let notifications = await Notification
             .query()
-            .limit(5)
+            .limit(10)
             .orderBy('created_at', 'DESC')
             .where('user_id', user.id)
             // .where('seen', false)
