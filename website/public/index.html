@@ -30,13 +30,13 @@
         <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
         <script>
             var OneSignal = window.OneSignal || [];
-            OneSignal.push(function() {
+            OneSignal.push(() => {
                 OneSignal.init({
                     appId: "dc8495cf-d343-4c38-94cf-883cc60c7aee",
                     safari_web_id: "web.onesignal.auto.62c55c8f-4b76-4a2c-bf2b-fd3fb88f056f",
                     autoResubscribe: true,
                     notifyButton: {
-                        enable: true,
+                        enable: false
                     },
                     promptOptions: {
                         /* These prompt options values configure both the HTTP prompt and the HTTP popup. */
