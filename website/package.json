@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@crossfield/react-read-more": "^0.2.0",
     "antd": "^4.0.4",
     "axios": "^0.19.2",
     "axios-retry": "^3.1.2",

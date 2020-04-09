@@ -25,7 +25,7 @@ import moment from 'moment';
 import 'moment/locale/es';
 import * as Icons from '@ant-design/icons';
 import { Spin } from 'antd';
-import ParticleEffectButton from 'react-particle-effect-button'
+import ReadMore from '@crossfield/react-read-more';
 
 // Services
 import * as Services from '../services'
@@ -225,9 +225,19 @@ export default class FriwordCard extends React.Component {
                                     </div>
                                 }
                                 description={
-                                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                    <ReadMore
+                                        initialHeight={250}
+                                        readMore={props => (
+                                            <div
+                                                style={{ width: '100%', padding: 0, marginTop: 5, cursor: 'pointer' }}
+                                                onClick={props.onClick}>
+                                                <span style={{ color: 'white', fontWeight: 400, fontSize: '.75em', marginRight: 5, backgroundColor: 'rgba(20, 20, 20, .75)', padding: 5, borderRadius: 5 }}>
+                                                    {props.open ? 'Leer menos' : 'Leer más'}
+                                                </span>
+                                            </div>
+                                        )}>
                                         <span style={{ fontSize: '0.9em' }}>{ `${friword.text}` }</span>
-                                    </div>
+                                    </ReadMore>
                                 }
                             />
 
