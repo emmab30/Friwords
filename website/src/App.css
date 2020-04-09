@@ -47,6 +47,10 @@ input {
     color: #61dafb;
 }
 
+.scroll-container {
+    padding-top: 15px;
+}
+
 .counter-online-users span {
     font-size: 0.6em !important;
 }
@@ -146,7 +150,7 @@ input {
     color: white !important;
 }
 
-/*.fade-in-section {
+.fade-in-section {
     opacity: 0;
     transform: translateY(20vh);
     visibility: hidden;
@@ -158,7 +162,7 @@ input {
     opacity: 1;
     transform: none;
     visibility: visible;
-}*/
+}
 
 .ant-card-body {
     transition: all 0.1s ease-in;
@@ -180,6 +184,21 @@ input {
     color: rgba(80,80,80,1);
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+.ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab {
+    background: rgba(0,0,0,.2) !important;
+    color: white;
+    opacity: 1;
+    border-radius: 5px;
+}
+
+.ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab-active {
+    background: rgba(0,0,0,.8) !important;
+}
+
+.ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab span {
+    font-weight: 400;
 }
 
 /* Animations lottie */

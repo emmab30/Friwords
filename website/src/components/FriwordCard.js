@@ -14,7 +14,6 @@ import {
 
 // Components
 import FriwordComment from './FriwordComment';
-import FadeInSection from './FadeInSection'
 
 // Animations
 import * as animationData from '../assets/animations/like.json'
@@ -201,175 +200,173 @@ export default class FriwordCard extends React.Component {
         }
 
         return (
-            <FadeInSection key={friword.id}>
-                <div className={`data-node-${friword.id}`}>
-                    <div style={{ width: '100%' }}>
-                        <div style={{ width: '100%', height: 15, backgroundColor: 'rgba(0,0,0,.1)' }}></div>
-                        <Card
-                            bordered={false}
-                            // loading={this.props.loading}
-                            bodyStyle={{ padding: 10, paddingTop: 20, opacity: this.props.loading ? .1 : 1 }}>
-                            <Meta
-                                avatar={
-                                    <Avatar
-                                        src={friword && friword.user && friword.user.gender == 'female' ? 'https://image.flaticon.com/icons/svg/2284/2284897.svg' : 'https://image.flaticon.com/icons/svg/2284/2284900.svg'}
-                                        size={'large'}
-                                        style={{ borderRadius: 0, width: 30, height: 30 }}
-                                    />
-                                }
-                                title={
-                                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                        <span>
-                                            { `${friword.text.substring(0, 30)}...` }
-                                        </span>
-                                    </div>
-                                }
-                                description={
-                                    <ReadMore
-                                        initialHeight={250}
-                                        readMore={props => (
-                                            <div
-                                                style={{ width: '100%', padding: 0, marginTop: 5, cursor: 'pointer' }}
-                                                onClick={props.onClick}>
-                                                <span style={{ color: 'white', fontWeight: 400, fontSize: '.75em', marginRight: 5, backgroundColor: 'rgba(20, 20, 20, .75)', padding: 5, borderRadius: 5 }}>
-                                                    {props.open ? 'Leer menos' : 'Leer más'}
-                                                </span>
-                                            </div>
-                                        )}>
-                                        <span style={{ fontSize: '0.9em' }}>{ `${friword.text}` }</span>
-                                    </ReadMore>
-                                }
-                            />
-
-                            <span style={{ display: 'block', marginTop: 10, fontSize: 10, textAlign: 'right' }}>{ moment(friword.created_at).fromNow() }</span>
-
-                            { friword && friword.user_alias &&
-                                <span style={{ display: 'block', marginTop: 0, fontSize: 10, textAlign: 'right' }}>por <span style={{ color: '#25b864', fontWeight: 600 }}>@{ friword.user_alias }</span></span>
-                            }
-
-                            <div
-                                onClick={this.onLike}
-                                style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', marginTop: 5, marginBottom: 5 }}>
-                                <Lottie
-                                    options={defaultOptions}
-                                    autoplay={false}
-                                    height={50}
-                                    width={32}
-                                    isStopped={!friword.liked}
+            <div className={`data-node-${friword.id}`}>
+                <div style={{ width: '100%' }}>
+                    <div style={{ width: '100%', height: 15, backgroundColor: 'rgba(0,0,0,.1)' }}></div>
+                    <Card
+                        bordered={false}
+                        // loading={this.props.loading}
+                        bodyStyle={{ padding: 10, paddingTop: 20, opacity: this.props.loading ? .1 : 1 }}>
+                        <Meta
+                            avatar={
+                                <Avatar
+                                    src={friword && friword.user && friword.user.gender == 'female' ? 'https://image.flaticon.com/icons/svg/2284/2284897.svg' : 'https://image.flaticon.com/icons/svg/2284/2284900.svg'}
+                                    size={'large'}
+                                    style={{ borderRadius: 0, width: 30, height: 30 }}
                                 />
-                                <span style={{ color: '#f87676', marginLeft: 5, fontWeight: 800 }}>{ this.props.likes } like{this.props.likes > 1 ? 's' : ''}</span>
+                            }
+                            title={
+                                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                    <span>
+                                        { `${friword.text.substring(0, 30)}...` }
+                                    </span>
+                                </div>
+                            }
+                            description={
+                                <ReadMore
+                                    initialHeight={250}
+                                    readMore={props => (
+                                        <div
+                                            style={{ width: '100%', padding: 0, marginTop: 5, cursor: 'pointer' }}
+                                            onClick={props.onClick}>
+                                            <span style={{ color: 'white', fontWeight: 400, fontSize: '.75em', marginRight: 5, backgroundColor: 'rgba(20, 20, 20, .75)', padding: 5, borderRadius: 5 }}>
+                                                {props.open ? 'Leer menos' : 'Leer más'}
+                                            </span>
+                                        </div>
+                                    )}>
+                                    <span style={{ fontSize: '0.9em' }}>{ `${friword.text}` }</span>
+                                </ReadMore>
+                            }
+                        />
+
+                        <span style={{ display: 'block', marginTop: 10, fontSize: 10, textAlign: 'right' }}>{ moment(friword.created_at).fromNow() }</span>
+
+                        { friword && friword.user_alias &&
+                            <span style={{ display: 'block', marginTop: 0, fontSize: 10, textAlign: 'right' }}>por <span style={{ color: '#25b864', fontWeight: 600 }}>@{ friword.user_alias }</span></span>
+                        }
+
+                        <div
+                            onClick={this.onLike}
+                            style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', marginTop: 5, marginBottom: 5 }}>
+                            <Lottie
+                                options={defaultOptions}
+                                autoplay={false}
+                                height={50}
+                                width={32}
+                                isStopped={!friword.liked}
+                            />
+                            <span style={{ color: '#f87676', marginLeft: 5, fontWeight: 800 }}>{ this.props.likes } like{this.props.likes > 1 ? 's' : ''}</span>
+                        </div>
+
+                        { this.state.isLoadingComments && (!friword.comments || !friword.comments.length) &&
+                            <Icons.LoadingOutlined style={{ fontSize: 24, color: '#ff306f', marginTop: 10 }} spin />
+                        }
+
+                        { !this.state.isLoadingComments && !this.state.showComments && friword.comments_qty > 0 &&
+                            <a
+                                onClick={() => {
+                                    this.setState({
+                                        isLoadingComments: true,
+                                        showComments: true
+                                    });
+                                    this.props.onRequestComments();
+                                }}
+                                style={{ display: 'block', marginLeft: 0, marginTop: 0, marginBottom: 10, marginLeft: 7, fontWeight: 400, textDecoration: 'underline' }}>
+                                Ver { friword.comments_qty } comentario{friword.comments_qty > 1 ? 's' : ''}
+                            </a>
+                        }
+
+                        { friword.comments != null && friword.comments.length > 0 && this.state.showComments &&
+                            <a
+                                onClick={() => {
+                                    this.setState({
+                                        isLoadingComments: false,
+                                        showComments: false
+                                    });
+                                }}
+                                style={{ display: 'block', marginLeft: 0, marginBottom: 15, fontWeight: 500 }}>
+                                Ocultar comentarios
+                            </a>
+                        }
+
+                        <div style={{ marginLeft: 5 }}>
+                            <Timeline>
+                                { this.state.showComments && friword.comments != null && friword.comments.length > 0 && friword.comments.map((e, index) => {
+                                    return (
+                                        <FriwordComment
+                                            key={`comment_${e.id}`}
+                                            comment={e}
+                                            onLikeComment={(comment) => {
+                                                if(this.props.user != null) {
+                                                    Services.Friwords.likeCommentById(comment.id, (data) => {
+                                                        this.props.refreshFriword();
+                                                    }, (err) => {
+                                                        this.props.refreshFriword();
+                                                    });
+                                                } else {
+                                                    notification.open({
+                                                        className: 'error',
+                                                        message: 'Oops',
+                                                        description: 'No se pudo dar like. Debes ingresar con tu alias para hacer esto',
+                                                    });
+                                                    return;
+                                                }
+                                            }}
+                                        />
+                                    );
+                                })}
+                            </Timeline>
+                        </div>
+
+                        { this.state.canLeaveComment &&
+                            <div style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 0, marginBottom: 0 }}>
+                                <div style={{ display: 'flex', flex: 1 }}>
+                                    <Form
+                                        name="post_comment"
+                                        style={{ width: '100%', paddingLeft: 0, paddingRight: 0, position: 'relative' }}>
+                                        <Form.Item
+                                            name="comment"
+                                            rules={[{ required: true, message: 'Ingresa un comentario' }]}
+                                            style={{ marginBottom: 0, paddingBottom: 0 }}>
+                                            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                                                <Mentions
+                                                    onChange={(comment) => {
+                                                        this.setState({ comment });
+                                                    }}
+                                                    className="input-comment"
+                                                    placeholder="Deja tu comentario"
+                                                    autoSize={{ minRows: 1, maxRows: 3 }}
+                                                    maxLength={750}>
+                                                    { mentions && mentions.map((e) => {
+                                                        return (
+                                                            <Option value={e.alias}>{e.alias}</Option>
+                                                        );
+                                                    })}
+                                                </Mentions>
+
+                                                { sendCommentSuffix }
+                                            </div>
+                                        </Form.Item>
+                                    </Form>
+                                </div>
                             </div>
+                        }
 
-                            { this.state.isLoadingComments && (!friword.comments || !friword.comments.length) &&
-                                <Icons.LoadingOutlined style={{ fontSize: 24, color: '#ff306f', marginTop: 10 }} spin />
-                            }
-
-                            { !this.state.isLoadingComments && !this.state.showComments && friword.comments_qty > 0 &&
-                                <a
-                                    onClick={() => {
-                                        this.setState({
-                                            isLoadingComments: true,
-                                            showComments: true
-                                        });
-                                        this.props.onRequestComments();
-                                    }}
-                                    style={{ display: 'block', marginLeft: 0, marginTop: 0, marginBottom: 10, marginLeft: 7, fontWeight: 400, textDecoration: 'underline' }}>
-                                    Ver { friword.comments_qty } comentario{friword.comments_qty > 1 ? 's' : ''}
-                                </a>
-                            }
-
-                            { friword.comments != null && friword.comments.length > 0 && this.state.showComments &&
-                                <a
-                                    onClick={() => {
-                                        this.setState({
-                                            isLoadingComments: false,
-                                            showComments: false
-                                        });
-                                    }}
-                                    style={{ display: 'block', marginLeft: 0, marginBottom: 15, fontWeight: 500 }}>
-                                    Ocultar comentarios
-                                </a>
-                            }
-
-                            <div style={{ marginLeft: 5 }}>
-                                <Timeline>
-                                    { this.state.showComments && friword.comments != null && friword.comments.length > 0 && friword.comments.map((e, index) => {
-                                        return (
-                                            <FriwordComment
-                                                key={`comment_${e.id}`}
-                                                comment={e}
-                                                onLikeComment={(comment) => {
-                                                    if(this.props.user != null) {
-                                                        Services.Friwords.likeCommentById(comment.id, (data) => {
-                                                            this.props.refreshFriword();
-                                                        }, (err) => {
-                                                            this.props.refreshFriword();
-                                                        });
-                                                    } else {
-                                                        notification.open({
-                                                            className: 'error',
-                                                            message: 'Oops',
-                                                            description: 'No se pudo dar like. Debes ingresar con tu alias para hacer esto',
-                                                        });
-                                                        return;
-                                                    }
-                                                }}
-                                            />
-                                        );
-                                    })}
-                                </Timeline>
+                        { this.props.user == null &&
+                            <div style={{ width: '100%', backgroundColor: '#25b864', padding: 5, marginTop: 10, borderRadius: 2 }}>
+                                <span style={{ display: 'block', fontSize: 12, fontWeight: 600, textAlign: 'left', color: 'white' }}>Creá tu alias anónimo para dejar un comentario</span>
                             </div>
+                        }
 
-                            { this.state.canLeaveComment &&
-                                <div style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 0, marginBottom: 0 }}>
-                                    <div style={{ display: 'flex', flex: 1 }}>
-                                        <Form
-                                            name="post_comment"
-                                            style={{ width: '100%', paddingLeft: 0, paddingRight: 0, position: 'relative' }}>
-                                            <Form.Item
-                                                name="comment"
-                                                rules={[{ required: true, message: 'Ingresa un comentario' }]}
-                                                style={{ marginBottom: 0, paddingBottom: 0 }}>
-                                                <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                                                    <Mentions
-                                                        onChange={(comment) => {
-                                                            this.setState({ comment });
-                                                        }}
-                                                        className="input-comment"
-                                                        placeholder="Deja tu comentario"
-                                                        autoSize={{ minRows: 1, maxRows: 3 }}
-                                                        maxLength={750}>
-                                                        { mentions && mentions.map((e) => {
-                                                            return (
-                                                                <Option value={e.alias}>{e.alias}</Option>
-                                                            );
-                                                        })}
-                                                    </Mentions>
+                        { this.state.friword && this.state.friword.topic != null &&
+                            <div style={{ width: 'auto', position: 'absolute', top: 0, right: 0, backgroundColor: 'rgba(0,0,0,.85)', color: 'white', fontSize: '0.7em', borderBottomLeftRadius: 3, borderTopLeftRadius: 0, padding: 5, opacity: .8 }}>
+                                #{this.state.friword.topic.name}
+                            </div>
+                        }
 
-                                                    { sendCommentSuffix }
-                                                </div>
-                                            </Form.Item>
-                                        </Form>
-                                    </div>
-                                </div>
-                            }
-
-                            { this.props.user == null &&
-                                <div style={{ width: '100%', backgroundColor: '#25b864', padding: 5, marginTop: 10, borderRadius: 2 }}>
-                                    <span style={{ display: 'block', fontSize: 12, fontWeight: 600, textAlign: 'left', color: 'white' }}>Creá tu alias anónimo para dejar un comentario</span>
-                                </div>
-                            }
-
-                            { this.state.friword && this.state.friword.topic != null &&
-                                <div style={{ width: 'auto', position: 'absolute', top: 0, right: 0, backgroundColor: 'rgba(0,0,0,.85)', color: 'white', fontSize: '0.7em', borderBottomLeftRadius: 3, borderTopLeftRadius: 0, padding: 5, opacity: .8 }}>
-                                    #{this.state.friword.topic.name}
-                                </div>
-                            }
-
-                        </Card>
-                    </div>
+                    </Card>
                 </div>
-            </FadeInSection>
+            </div>
         )
     }
 };

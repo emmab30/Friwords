@@ -17,11 +17,13 @@ import axios from 'axios';
 import Lottie from 'react-lottie';
 import * as Icons from '@ant-design/icons';
 import * as animationLoadingData from '../assets/animations/load.json'
+import * as covidAnimationData from '../assets/animations/covid19.json'
 import _ from 'lodash';
 import CountUp from 'react-countup';
 import ScrollManager from '../utils/ScrollManager'
 
 // Cards
+import FadeInSection from '../components/FadeInSection'
 import FriwordWelcome from '../components/FriwordWelcome';
 import FriwordLogin from '../components/FriwordLogin';
 import FriwordCreatePost from '../components/FriwordCreatePost';
@@ -53,6 +55,11 @@ export default class Friwords extends React.Component {
             isLoggingIn: false,
             isLoading: true,
             hasUpdates: false,
+
+            // Statistics - Number of covid counter
+            covidCounter: 0,
+            canVoteHashtag: true,
+            isLoadingButton: false,
             /*previousOnlineUsers: 132,
             newOnlineUsers: 132,*/
             user: null,
@@ -66,6 +73,15 @@ export default class Friwords extends React.Component {
         this.getTopics();
 
         setInterval(this.getMe, 10000);
+
+        const databaseCovid = Services.Firebase.services().database().ref('hashtags/yomequedoencasa');
+        databaseCovid.on('value', (snapshot) => {
+            this.setState({ covidCounter : snapshot.val() });
+        });
+
+        if(localStorage.getItem('hashtags/yomequedoencasa') != null) {
+            this.setState({ canVoteHashtag : false });
+        }
     }
 
     getTopics = () => {
@@ -200,6 +216,28 @@ export default class Friwords extends React.Component {
         this.setState({ filters }, this.getFriwords);
     }
 
+    onPressTopCta = () => {
+        this.setState({ isLoadingButton : true });
+
+        const databaseCovid = Services.Firebase.services().database().ref('hashtags/yomequedoencasa');
+        databaseCovid.transaction((value) => {
+            if(value == null) {
+                return 1;
+            } else if(typeof value == 'number') {
+                return value + 1;
+            }
+        }, (err, commited, snapshot) => {
+            // Commited
+            if(!err) {
+                localStorage.setItem('hashtags/yomequedoencasa', 'true');
+                this.setState({
+                    isLoadingButton : false,
+                    canVoteHashtag: false
+                });
+            }
+        });
+    }
+
     render() {
         const {
             friwords,
@@ -254,10 +292,48 @@ export default class Friwords extends React.Component {
                     </div>
                 </div>
 
-                <section style={{ textAlign: 'center', marginTop: 80, marginBottom: 20 }}>
-                    <Title level={2} className="Title">
+                <section style={{ textAlign: 'center', marginTop: 45, marginBottom: 0, borderBottom: '5px solid rgba(0,0,0,.05)' }}>
+                    {/*<Title level={2} className="Title">
                         Friwords
-                    </Title>
+                    </Title>*/}
+
+                    { this.state.covidCounter > 0 &&
+                        <FadeInSection key={'hashtags/yomequedoencasa'}>
+                            <div
+                                style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0,0,0,.8)', paddingTop: 0, paddingBottom: 0 }}>
+                                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                                    <Lottie
+                                        options={{
+                                            loop: true,
+                                            autoplay: true,
+                                            animationData: covidAnimationData.default,
+                                            rendererSettings: {
+                                                preserveAspectRatio: 'xMidYMid slice'
+                                            }
+                                        }}
+                                        height={125}
+                                        width={200}
+                                    />
+                                    {/*<p style={{ fontFamily: 'Open Sans', fontSize: '1em', fontWeight: 400, margin: 0, padding: 0, marginLeft: 10 }}>#QuedateEnCasa</p>*/}
+                                </div>
+
+                                <p style={{ fontSize: '1em', marginTop: 0, marginBottom: 10, color: 'white' }}>{ this.state.covidCounter } personas han apoyado el hashtag <b>#YoMeQuedoEnCasa</b>, { this.state.canVoteHashtag ? '¿y vos?' : '¡y vos tambien!'}</p>
+
+                                { this.state.canVoteHashtag &&
+                                    <div style={{ display: 'flex', flexDirection: 'row', width: '100%', marginTop: 0, justifyContent: 'center', alignItems: 'center' }}>
+                                        <Button
+                                            ghost={true}
+                                            onClick={this.onPressTopCta}
+                                            loading={this.state.isLoadingButton}
+                                            type="primary"
+                                            style={{ width: '95%', alignSelf: 'center', marginBottom: 10 }}>
+                                            #YoMeQuedoEnCasa
+                                        </Button>
+                                    </div>
+                                }
+                            </div>
+                        </FadeInSection>
+                    }
                 </section>
 
                 <div className="scroll-container">
@@ -361,7 +437,7 @@ export default class Friwords extends React.Component {
                                 }}
                                 type="primary"
                                 icon={<Icons.PlusOutlined />}
-                                style={{ display: 'flex', width: '80%', margin: '0 auto', justifyContent: 'center', alignItems: 'center', height: 40, backgroundColor: 'white', color: '#25b864' }}>
+                                style={{ display: 'flex', width: '80%', margin: '0 auto', justifyContent: 'center', alignItems: 'center', height: 40 }}>
                                 Publicá tu Friword
                             </Button>
                         </div>,
@@ -375,7 +451,7 @@ export default class Friwords extends React.Component {
                             </a>
                         ),
                         <Tabs
-                            style={{ marginTop: 20 }}
+                            style={{ marginTop: 15 }}
                             activeKey={this.state.tabActiveKey}
                             type={'card'}
                             onTabClick={(val) => {
