@@ -27,12 +27,11 @@
         <meta property="twitter:image" content="https://i.ibb.co/HqKBCZ1/ICON.png">
 
         <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-        <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js"></script>
+        <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
         <script>
             var OneSignal = window.OneSignal || [];
-            console.log(window.OneSignal);
-            window.OneSignal.push(() => {
-                window.OneSignal.init({
+            OneSignal.push(() => {
+                OneSignal.init({
                     appId: "dc8495cf-d343-4c38-94cf-883cc60c7aee",
                     subdomain: 'localhost',
                     allowLocalhostAsSecureOrigin: true,
@@ -61,7 +60,7 @@
                     }
                 });
 
-                window.OneSignal.showHttpPermissionRequest();
+                OneSignal.showHttpPermissionRequest();
             });
         </script>
     </head>
