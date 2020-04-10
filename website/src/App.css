@@ -150,7 +150,7 @@ input {
     color: white !important;
 }
 
-.fade-in-section {
+/*.fade-in-section {
     opacity: 0;
     transform: translateY(20vh);
     visibility: hidden;
@@ -162,7 +162,7 @@ input {
     opacity: 1;
     transform: none;
     visibility: visible;
-}
+}*/
 
 .ant-card-body {
     transition: all 0.1s ease-in;
