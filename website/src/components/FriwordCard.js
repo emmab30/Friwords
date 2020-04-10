@@ -235,17 +235,23 @@ export default class FriwordCard extends React.Component {
                                     { friword.image != null &&
                                         <div
                                             onClick={() => {
-                                                friword.discover_image = true;
-                                                this.setState({ friword });
+                                                if(friword.discover_image == true) {
+                                                    if(this.props.onShowImage){
+                                                        this.props.onShowImage(friword.image);
+                                                    }
+                                                } else {
+                                                    friword.discover_image = true;
+                                                    this.setState({ friword });
+                                                }
                                             }}
                                             style={{ width: '100%', marginBottom: 5 }}>
                                             <img
                                                 className={friword.discover_image ? '' : "filter-uploaded"}
                                                 src={friword.image}
-                                                style={{ maxHeight: 100, borderRadius: 5, border: '3px solid rgba(0,0,0,0.03)' }}
+                                                style={{ maxHeight: 200, maxWidth: '100%', borderRadius: 3 }}
                                             />
                                             <div>
-                                                <span style={{ fontSize: '0.6em', color: 'rgb(37, 184, 100)' }}>Toca para ver la imagen completa</span>
+                                                <span style={{ fontSize: '0.6em', color: 'rgb(37, 184, 100)' }}>{ (!friword.discover_image) ? 'Toca para ver la imagen completa' : 'Toca de nuevo para agrandar la imagen' }</span>
                                             </div>
                                         </div>
                                     }

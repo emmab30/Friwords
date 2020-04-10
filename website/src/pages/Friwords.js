@@ -23,6 +23,7 @@ import CountUp from 'react-countup';
 import ScrollManager from '../utils/ScrollManager'
 
 // Cards
+import FriwordImageLightbox from '../components/FriwordImageLightbox';
 import FadeInSection from '../components/FadeInSection'
 import FriwordWelcome from '../components/FriwordWelcome';
 import FriwordLogin from '../components/FriwordLogin';
@@ -61,7 +62,8 @@ export default class Friwords extends React.Component {
             canVoteHashtag: true,
             isLoadingButton: false,
             user: null,
-            currentFriwordId: null
+            currentFriwordId: null,
+            showImageURL: null // This enables the lightbox for images
         };
     }
 
@@ -239,7 +241,8 @@ export default class Friwords extends React.Component {
     render() {
         const {
             friwords,
-            filters
+            filters,
+            showImageURL
         } = this.state;
 
         if(this.state.isWelcome) {
@@ -289,6 +292,16 @@ export default class Friwords extends React.Component {
                             src="/img/update.png" />
                     </div>
                 </div>
+
+                { showImageURL != null &&
+                    <FriwordImageLightbox
+                        visible={true}
+                        url={showImageURL}
+                        onDismiss={() => {
+                            this.setState({ showImageURL : null });
+                        }}
+                    />
+                }
 
                 <section style={{ textAlign: 'center', marginTop: 45, marginBottom: 0, borderBottom: '5px solid rgba(0,0,0,.05)' }}>
                     {/*<Title level={2} className="Title">
@@ -421,6 +434,9 @@ export default class Friwords extends React.Component {
                                 this.getFriwordById(this.state.friwords[0].id, true);
                             }}
                             onPostedComment={this.getMe}
+                            onShowImage={(url) => {
+                                this.setState({ showImageURL : url });
+                            }}
                         />
                     ]}
 
@@ -593,6 +609,9 @@ export default class Friwords extends React.Component {
                                         refreshFriword={() => {
                                             this.getFriwordById(e.id, false);
                                         }}
+                                        onShowImage={(url) => {
+                                            this.setState({ showImageURL : url });
+                                        }}
                                     />
                                 ))}
 
@@ -640,6 +659,9 @@ export default class Friwords extends React.Component {
                                             onPostedComment={this.getMe}
                                             refreshFriword={() => {
                                                 this.getFriwordById(e.id, false);
+                                            }}
+                                            onShowImage={(url) => {
+                                                this.setState({ showImageURL : url });
                                             }}
                                         />
                                     ))}
