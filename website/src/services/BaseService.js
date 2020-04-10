@@ -8,7 +8,8 @@ var ENVIRONMENTS = {
     PRODUCTION: 'https://api.friwords.com/api/v1/'
 };
 
-var BASE_URL = process.env.NODE_ENV == 'development' ? ENVIRONMENTS.LOCAL : ENVIRONMENTS.PRODUCTION;
+// var BASE_URL = process.env.NODE_ENV == 'development' ? ENVIRONMENTS.LOCAL : ENVIRONMENTS.PRODUCTION;
+var BASE_URL = process.env.REACT_APP_API_URL;
 var JWT_TOKEN = null;
 
 export function SetToken(token) {

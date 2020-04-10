@@ -9,7 +9,8 @@ import {
     Form,
     Input,
     Select,
-    notification
+    notification,
+    Upload
 } from 'antd';
 
 // Components
@@ -28,12 +29,24 @@ const { Meta } = Card;
 const { Option } = Select;
 const { TextArea } = Input;
 
+function getBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
+}
+
 export default class FriwordCreatePost extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             isVisible: false,
-            friword: {}
+            friword: {},
+            previewVisible: false,
+            previewImage: '',
+            fileList: []
         };
 
         this.form = null;
@@ -62,52 +75,79 @@ export default class FriwordCreatePost extends React.Component {
             this.setState({ isLoading : true });
 
             const { friword } = this.state;
-            // friword.title = friword.text.substring(0, 12) + '...';
 
-            Services.Friwords.postFriword(friword, (data) => {
-                this.setState({ isLoading : false });
-                if(data.success) {
-                    this.setState({
-                        isVisible: false,
-                        friword: {}
-                    });
+            const _postFriword = (friword) => {
+                Services.Friwords.postFriword(friword, (data) => {
+                    this.setState({ isLoading : false });
+                    if(data.success) {
+                        this.setState({
+                            isVisible: false,
+                            friword: {}
+                        });
 
-                    // Reset form
-                    if(this.form)
-                        this.form.resetFields();
+                        // Reset form
+                        if(this.form)
+                            this.form.resetFields();
 
-                    this.props.onCreated(data.friword);
-                } else {
+                        this.props.onCreated(data.friword);
+                    } else {
+                        notification.open({
+                            className: 'error',
+                            message: 'Oops',
+                            description: data.message,
+                        });
+                    }
+                }, (err) => {
+                    // Do nothing
+                    this.setState({ isLoading : false });
                     notification.open({
                         className: 'error',
                         message: 'Oops',
-                        description: data.message,
+                        description:
+                            'Tu friword no pudo ser creado ahora. Intenta en unos momentos.',
                     });
-                }
-            }, (err) => {
-                // Do nothing
-                this.setState({ isLoading : false });
-                notification.open({
-                    className: 'error',
-                    message: 'Oops',
-                    description:
-                        'Tu friword no pudo ser creado ahora. Intenta en unos momentos.',
                 });
-            });
+            }
+
+            if(this.state.fileList && this.state.fileList.length > 0) {
+                this.uploadImage((data) => {
+                    friword.image = data.downloadURL;
+                    _postFriword(friword);
+                });
+            } else {
+                console.log("Entre aca nomas");
+                _postFriword(friword);
+            }
         }
+    }
+
+    uploadImage = (success, err, options) => {
+        // Upload image
+        const storage = Services.Firebase.services().storage();
+
+        const file = this.state.fileList[0].originFileObj;
+        const storageRef = storage.ref(`${process.env.REACT_APP_STORAGE_FIREBASE_CONTAINER}/${file.name}`)
+        const task = storageRef.put(file)
+        task.on('state_changed', (snapshot) => {
+            // Se lanza durante el progreso de subida
+            if(options && options.onProgress)
+                options.onProgress(snapshot);
+        }, (error) => {
+            if(err)
+                err(error);
+        }, (data) => {
+            if(success){
+                task.snapshot.ref.getDownloadURL().then((data) => {
+                    success({
+                        downloadURL: data
+                    });
+                });
+            }
+        });
     }
 
     isValid = () => {
         const { friword } = this.state;
-        /*if(friword.gender == null) {
-            notification['error']({
-                message: 'El género',
-                description:
-                    'Selecciona tu género',
-            });
-
-            return false;
-        }*/
 
         if(!friword || !friword.text || friword.text.length < 10) {
             notification.open({
@@ -122,13 +162,30 @@ export default class FriwordCreatePost extends React.Component {
         return true;
     }
 
+    handleCancel = () => this.setState({ previewVisible: false });
+
+    handlePreview = async file => {
+        if (!file.url && !file.preview) {
+          file.preview = await getBase64(file.originFileObj);
+        }
+
+         this.setState({
+            previewImage: file.url || file.preview,
+            previewVisible: true,
+        });
+    };
+
+    handleChange = ({ fileList }) => {
+        this.setState({ fileList });
+    };
+
     render() {
-        const {
-            friword
-        } = this.state;
+        const { friword, previewVisible, previewImage, fileList } = this.state;
 
         return (
             <Modal
+                style={{ top: 50, height: '100%' }}
+                bodyStyle={{ paddingBottom: 30 }}
                 title={`Publica tu friword`}
                 visible={this.state.isVisible}
                 closable={true}
@@ -159,52 +216,48 @@ export default class FriwordCreatePost extends React.Component {
                         </Select>
                     }
 
-                    <Form.Item
-                        name="text"
-                        rules={[{ required: true, message: 'Ingresa el texto' }]}>
-                        <TextArea
-                            placeholder="Escribe tu friword"
-                            autoSize={{ minRows: 2, maxRows: 8 }}
-                            maxLength={750}
-                            onChange={(evt) => {
-                                friword.text = evt.target.value;
-                                this.setState({ friword });
-                            }}
-                            prefix={<Icons.QuestionCircleOutlined className="site-form-item-icon" />}
-                        />
-                    </Form.Item>
+                    <TextArea
+                        placeholder="Escribe tu friword"
+                        autoSize={{ minRows: 2, maxRows: 8 }}
+                        maxLength={750}
+                        onChange={(evt) => {
+                            friword.text = evt.target.value;
+                            this.setState({ friword });
+                        }}
+                        prefix={<Icons.QuestionCircleOutlined className="site-form-item-icon" />}
+                        style={{ marginBottom: 5 }}
+                    />
                     <span>{750 - (friword && friword.text && friword.text.length ? friword.text.length : 0)} caracteres restantes</span>
 
                     <div style={{ width: '100%', height: 5, backgroundColor: 'rgba(0,0,0,0.05)', marginTop: 5, marginBottom: 10 }}></div>
 
-                    {/*<span style={{ width: '100%', display: 'block', textAlign: 'center', fontWeight: 600 }}>Selecciona tu género</span>
-                    <div style={{ width: '100%', height: 40, display: 'flex', flexDirection: 'row', marginBottom: 20 }}>
-                        <div
-                            onClick={() => {
-                                friword.gender = 'female';
-                                this.setState({ friword });
-                            }}
-                            style={{ display: 'flex', flex: 1, flexDirection: 'row', backgroundColor: 'transparent', justifyContent: 'center', alignItems: 'center' }}>
-                            <img
-                                style={{ maxWidth: 35, maxHeight: 35, opacity: friword.gender == 'female' ? 1 : 0.5 }}
-                                src="https://image.flaticon.com/icons/svg/590/590083.svg"
-                            />
-                        </div>
-                        <div
-                            onClick={() => {
-                                friword.gender = 'male';
-                                this.setState({ friword });
-                            }}
-                            style={{ display: 'flex', flex: 1, flexDirection: 'row', backgroundColor: 'transparent', justifyContent: 'center', alignItems: 'center' }}>
-                            <img
-                                style={{ maxWidth: 35, maxHeight: 35, opacity: friword.gender == 'male' ? 1 : 0.5 }}
-                                src="https://image.flaticon.com/icons/svg/921/921071.svg" />
-                        </div>
-                    </div>*/}
+                    <Upload
+                        accept={".png, .jpeg, .jpg, .JPG, .JPEG"}
+                        listType="picture-card"
+                        fileList={fileList}
+                        onPreview={this.handlePreview}
+                        onChange={this.handleChange}
+                        beforeUpload={ (file) => {
+                            this.setState(state => ({
+                                fileList: [...state.fileList, file],
+                            }));
+                            return false;
+                        }}>
+                        {fileList.length >= 8 ? null : (
+                            <div>
+                                <Icons.PlusOutlined />
+                                <div className="ant-upload-text">{ fileList.length > 0 ? 'Reemplazar imagen' : 'Subir imagen (opcional)' }</div>
+                            </div>
+                        )}
+                    </Upload>
 
                     <Form.Item>
-                        <Button type="primary" htmlType="submit" loading={this.state.isLoading}>
-                            Publicar
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            loading={this.state.isLoading}
+                            style={{ width: '100%' }}>
+                            Publicar friword
                         </Button>
                     </Form.Item>
                 </Form>

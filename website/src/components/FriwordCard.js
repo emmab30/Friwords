@@ -34,6 +34,7 @@ import '../App.css';
 const { Meta } = Card;
 const { TextArea } = Input;
 const { Option, getMentions } = Mentions;
+const MAX_CHARACTERS_FOR_TRUNCATE = 80;
 
 export default class FriwordCard extends React.Component {
     constructor(props) {
@@ -49,7 +50,8 @@ export default class FriwordCard extends React.Component {
             // False both
             hasDisliked: false,
             hasLiked: false,
-            friword: null
+            friword: null,
+            isShowingTruncated: false
         };
     }
 
@@ -66,7 +68,13 @@ export default class FriwordCard extends React.Component {
         }
 
         if(this.props.friword != null) {
-            this.setState({ friword : this.props.friword });
+            this.setState({
+                friword : this.props.friword
+            }, () => {
+                if(this.props.friword.text.length > MAX_CHARACTERS_FOR_TRUNCATE) {
+                    this.setState({ isShowingTruncated : true });
+                }
+            });
         }
     }
 
@@ -210,7 +218,7 @@ export default class FriwordCard extends React.Component {
                         <Meta
                             avatar={
                                 <Avatar
-                                    src={friword && friword.user && friword.user.gender == 'female' ? 'https://image.flaticon.com/icons/svg/2284/2284897.svg' : 'https://image.flaticon.com/icons/svg/2284/2284900.svg'}
+                                    src={friword && friword.user && friword.user.gender == 'female' ? '/img/genders/female.svg' : '/img/genders/male.svg'}
                                     size={'large'}
                                     style={{ borderRadius: 0, width: 30, height: 30 }}
                                 />
@@ -223,19 +231,42 @@ export default class FriwordCard extends React.Component {
                                 </div>
                             }
                             description={
-                                <ReadMore
-                                    initialHeight={250}
-                                    readMore={props => (
+                                <div style={{ width: '100%' }}>
+                                    { friword.image != null &&
                                         <div
-                                            style={{ width: '100%', padding: 0, marginTop: 5, cursor: 'pointer' }}
-                                            onClick={props.onClick}>
-                                            <span style={{ color: 'white', fontWeight: 400, fontSize: '.75em', marginRight: 5, backgroundColor: 'rgba(20, 20, 20, .75)', padding: 5, borderRadius: 5 }}>
-                                                {props.open ? 'Leer menos' : 'Leer más'}
-                                            </span>
+                                            onClick={() => {
+                                                friword.discover_image = true;
+                                                this.setState({ friword });
+                                            }}
+                                            style={{ width: '100%', marginBottom: 5 }}>
+                                            <img
+                                                className={friword.discover_image ? '' : "filter-uploaded"}
+                                                src={friword.image}
+                                                style={{ maxHeight: 100, borderRadius: 5, border: '3px solid rgba(0,0,0,0.03)' }}
+                                            />
+                                            <div>
+                                                <span style={{ fontSize: '0.6em', color: 'rgb(37, 184, 100)' }}>Toca para ver la imagen completa</span>
+                                            </div>
                                         </div>
-                                    )}>
-                                    <span style={{ fontSize: '0.9em' }}>{ `${friword.text}` }</span>
-                                </ReadMore>
+                                    }
+
+                                    { this.state.isShowingTruncated ?
+                                        <div>
+                                            <span style={{ fontSize: '0.9em' }}>{ `${friword.text.substring(0, 100)}` }...</span>
+                                            <div
+                                                style={{ width: '100%', padding: 0, marginTop: 5, cursor: 'pointer' }}
+                                                onClick={() => {
+                                                    this.setState({ isShowingTruncated : false });
+                                                }}>
+                                                <span style={{ color: 'white', fontWeight: 400, fontSize: '.75em', marginRight: 5, backgroundColor: 'rgba(20, 20, 20, .75)', padding: 5, borderRadius: 5 }}>
+                                                    Leer más
+                                                </span>
+                                            </div>
+                                        </div>
+                                    :
+                                        <span style={{ fontSize: '0.9em' }}>{ `${friword.text}` }</span>
+                                    }
+                                </div>
                             }
                         />
 

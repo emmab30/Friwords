@@ -162,8 +162,8 @@ export default class FriwordWelcome extends React.Component {
                             }}
                             style={{ display: 'flex', flex: 1, flexDirection: 'row', backgroundColor: 'transparent', justifyContent: 'center', alignItems: 'center' }}>
                             <img
-                                style={{ maxWidth: 35, maxHeight: 35, opacity: auth.gender == 'female' ? 1 : 0.6 }}
-                                src="https://image.flaticon.com/icons/svg/590/590083.svg"
+                                style={{ maxWidth: 40, maxHeight: 40, opacity: auth.gender == 'female' ? 1 : 0.6 }}
+                                src="/img/genders/female_character.svg"
                             />
                         </div>
                         <div
@@ -173,8 +173,8 @@ export default class FriwordWelcome extends React.Component {
                             }}
                             style={{ display: 'flex', flex: 1, flexDirection: 'row', backgroundColor: 'transparent', justifyContent: 'center', alignItems: 'center' }}>
                             <img
-                                style={{ maxWidth: 35, maxHeight: 35, opacity: auth.gender == 'male' ? 1 : 0.6 }}
-                                src="https://image.flaticon.com/icons/svg/921/921071.svg" />
+                                style={{ maxWidth: 40, maxHeight: 40, opacity: auth.gender == 'male' ? 1 : 0.6 }}
+                                src="/img/genders/male_character.svg" />
                         </div>
                     </div>
 

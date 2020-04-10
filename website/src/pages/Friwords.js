@@ -60,8 +60,6 @@ export default class Friwords extends React.Component {
             covidCounter: 0,
             canVoteHashtag: true,
             isLoadingButton: false,
-            /*previousOnlineUsers: 132,
-            newOnlineUsers: 132,*/
             user: null,
             currentFriwordId: null
         };
@@ -297,7 +295,7 @@ export default class Friwords extends React.Component {
                         Friwords
                     </Title>*/}
 
-                    { this.state.covidCounter > 0 &&
+                    { this.state.covidCounter > -1 &&
                         <FadeInSection key={'hashtags/yomequedoencasa'}>
                             <div
                                 style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0,0,0,.8)', paddingTop: 0, paddingBottom: 0 }}>
@@ -317,7 +315,9 @@ export default class Friwords extends React.Component {
                                     {/*<p style={{ fontFamily: 'Open Sans', fontSize: '1em', fontWeight: 400, margin: 0, padding: 0, marginLeft: 10 }}>#QuedateEnCasa</p>*/}
                                 </div>
 
-                                <p style={{ fontSize: '1em', marginTop: 0, marginBottom: 10, color: 'white' }}>{ this.state.covidCounter } personas han apoyado el hashtag <b>#YoMeQuedoEnCasa</b>, { this.state.canVoteHashtag ? '¿y vos?' : '¡y vos tambien!'}</p>
+                                { this.state.covidCounter > 0 &&
+                                    <p style={{ fontSize: '1em', marginTop: 0, marginBottom: 10, color: 'white' }}>{ this.state.covidCounter } personas han apoyado el hashtag <b>#YoMeQuedoEnCasa</b>, { this.state.canVoteHashtag ? '¿y vos?' : '¡y vos tambien!'}</p>
+                                }
 
                                 { this.state.canVoteHashtag &&
                                     <div style={{ display: 'flex', flexDirection: 'row', width: '100%', marginTop: 0, justifyContent: 'center', alignItems: 'center' }}>
@@ -382,7 +382,7 @@ export default class Friwords extends React.Component {
                             this.setState({ filters, tabActiveKey: '1' }, this.refresh);
                             notification.open({
                                 className: 'success',
-                                message: <Icons.HeartTwoTone twoToneColor="#eb2f96" />,
+                                message: 'Éxito',
                                 description: 'Tu friword fue publicado exitosamente en la sección `Últimos Friwords`',
                             });
                         }}
@@ -426,20 +426,34 @@ export default class Friwords extends React.Component {
 
                     { this.state.currentFriwordId == null && [
                         <div style={{ width: '100%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                            <Button
+                            <div style={{ display: 'flex', flexDirection: 'row' }}>
+                                <div
+                                    onClick={() => {
+                                        if(this.isAuthenticated()) {
+                                            this.setState({ isCreating : true });
+                                        } else {
+                                            this.setState({ isWelcome : true });
+                                        }
+                                    }}
+                                    style={{ display: 'flex', flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: 50, height: 50, borderRadius: 25, padding: 10, backgroundColor: this.state.user == null ? '#aaaaaa' : '#25b864' }}>
+                                        <Icons.PlusOutlined
+                                            style={{ fontSize: '2em', color: 'white' }}
+                                        />
+                                    </div>
+                                    <span style={{ color: '#25b864', fontWeight: 800, marginTop: 5 }}>Publicar Friword</span>
+                                </div>
+                            </div>
+                            { /* <Button
                                 disabled={this.state.user == null}
                                 onClick={() => {
-                                    if(this.isAuthenticated()) {
-                                        this.setState({ isCreating : true });
-                                    } else {
-                                        this.setState({ isWelcome : true });
-                                    }
+                                    
                                 }}
                                 type="primary"
                                 icon={<Icons.PlusOutlined />}
                                 style={{ display: 'flex', width: '80%', margin: '0 auto', justifyContent: 'center', alignItems: 'center', height: 40 }}>
                                 Publicá tu Friword
-                            </Button>
+                            </Button> */ }
                         </div>,
                         (this.state.user == null &&
                             <a
@@ -667,7 +681,7 @@ export default class Friwords extends React.Component {
                         this.setState({ isWelcome : false }, this.getMe);
                         notification.open({
                             className: 'success',
-                            message: <Icons.HeartTwoTone twoToneColor="#eb2f96" />,
+                            message: 'Éxito',
                             description:
                                 'Bienvenid@ a Friwords. Empieza leyendo y publicando',
                         });

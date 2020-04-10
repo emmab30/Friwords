@@ -183,7 +183,7 @@ class FriwordController {
             text: body.text,
             user_alias: body.user_alias,
             topic_id: body.topic_id,
-            // gender: body.gender,
+            image: body.image,
             comments_qty: 0,
             likes_qty: 0,
             dislikes_qty: 0

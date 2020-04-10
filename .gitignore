@@ -2,3 +2,5 @@ backend/node_modules
 backend/.env
 website/node_modules
 website/.env
+website/.env.production
+website/.env.development
