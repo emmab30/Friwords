@@ -51,7 +51,8 @@ export default class FriwordCard extends React.Component {
             hasDisliked: false,
             hasLiked: false,
             friword: null,
-            isShowingTruncated: false
+            isShowingTruncated: false,
+            isImageLoading: false
         };
     }
 
@@ -73,6 +74,10 @@ export default class FriwordCard extends React.Component {
             }, () => {
                 if(this.props.friword.text.length > MAX_CHARACTERS_FOR_TRUNCATE) {
                     this.setState({ isShowingTruncated : true });
+                }
+
+                if(this.props.friword.image != null) {
+                    this.setState({ isImageLoading : true });
                 }
             });
         }
@@ -245,9 +250,19 @@ export default class FriwordCard extends React.Component {
                                                 }
                                             }}
                                             style={{ width: '100%', marginBottom: 5 }}>
+
+                                            { this.state.isImageLoading &&
+                                                <Spin
+                                                    style={{ marginTop: 10, marginBottom: 10 }}
+                                                />
+                                            }
+
                                             <img
                                                 className={friword.discover_image ? '' : "filter-uploaded"}
                                                 src={friword.image}
+                                                onLoad={() => {
+                                                    this.setState({ isImageLoading: false });
+                                                }}
                                                 style={{ maxHeight: 200, maxWidth: '100%', borderRadius: 3 }}
                                             />
                                             <div>

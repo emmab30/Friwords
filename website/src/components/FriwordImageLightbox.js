@@ -41,7 +41,8 @@ export default class FriwordImageLightbox extends React.Component {
         super(props);
         this.state = {
             url: null,
-            visible: false
+            visible: false,
+            isImageLoading: true
         };
     }
 
@@ -76,8 +77,18 @@ export default class FriwordImageLightbox extends React.Component {
 
         return (
             <div className={`image-lightbox`}>
+
+                { this.state.isImageLoading &&
+                    <Spin
+                        style={{ marginTop: 10, marginBottom: 10 }}
+                    />
+                }
+
                 <img
                     src={url}
+                    onLoad={() => {
+                        this.setState({ isImageLoading : false });
+                    }}
                     style={{ maxWidth: '100%', maxHeight: '100%' }}
                 />
                 <Button
