@@ -114,7 +114,9 @@ export default class FriwordCreatePost extends React.Component {
                     friword.image = data.downloadURL;
                     _postFriword(friword);
                 }, (err) => {
-                    console.log(`Err uploading image`, err);
+                    this.setState({ isLoading : false });
+                    alert(`Error al subir la imagen. Contáctate con soporte y envíale este texto: ` + JSON.stringify(err));
+                    Services.Logs.object(err);
                 });
             } else {
                 _postFriword(friword);

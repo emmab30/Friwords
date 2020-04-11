@@ -17,6 +17,11 @@ export function SetToken(token) {
     JWT_TOKEN = token;
 }
 
+export function GetToken() {
+    let token = localStorage.getItem('JWT_TOKEN')
+    return token;
+}
+
 export function ApiService(timeout = 15000, headers) {
 
     if(!headers) {

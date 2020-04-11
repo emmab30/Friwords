@@ -44,4 +44,7 @@ Route.group(() => {
     // Notifications
     Route.get('notifications/me', 'NotificationController.getMe');
     Route.post('notifications/:id/update', 'NotificationController.updateNotification');
+
+    // Client logs
+    Route.post('logs/client', 'LogController.logClient');
 }).prefix('api/v1');
