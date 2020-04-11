@@ -111,11 +111,13 @@ export default class FriwordCreatePost extends React.Component {
 
             if(this.state.fileList && this.state.fileList.length > 0) {
                 this.uploadImage((data) => {
+                    alert(`OK ${JSON.stringify(data)}`);
                     friword.image = data.downloadURL;
                     _postFriword(friword);
+                }, (err) => {
+                    alert(`Err ${JSON.stringify(err)}`);
                 });
             } else {
-                console.log("Entre aca nomas");
                 _postFriword(friword);
             }
         }
