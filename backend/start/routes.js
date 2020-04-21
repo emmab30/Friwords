@@ -22,6 +22,7 @@ Route.group(() => {
     // Alias
     Route.get('auth/generate_alias', 'AuthController.generateRandomAlias');
     Route.post('auth/sign_in', 'AuthController.signInWithAlias');
+    Route.post('auth/sign_in/facebook', 'AuthController.signInWithFacebook');
     Route.post('auth/register', 'AuthController.register');
 
     Route.get('friwords', 'FriwordController.getFriwords');

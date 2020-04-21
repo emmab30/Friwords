@@ -176,12 +176,13 @@ class FriwordController {
         });
     }
 
-    async postFriword({ request, response }) {
+    async postFriword({ request, auth, response }) {
+        let user = await auth.getUser();
         let body = request.all();
         let friword = await Friword.create({
             title: body.title,
             text: body.text,
-            user_alias: body.user_alias,
+            user_alias: user.alias,
             topic_id: body.topic_id,
             image: body.image,
             comments_qty: 0,
@@ -242,7 +243,7 @@ class FriwordController {
 
         let friwordComment = await FriwordComment.create({
             friword_id: request.params.id,
-            user_alias: body.user_alias,
+            user_alias: user.alias,
             text: body.text,
             html: html,
             likes_qty: 0,
