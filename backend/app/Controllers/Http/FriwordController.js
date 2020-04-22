@@ -155,7 +155,7 @@ class FriwordController {
         let mentions = [];
         if(friword && friword.user && friword.user.alias){
             mentions.push({
-                alias: friword.user.alias
+                alias: friword.user.alias.toLowerCase()
             });
         }
 
@@ -198,7 +198,7 @@ class FriwordController {
 
     async postFriwordComment({ request, auth, response }) {
         let body = request.all();
-        let user = await auth.getUser();
+        let loggedUser = await auth.getUser();
         let friword = await Friword
             .query()
             .where('id', request.params.id)
@@ -225,10 +225,12 @@ class FriwordController {
                                 if(user != null) {
                                     Notification.create({
                                         user_id: user.id,
-                                        text: `@${body.user_alias} te mencionó en el friword '${friword.text.substring(0, 30)}...'`,
-                                        html: `<span style="color: #ffa000; font-weight: 800;">@${body.user_alias}</span> te mencionó en el friword <b>'${friword.text.substring(0, 30)}...'</b>`,
+                                        text: `@${loggedUser.alias} te mencionó en el friword '${friword.text.substring(0, 30)}...'`,
+                                        html: `<span style="color: #ffa000; font-weight: 800;">@${loggedUser.alias}</span> te mencionó en el friword <b>'${friword.text.substring(0, 30)}...'</b>`,
                                         redirect_to: `friword/${friword.id}`,
                                         seen: false,
+                                        onesignal_title: 'Te mencionaron en un friword',
+                                        onesignal_message: `@${loggedUser.alias} te mencionó en el friword '${friword.text.substring(0, 30)}...'`,
                                         created_at: new Date(),
                                         updated_at: new Date()
                                     }).then((data) => {
@@ -243,7 +245,7 @@ class FriwordController {
 
         let friwordComment = await FriwordComment.create({
             friword_id: request.params.id,
-            user_alias: user.alias,
+            user_alias: loggedUser.alias,
             text: body.text,
             html: html,
             likes_qty: 0,
@@ -253,13 +255,15 @@ class FriwordController {
         if(friword && friword.user) {
             friword = friword.toJSON();
 
-            if(friword.user.alias != body.user_alias) {
+            if(friword.user.alias != loggedUser.alias) {
                 await Notification.create({
                     user_id: friword.user.id,
-                    text: `@${body.user_alias} hizo un comentario en tu friword '${friword.text.substring(0, 30)}...'`,
-                    html: `<span style="color: #ffa000; font-weight: 800;">@${body.user_alias}</span> hizo un comentario en tu friword <b>'${friword.text.substring(0, 30)}...'</b>`,
+                    text: `@${loggedUser.alias} hizo un comentario en tu friword '${friword.text.substring(0, 30)}...'`,
+                    html: `<span style="color: #ffa000; font-weight: 800;">@${loggedUser.alias}</span> hizo un comentario en tu friword <b>'${friword.text.substring(0, 30)}...'</b>`,
                     seen: false,
                     redirect_to: `friword/${friword.id}`,
+                    onesignal_title: 'Nuevo comentario en tu Friword',
+                    onesignal_message: `@${loggedUser.alias} hizo un comentario en tu friword '${friword.text.substring(0, 30)}...'`,
                     created_at: new Date(),
                     updated_at: new Date()
                 });

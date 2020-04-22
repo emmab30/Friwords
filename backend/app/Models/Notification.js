@@ -4,7 +4,11 @@
 const Model = use('Model')
 
 class Notification extends Model {
+    static boot() {
+        super.boot();
 
+        this.addHook('afterCreate', 'NotificationHook.afterCreate');
+    }
 }
 
 module.exports = Notification

@@ -1,16 +1,25 @@
 import React from 'react';
-import { Form, Select, InputNumber, DatePicker, Switch, Slider, Button, Typography } from 'antd';
+import { BrowserRouter as Router, Switch, Route, Link, useRouteMatch, useParams } from 'react-router-dom';
+
+// Import pages
 import Friwords from './pages/Friwords';
+import MemeGeneratorPage from './pages/MemeGeneratorPage'
 
 // CSS Files
 import './App.css';
 import './assets/css/friwords.css';
 
-const { Option } = Select;
-const { Title } = Typography;
-
 const App = () => (
-    <Friwords />
+    <Router>
+        <Switch>
+            <Route path="/meme/new">
+                <MemeGeneratorPage />
+            </Route>
+            <Route path="/">
+                <Friwords />
+            </Route>
+        </Switch>
+    </Router>
 );
 
 export default App;

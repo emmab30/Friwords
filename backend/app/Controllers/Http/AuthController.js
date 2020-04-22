@@ -17,6 +17,34 @@ class AuthController {
             .where('alias', body.alias)
             .first();
 
+        if(body.creating) {
+            // Check if the alias exists in our system
+            if(user != null) {
+                return response.json({
+                    success: false,
+                    message: 'Ese alias ya existe en nuestro sistema. Ingresa en vez de crear un nuevo usuario'
+                });
+            }
+
+            // Create the user with provided info
+            user = await User.create({
+                username: body.alias,
+                alias: body.alias,
+                email: `${body.alias}@friwords.com`,
+                password: body.password,
+                notification_id: body.notification_id,
+                gender: null,
+                is_configured: true,
+                created_at: new Date(),
+                updated_at: new Date()
+            });
+        } else {
+            if(user != null) {
+                user.notification_id = body.notification_id;
+                await user.save();
+            }
+        }
+
         if(!user){
             return response.json({
                 success: false,
@@ -48,6 +76,8 @@ class AuthController {
         })
         .replace(' ', '')
         .replace('&', '_');
+
+        alias = alias.toLowerCase();
 
         return response.json({
             success: true,

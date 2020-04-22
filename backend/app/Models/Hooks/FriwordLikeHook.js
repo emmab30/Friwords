@@ -29,6 +29,8 @@ FriwordLikeHook.afterCreate = async (like) => {
         html: `<span style="color: #ffa000; font-weight: 800;">A @${liker.alias}</span> le gusta tu friword <b>'${friword.text.substring(0, 20)}...'</b>`,
         redirect_to: `friword/${friword.id}`,
         seen: false,
+        onesignal_title: `Nuevo me gusta`,
+        onesignal_message: `A @${liker.alias} le gusta '${friword.text.substring(0, 25)}...`,
         created_at: new Date(),
         updated_at: new Date()
     });

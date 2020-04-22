@@ -41,6 +41,7 @@ Route.group(() => {
     // Profile
     Route.get('profile/me', 'UserController.getMe');
     Route.post('profile/me', 'UserController.updateMe');
+    Route.post('profile/me/metadata', 'UserController.updateMetadata');
 
     // Notifications
     Route.get('notifications/me', 'NotificationController.getMe');

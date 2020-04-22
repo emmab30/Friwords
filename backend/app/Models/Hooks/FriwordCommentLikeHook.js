@@ -30,6 +30,8 @@ FriwordCommentLikeHook.afterCreate = async (commentLike) => {
         html: `<span style="color: #ffa000; font-weight: 800;">A @${liker.alias}</span> le gusta tu comentario en <b>'${friword.text.substring(0, 20)}...'</b>`,
         redirect_to: `friword/${friword.id}`,
         seen: false,
+        onesignal_title: 'Le gusta tu comentario',
+        onesignal_message: `A @${liker.alias} le gusta tu comentario en '${friword.text.substring(0, 20)}...'`,
         created_at: new Date(),
         updated_at: new Date()
     });

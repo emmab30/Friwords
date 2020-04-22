@@ -1,6 +1,9 @@
 'use strict'
 
+const Database = use('Database');
 const User = use('App/Models/User');
+const Friword = use('App/Models/Friword');
+const FriwordComment = use('App/Models/FriwordComment');
 const Notification = use('App/Models/Notification');
 
 class UserController {
@@ -41,13 +44,53 @@ class UserController {
         let user = await auth.getUser();
         let body = request.all();
 
-        user = await User.find(user.id);
-        user.merge(body);
-        await user.save();
+        let newAlias = request.body.alias;
+        let oldAlias = null;
+
+        try {
+            user = await User.find(user.id);
+            oldAlias = user.alias;
+            user.merge(body);
+            await user.save();
+
+            // If goes here, everything is ok
+            await Friword.query().where('user_alias', oldAlias).update({ user_alias: newAlias });
+            await FriwordComment.query().where('user_alias', oldAlias).update({ user_alias: newAlias });
+        } catch (exception) {
+            if(exception && exception.code == 'ER_DUP_ENTRY') {
+                return response.json({
+                    success: false,
+                    message: 'El alias que intentas colocar ya existe. Escoge uno nuevo'
+                });
+            } else {
+                return response.json({
+                    success: false,
+                    message: 'Hubo un problema al modificar tu perfil'
+                });
+            }
+        }
 
         return response.json({
             success: true,
             user: user
+        });
+    }
+
+    async updateMetadata({ request, auth, response }) {
+        let user = await auth.getUser();
+        let body = request.all();
+        
+        await User
+            .query()
+            .where('id', user.id)
+            .update({
+                app_version: body.appVersion,
+                platform: body.platform,
+                last_login: new Date()
+            });
+
+        return response.json({
+            success: true
         });
     }
 }
