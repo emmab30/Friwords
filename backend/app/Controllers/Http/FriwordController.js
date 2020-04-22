@@ -12,7 +12,7 @@ const FriwordComment = use('App/Models/FriwordComment');
 class FriwordController {
 
     async getFriwords({ request, response }) {
-        const perPage = 6;
+        const perPage = 4;
         let friwords = await Friword
             .query()
             .limit(perPage)
@@ -31,7 +31,7 @@ class FriwordController {
         try { user = await auth.getUser(); } catch (exception) { }
 
 
-        const perPage = 6;
+        const perPage = 4;
         let friwords = Friword
             .query()
             .limit(perPage)
