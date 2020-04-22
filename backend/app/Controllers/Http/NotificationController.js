@@ -14,6 +14,14 @@ class NotificationController {
             // .where('seen', false)
             .fetch();
 
+        await Notification
+            .query()
+            .where('user_id', user.id)
+            .where('seen', false)
+            .update({
+                seen: true
+            });
+
         return response.json({
             success: true,
             notifications: notifications
