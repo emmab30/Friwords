@@ -1,6 +1,7 @@
 'use strict'
 
 /** @type {import('@adonisjs/framework/src/Server')} */
+const Scheduler = use('Adonis/Addons/Scheduler')
 const Server = use('Server')
 
 /*
@@ -56,6 +57,8 @@ const serverMiddleware = [
   'Adonis/Middleware/Static',
   'Adonis/Middleware/Cors'
 ]
+
+Scheduler.run()
 
 Server
   .registerGlobal(globalMiddleware)
