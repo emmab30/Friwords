@@ -14,7 +14,7 @@ class LikePostsRandomly extends Task {
     }
 
     async handle() {
-        const randomNumber = Math.random();
+        /*const randomNumber = Math.random();
 
         let alias = uniqueNamesGenerator({
             dictionaries: [adjectives, countries, animals, colors],
@@ -24,20 +24,6 @@ class LikePostsRandomly extends Task {
         .replace(' ', '')
         .replace('&', '_')
         .toLowerCase();
-
-        /*console.log("Generated user dummy " + alias);
-        User.create({
-            username:  alias,
-            alias: alias,
-            is_dummy_user: true,
-            email: `${alias}@friwords.com`,
-            password: 'fekaa',
-            notification_id: null,
-            gender: Math.random() > 0 ? 'male' : 'female',
-            is_configured: true,
-            created_at: new Date(),
-            updated_at: new Date()
-        });*/
 
         if(this.getTimeCategory(moment()) == 'DAWN' || this.getTimeCategory(moment()) == 'MORNING') {
             console.log("No es hora para enviar fake news");
@@ -89,7 +75,7 @@ class LikePostsRandomly extends Task {
                     user.delete();
                 });
             }
-        }
+        }*/
     }
 
     getTimeCategory(time) {
