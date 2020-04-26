@@ -10,20 +10,11 @@ const moment = require('moment');
 
 class LikePostsRandomly extends Task {
     static get schedule() {
-        return '*/2 * * * *';
+        return '*/10 * * * *';
     }
 
     async handle() {
         const randomNumber = Math.random();
-
-        let alias = uniqueNamesGenerator({
-            dictionaries: [adjectives, countries, animals, colors],
-            length: 1,
-            style: 'lowerCase'
-        })
-        .replace(' ', '')
-        .replace('&', '_')
-        .toLowerCase();
 
         if(this.getTimeCategory(moment()) == 'DAWN') {
             console.log("No es hora para enviar fake news");
@@ -31,12 +22,31 @@ class LikePostsRandomly extends Task {
         }
 
         if (randomNumber > 0.4) {
+            let alias = uniqueNamesGenerator({
+                dictionaries: [adjectives, countries, animals, colors],
+                length: 1,
+                style: 'lowerCase'
+            })
+            .replace(' ', '')
+            .replace('&', '_')
+            .toLowerCase();
+            if(alias == null) {
+                let alias = uniqueNamesGenerator({
+                    dictionaries: [adjectives, countries, animals, colors],
+                    length: 1,
+                    style: 'lowerCase'
+                })
+                .replace(' ', '')
+                .replace('&', '_')
+                .toLowerCase();
+            }
+
             let friwords = await Friword.query()
                 .where(
                     'created_at',
                     '>=',
                     moment()
-                        .subtract(4, 'day')
+                        .subtract(2, 'day')
                         .format('YYYY-MM-DD HH:mm:ss')
                 )
                 .fetch();
@@ -61,20 +71,20 @@ class LikePostsRandomly extends Task {
                 let promises = [];
                 for (var idx in friwords) {
                     const friword = friwords[idx];
-                    if(Math.random() >= 0.5 && commentedOnUsersFriwords.indexOf(friword.user_alias) == -1) {
-                        console.log(`Generating like on ${friword.text.substring(0, 50)} with ${alias}`);
+                    if(Math.random() >= 0.75 && commentedOnUsersFriwords.indexOf(friword.user_alias) == -1) {
+                        console.log(`Generating like on '${friword.text.substring(0, 50)}' using the alias ${alias}`);
                         commentedOnUsersFriwords.push(friword.user_alias);
                         promises.push(new Promise((resolve, reject) => {
                             resolve();
                         }));
-                        /*promises.push(
+                        promises.push(
                             FriwordLike.create({
                                 user_id: user.id,
                                 friword_id: friword.id,
                                 created_at: new Date(),
                                 updated_at: new Date()
                             })
-                        );*/
+                        );
                     }
                 }
 
