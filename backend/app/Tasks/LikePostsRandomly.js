@@ -10,7 +10,7 @@ const moment = require('moment');
 
 class LikePostsRandomly extends Task {
     static get schedule() {
-        return '* */15 * * * *';
+        return '* */1 * * * *';
     }
 
     async handle() {
@@ -43,7 +43,7 @@ class LikePostsRandomly extends Task {
             friwords = friwords.toJSON();
 
             console.log(`Generating dummy user`, alias);
-            /*if (friwords.length > 0) {
+            if (friwords.length > 0) {
                 const user = await User.create({
                     username: alias,
                     alias: alias,
@@ -62,16 +62,19 @@ class LikePostsRandomly extends Task {
                 for (var idx in friwords) {
                     const friword = friwords[idx];
                     if(Math.random() >= 0.5 && commentedOnUsersFriwords.indexOf(friword.user_alias) == -1) {
-                        console.log(`Generating like on ${friword.id} with ${alias}`);
+                        console.log(`Generating like on ${friword.text.substring(0, 50)} with ${alias}`);
                         commentedOnUsersFriwords.push(friword.user_alias);
-                        promises.push(
+                        promises.push(new Promise((resolve, reject) => {
+                            resolve();
+                        }));
+                        /*promises.push(
                             FriwordLike.create({
                                 user_id: user.id,
                                 friword_id: friword.id,
                                 created_at: new Date(),
                                 updated_at: new Date()
                             })
-                        );
+                        );*/
                     }
                 }
 
@@ -79,7 +82,7 @@ class LikePostsRandomly extends Task {
                     console.log(`Deleting dummy user`);
                     user.delete();
                 });
-            }*/
+            }
         }
     }
 
