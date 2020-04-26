@@ -14,7 +14,7 @@ class LikePostsRandomly extends Task {
     }
 
     async handle() {
-        /*const randomNumber = Math.random();
+        const randomNumber = Math.random();
 
         let alias = uniqueNamesGenerator({
             dictionaries: [adjectives, countries, animals, colors],
@@ -57,11 +57,13 @@ class LikePostsRandomly extends Task {
                     updated_at: new Date()
                 });
 
+                let commentedOnUsersFriwords = [];
                 let promises = [];
                 for (var idx in friwords) {
                     const friword = friwords[idx];
-                    if(Math.random() >= 0.75) {
+                    if(Math.random() >= 0.5 && commentedOnUsersFriwords.indexOf(friword.user_alias) == -1) {
                         console.log(`Generating like on ${friword.id} with ${alias}`);
+                        commentedOnUsersFriwords.push(friword.user_alias);
                         promises.push(
                             FriwordLike.create({
                                 user_id: user.id,
@@ -78,7 +80,7 @@ class LikePostsRandomly extends Task {
                     user.delete();
                 });
             }
-        }*/
+        }
     }
 
     getTimeCategory(time) {
