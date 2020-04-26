@@ -43,7 +43,7 @@ class LikePostsRandomly extends Task {
             friwords = friwords.toJSON();
 
             console.log(`Generating dummy user`, alias);
-            if (friwords.length > 0) {
+            /*if (friwords.length > 0) {
                 const user = await User.create({
                     username: alias,
                     alias: alias,
@@ -79,7 +79,7 @@ class LikePostsRandomly extends Task {
                     console.log(`Deleting dummy user`);
                     user.delete();
                 });
-            }
+            }*/
         }
     }
 
