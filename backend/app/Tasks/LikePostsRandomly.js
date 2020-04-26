@@ -10,7 +10,7 @@ const moment = require('moment');
 
 class LikePostsRandomly extends Task {
     static get schedule() {
-        return '*/10 * * * * *';
+        return '* */15 * * * *';
     }
 
     async handle() {
@@ -60,7 +60,7 @@ class LikePostsRandomly extends Task {
                 let promises = [];
                 for (var idx in friwords) {
                     const friword = friwords[idx];
-                    if(Math.random() >= 0.5) {
+                    if(Math.random() >= 0.75) {
                         console.log(`Generating like on ${friword.id} with ${alias}`);
                         promises.push(
                             FriwordLike.create({
