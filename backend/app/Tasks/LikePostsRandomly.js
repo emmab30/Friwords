@@ -14,7 +14,7 @@ class LikePostsRandomly extends Task {
     }
 
     async handle() {
-        const randomNumber = Math.random();
+        /*const randomNumber = Math.random();
 
         let alias = uniqueNamesGenerator({
             dictionaries: [adjectives, countries, animals, colors],
@@ -78,7 +78,7 @@ class LikePostsRandomly extends Task {
                     user.delete();
                 });
             }
-        }
+        }*/
     }
 
     getTimeCategory(time) {
