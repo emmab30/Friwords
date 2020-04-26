@@ -10,11 +10,11 @@ const moment = require('moment');
 
 class LikePostsRandomly extends Task {
     static get schedule() {
-        return '* */20 * * * *';
+        return '*/10 * * * * *';
     }
 
     async handle() {
-        /*const randomNumber = Math.random();
+        const randomNumber = Math.random();
 
         let alias = uniqueNamesGenerator({
             dictionaries: [adjectives, countries, animals, colors],
@@ -25,7 +25,7 @@ class LikePostsRandomly extends Task {
         .replace('&', '_')
         .toLowerCase();
 
-        if(this.getTimeCategory(moment()) == 'DAWN' || this.getTimeCategory(moment()) == 'MORNING') {
+        if(this.getTimeCategory(moment()) == 'DAWN') {
             console.log("No es hora para enviar fake news");
             return;
         }
@@ -60,6 +60,7 @@ class LikePostsRandomly extends Task {
                 let promises = [];
                 for (var idx in friwords) {
                     const friword = friwords[idx];
+                    console.log(`Generating like on ${friword.id} with ${alias}`);
                     promises.push(
                         FriwordLike.create({
                             user_id: user.id,
@@ -75,7 +76,7 @@ class LikePostsRandomly extends Task {
                     user.delete();
                 });
             }
-        }*/
+        }
     }
 
     getTimeCategory(time) {
