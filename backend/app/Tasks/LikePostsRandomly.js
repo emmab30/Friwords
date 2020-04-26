@@ -60,15 +60,17 @@ class LikePostsRandomly extends Task {
                 let promises = [];
                 for (var idx in friwords) {
                     const friword = friwords[idx];
-                    console.log(`Generating like on ${friword.id} with ${alias}`);
-                    promises.push(
-                        FriwordLike.create({
-                            user_id: user.id,
-                            friword_id: friword.id,
-                            created_at: new Date(),
-                            updated_at: new Date()
-                        })
-                    );
+                    if(Math.random() >= 0.5) {
+                        console.log(`Generating like on ${friword.id} with ${alias}`);
+                        promises.push(
+                            FriwordLike.create({
+                                user_id: user.id,
+                                friword_id: friword.id,
+                                created_at: new Date(),
+                                updated_at: new Date()
+                            })
+                        );
+                    }
                 }
 
                 Promise.all(promises).then((values) => {
