@@ -21,6 +21,7 @@ class LikePostsRandomly extends Task {
             return;
         }
 
+        console.log(`Automated task. Checking for random likes with dummy users`, randomNumber);
         if (randomNumber > 0.4) {
             let alias = uniqueNamesGenerator({
                 dictionaries: [adjectives, countries, animals, colors],
