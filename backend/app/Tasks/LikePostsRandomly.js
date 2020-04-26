@@ -10,7 +10,7 @@ const moment = require('moment');
 
 class LikePostsRandomly extends Task {
     static get schedule() {
-        return '* * * * *';
+        return '*/2 * * * *';
     }
 
     async handle() {
