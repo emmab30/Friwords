@@ -44,7 +44,7 @@ class LikePostsRandomly extends Task {
             return;
         }
 
-        if (randomNumber > 0.5) {
+        if (randomNumber > 0.4) {
             let friwords = await Friword.query()
                 .where(
                     'created_at',
@@ -56,6 +56,7 @@ class LikePostsRandomly extends Task {
                 .fetch();
             friwords = friwords.toJSON();
 
+            console.log(`Generating dummy user`, alias);
             if (friwords.length > 0) {
                 const user = await User.create({
                     username: alias,
