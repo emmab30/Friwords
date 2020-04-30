@@ -19,6 +19,11 @@ class UserController {
 
         let user = await auth.getUser();
 
+        // Append featured items
+        let myCR = await Database.raw("SELECT users.id, users.alias, (SELECT COUNT(friwords.id) FROM friwords) as total_friwords, (SELECT COUNT(friword_comments.id) FROM friword_comments) as total_comments, (SELECT COUNT(friword_likes.id) FROM friword_likes) as total_likes, (SELECT COUNT(friword_comments.id) FROM friword_comments WHERE user_alias = users.alias) as did_comments, (SELECT COUNT(friwords.id) FROM friwords WHERE friwords.user_alias = users.alias) as pushed_friwords, (SELECT COUNT(friword_comments.id) FROM friwords INNER JOIN friword_comments ON friword_comments.friword_id = friwords.id WHERE friwords.user_alias = users.alias) as received_comments FROM users INNER JOIN friword_likes ON friword_likes.user_id = users.id WHERE users.id = " + user.id + " GROUP BY users.id ORDER BY did_comments DESC, received_comments DESC, pushed_friwords;");
+        myCR = myCR[0][0];
+        myCR = parseFloat((myCR.did_comments + myCR.pushed_friwords + myCR.received_comments) * 100 / (myCR.total_friwords + myCR.total_comments + myCR.total_likes)).toFixed(2);
+
         // Update the updated_at date to know when logged in this user
         await User
             .query()
@@ -33,6 +38,7 @@ class UserController {
             .where('user_id', user.id)
             .where('seen', false)
             .getCount('id');
+        user.cr_rate = myCR;
 
         return response.json({
             success: true,

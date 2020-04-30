@@ -42,6 +42,9 @@ class User extends Model {
     getAvatar () {
         if(this.id == 162)
             return 'https://i.ibb.co/4fqFJ4x/friwords-admin.png';
+        else if(this.avatar != null) {
+            return this.avatar;
+        }
 
         return 'https://i.ibb.co/MDDbjf2/logo-friwords.png';
         /*if(this.gender == 'female')

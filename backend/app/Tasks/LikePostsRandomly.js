@@ -14,6 +14,8 @@ class LikePostsRandomly extends Task {
     }
 
     async handle() {
+        return;
+
         const randomNumber = Math.random();
 
         if(this.getTimeCategory(moment()) == 'DAWN') {

@@ -1,6 +1,7 @@
 'use strict'
 
 const _ = require('lodash');
+const Database = use('Database');
 const User = use('App/Models/User');
 const Friword = use('App/Models/Friword');
 const FriwordTopic = use('App/Models/FriwordTopic');
@@ -61,6 +62,62 @@ class FriwordController {
         friwords = await friwords.fetch()
         friwords = friwords.toJSON();
 
+        /* Query RAW SQL to get CE */
+        /*
+            SELECT
+                users.id,
+                users.alias,
+                (SELECT COUNT(friwords.id) FROM friwords) as total_friwords,
+                (SELECT COUNT(friword_comments.id) FROM friword_comments) as total_comments,
+                (SELECT COUNT(friword_likes.id) FROM friword_likes) as total_likes,
+                (SELECT COUNT(friword_comments.id) FROM friword_comments WHERE user_alias = users.alias) as did_comments,
+                (SELECT COUNT(friwords.id) FROM friwords WHERE friwords.user_alias = users.alias) as pushed_friwords,
+                (SELECT COUNT(friword_comments.id) FROM friwords INNER JOIN friword_comments ON friword_comments.friword_id = friwords.id WHERE friwords.user_alias = users.alias) as received_comments
+            FROM users
+                INNER JOIN friword_likes ON friword_likes.user_id = users.id
+            GROUP BY users.id
+            ORDER BY did_comments DESC, received_comments DESC, pushed_friwords DESC
+            LIMIT 5;
+        */
+
+        // Append featured items
+        let featured = await Database.raw("SELECT users.id, users.alias, (SELECT COUNT(friwords.id) FROM friwords) as total_friwords, (SELECT COUNT(friword_comments.id) FROM friword_comments) as total_comments, (SELECT COUNT(friword_likes.id) FROM friword_likes) as total_likes, (SELECT COUNT(friword_comments.id) FROM friword_comments WHERE user_alias = users.alias) as did_comments, (SELECT COUNT(friwords.id) FROM friwords WHERE friwords.user_alias = users.alias) as pushed_friwords, (SELECT COUNT(friword_comments.id) FROM friwords INNER JOIN friword_comments ON friword_comments.friword_id = friwords.id WHERE friwords.user_alias = users.alias) as received_comments FROM users INNER JOIN friword_likes ON friword_likes.user_id = users.id GROUP BY users.id ORDER BY did_comments DESC, received_comments DESC, pushed_friwords DESC LIMIT 5;");
+
+        // Analyze CE for user
+
+
+        featured = featured[0];
+        if(featured.length > 0) {
+            let featuredPromises = [];
+            for(var idx in featured) {
+                const featuredItem = featured[idx];
+                if(featuredItem.alias) {
+                    featuredPromises.push(new Promise((resolve, reject) => {
+                        User
+                            .query()
+                            .where('alias', featuredItem.alias)
+                            .select(['id', 'alias', 'avatar'])
+                            .first()
+                            .then((user) => {
+                                user.cr_rate = parseFloat((featuredItem.did_comments + featuredItem.pushed_friwords + featuredItem.received_comments) * 100 / (featuredItem.total_friwords + featuredItem.total_comments + featuredItem.total_likes)).toFixed(2);
+                                resolve(user);
+                            })
+                    }));
+                }
+            }
+
+            await Promise.all(featuredPromises).then((values) => {
+                values = _.orderBy(values, (e) => e.cr_rate).reverse();
+                featured = values;
+            });
+        }
+
+        /*let featured = await User
+            .query()
+            .limit(10)
+            .select(['id', 'alias'])
+            .fetch();*/
+
         // Check what friwords was liked for me
         let promises = [];
         if(user != null) {
@@ -85,7 +142,8 @@ class FriwordController {
 
             return response.json({
                 success: true,
-                friwords: values
+                friwords: values,
+                featured: featured
             });
         });
     }
