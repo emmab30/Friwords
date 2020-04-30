@@ -1,6 +1,7 @@
 'use strict'
 
 const Database = use('Database');
+const moment = require('moment');
 const User = use('App/Models/User');
 const Friword = use('App/Models/Friword');
 const FriwordComment = use('App/Models/FriwordComment');
@@ -20,7 +21,8 @@ class UserController {
         let user = await auth.getUser();
 
         // Append featured items
-        let myCR = await Database.raw("SELECT users.id, users.alias, (SELECT COUNT(friwords.id) FROM friwords) as total_friwords, (SELECT COUNT(friword_comments.id) FROM friword_comments) as total_comments, (SELECT COUNT(friword_likes.id) FROM friword_likes) as total_likes, (SELECT COUNT(friword_comments.id) FROM friword_comments WHERE user_alias = users.alias) as did_comments, (SELECT COUNT(friwords.id) FROM friwords WHERE friwords.user_alias = users.alias) as pushed_friwords, (SELECT COUNT(friword_comments.id) FROM friwords INNER JOIN friword_comments ON friword_comments.friword_id = friwords.id WHERE friwords.user_alias = users.alias) as received_comments FROM users INNER JOIN friword_likes ON friword_likes.user_id = users.id WHERE users.id = " + user.id + " GROUP BY users.id ORDER BY did_comments DESC, received_comments DESC, pushed_friwords;");
+        let minDate = moment().subtract(7, 'days').format('YYYY-MM-DD 00:00:00');
+        let myCR = await Database.raw(`SELECT users.id, users.alias, (SELECT COUNT(friwords.id) FROM friwords) as total_friwords, (SELECT COUNT(friword_comments.id) FROM friword_comments) as total_comments, (SELECT COUNT(friword_likes.id) FROM friword_likes) as total_likes, (SELECT COUNT(friword_comments.id) FROM friword_comments WHERE user_alias = users.alias AND created_at >= '${minDate}') as did_comments, (SELECT COUNT(friwords.id) FROM friwords WHERE friwords.user_alias = users.alias AND created_at >= '${minDate}') as pushed_friwords, (SELECT COUNT(friword_comments.id) FROM friwords INNER JOIN friword_comments ON friword_comments.friword_id = friwords.id WHERE friwords.user_alias = users.alias AND friword_comments.created_at >= '${minDate}') as received_comments FROM users WHERE users.id = ${user.id} GROUP BY users.id ORDER BY did_comments DESC, received_comments DESC, pushed_friwords;`);
         myCR = myCR[0][0];
         myCR = parseFloat((myCR.did_comments + myCR.pushed_friwords + myCR.received_comments) * 100 / (myCR.total_friwords + myCR.total_comments + myCR.total_likes)).toFixed(2);
 

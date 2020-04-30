@@ -1,6 +1,7 @@
 'use strict'
 
 const _ = require('lodash');
+const moment = require('moment');
 const Database = use('Database');
 const User = use('App/Models/User');
 const Friword = use('App/Models/Friword');
@@ -70,18 +71,18 @@ class FriwordController {
                 (SELECT COUNT(friwords.id) FROM friwords) as total_friwords,
                 (SELECT COUNT(friword_comments.id) FROM friword_comments) as total_comments,
                 (SELECT COUNT(friword_likes.id) FROM friword_likes) as total_likes,
-                (SELECT COUNT(friword_comments.id) FROM friword_comments WHERE user_alias = users.alias) as did_comments,
-                (SELECT COUNT(friwords.id) FROM friwords WHERE friwords.user_alias = users.alias) as pushed_friwords,
-                (SELECT COUNT(friword_comments.id) FROM friwords INNER JOIN friword_comments ON friword_comments.friword_id = friwords.id WHERE friwords.user_alias = users.alias) as received_comments
+                (SELECT COUNT(friword_comments.id) FROM friword_comments WHERE user_alias = users.alias AND created_at >= ${minDate}) as did_comments,
+                (SELECT COUNT(friwords.id) FROM friwords WHERE friwords.user_alias = users.alias AND created_at >= ${minDate}) as pushed_friwords,
+                (SELECT COUNT(friword_comments.id) FROM friwords INNER JOIN friword_comments ON friword_comments.friword_id = friwords.id WHERE friwords.user_alias = users.alias AND friword_comments.created_at >= ${minDate}) as received_comments
             FROM users
-                INNER JOIN friword_likes ON friword_likes.user_id = users.id
             GROUP BY users.id
             ORDER BY did_comments DESC, received_comments DESC, pushed_friwords DESC
             LIMIT 5;
         */
 
         // Append featured items
-        let featured = await Database.raw("SELECT users.id, users.alias, (SELECT COUNT(friwords.id) FROM friwords) as total_friwords, (SELECT COUNT(friword_comments.id) FROM friword_comments) as total_comments, (SELECT COUNT(friword_likes.id) FROM friword_likes) as total_likes, (SELECT COUNT(friword_comments.id) FROM friword_comments WHERE user_alias = users.alias) as did_comments, (SELECT COUNT(friwords.id) FROM friwords WHERE friwords.user_alias = users.alias) as pushed_friwords, (SELECT COUNT(friword_comments.id) FROM friwords INNER JOIN friword_comments ON friword_comments.friword_id = friwords.id WHERE friwords.user_alias = users.alias) as received_comments FROM users INNER JOIN friword_likes ON friword_likes.user_id = users.id GROUP BY users.id ORDER BY did_comments DESC, received_comments DESC, pushed_friwords DESC LIMIT 5;");
+        let minDate = moment().subtract(7, 'days').format('YYYY-MM-DD 00:00:00');
+        let featured = await Database.raw(`SELECT users.id, users.alias, (SELECT COUNT(friwords.id) FROM friwords) as total_friwords, (SELECT COUNT(friword_comments.id) FROM friword_comments) as total_comments, (SELECT COUNT(friword_likes.id) FROM friword_likes) as total_likes, (SELECT COUNT(friword_comments.id) FROM friword_comments WHERE user_alias = users.alias AND created_at >= '${minDate}') as did_comments, (SELECT COUNT(friwords.id) FROM friwords WHERE friwords.user_alias = users.alias AND created_at >= '${minDate}') as pushed_friwords, (SELECT COUNT(friword_comments.id) FROM friwords INNER JOIN friword_comments ON friword_comments.friword_id = friwords.id WHERE friwords.user_alias = users.alias AND friword_comments.created_at >= '${minDate}') as received_comments FROM users GROUP BY users.id ORDER BY did_comments DESC, received_comments DESC, pushed_friwords DESC LIMIT 5;`);
 
         // Analyze CE for user
 
